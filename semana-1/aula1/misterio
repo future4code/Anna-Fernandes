@@ -1,0 +1,98 @@
+ls
+cd assassinato-na-linha-de-comando/
+ls
+cat README.md 
+cat inicio 
+ls
+cd misterio
+ls
+cd cena-do-crime 
+cat cena-do-crime 
+grep PISTA cena-do-crime 
+ls
+cat pessoas
+grep Annabel
+ls
+grep Annabel pessoas 
+grep Vila pessoas 
+grep "Vila Hart" pessoas
+grep Annabel pessoas 
+grep Mattapan pessoas
+grep "Vila Buckingham" pessoas 
+ls
+cd entrevistas/
+ls
+cd ..
+cd associacoes/
+ls
+cd ..
+ls
+cat automoveis 
+grep ls
+ls
+cd ruas
+ls
+cat Vila_Hart
+cd ..
+grep Annabel pessoas 
+cd ruas
+head -n 40 Vila_Hart | tail -n 1
+head -n 179 Vila_Buckingham | tail -n 1
+cd ..
+cd entrevistas/
+ls
+cat entrevista-47246024
+cat entrevista-699607
+cd ..
+cd automoveis 
+grep L337 automoveis 
+grep L337 -A 3 automoveis 
+grep L337 -A 5 automoveis 
+grep PISTA cena-do-crime 
+cd associacoes/
+ls
+head -n 20 AAA
+grep Jacqui AAA
+grep Jeremy AAA
+grep Joe AAA
+ls
+grep Jacqui Delta_SkyMiles 
+grep Jeremy Delta_SkyMiles 
+grep Joe Delta_SkyMiles 
+ls
+grep Jacqui Biblioteca_da_Cidade 
+grep Jeremy Biblioteca_da_Cidade 
+grep Jacqui Museu_da_Hist├│ria_do_Bash 
+grep Jeremy Museu_da_Hist├│ria_do_Bash 
+cd ..
+ls
+cd ..
+cat inicio 
+cd misterio/
+ls
+grep PISTA cena-do-crime 
+cd entrevistas/
+cd ..
+grep Annabel pessoas 
+cd entrevistas/
+cd ..
+cd ruas
+ls
+head -n 176 Vila_Buckingham | tail -n 1
+head -n 179 Vila_Buckingham | tail -n 1
+cd ..
+cd entrevistas/
+cat entrevista-699607
+cd ..
+grep Jacqui pessoas
+grep Jeremy pessoas
+history
+touch assassino.txt
+echo "Jeremy Bowers" >> assassino.txt 
+cat assassino.txt 
+history
+history -d 257
+history
+history -w history
+
+Assassino: Jeremy Bowers
