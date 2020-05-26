@@ -3,47 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Loja Labenu</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    
-    <h1>Adicionar produto</h1>
-    <form action="#">
-        <div>
-            <label for="produto">Produto</label>
+    <header>
+        <h1>Labenu</h1>
+        <p class="intertitle">Sistema interno</p>
+    </header>
+    <main>
+        <h2>Adicionar produto</h2>
+        <form action="#">
             <div>
+                <label for="produto">Produto</label>
                 <input type="text" name="produto" id="produto" placeholder="Nome do produto">
             </div>
-        </div>
-        <div>
-            <label for="foto">Foto</label>
             <div>
-                <input type="image" name="foto" id="foto" src="images/imagem.svg" alt="Envie uma imagem" width="40" height="40">
+                <label for="image">Foto</label>
+                <input type="file" id="image" name="image">
             </div>
-        </div>
-        <div>
-            <label for="descrição">Descrição</label>
             <div>
+                <label for="descrição">Descrição</label>
                 <textarea name="descrição" id="descrição" rows="10" cols="30" placeholder="Coloque aqui as características do produto."></textarea>
             </div>
-        </div>
-        <div>
-            <label for="quantidade">Preço</label>
             <div>
+                <label for="quantidade">Preço</label>
                 <input type="number" name="preco" id="preco" placeholder="x">
             </div>
-        </div>
-        <div>
-            <label for="quantidade">Quantidade</label>
             <div>
+                <label for="quantidade">Quantidade</label>
                 <input type="number" name="quantidade" id="quantidade" placeholder="x">
             </div>
+            <button type="submit">Adicionar</button>
+        </form>
+        <div class="result">
+            <p class="success">Produto adicionado com sucesso.</p>
+            <p class="fail">Por favor, complete todas as informações.</p>
         </div>
-        <button type="submit">Enviar</button>
-    </form>
+    </main>
 
-    
-    <a href="index.html">< voltar</a>
+    <footer>
+        <a href="index.html">voltar</a>
+    </footer>
 
     
 </body>
