@@ -8,6 +8,11 @@
     margin: 0;
     padding: 0;
     font-family: 'Roboto', sans-serif;
+    text-decoration: none;
+}
+
+button {
+    cursor: pointer;
 }
 
 h2 {
@@ -88,6 +93,9 @@ div>p:first-child {
 
 #container-de-descricao>ol {
     padding: 15px 0px;
+    display: block;
+    margin: auto;
+    max-width: 240px;
 }
 
 #container-para-comprar {
@@ -143,6 +151,8 @@ td button {
 
 
 #back-button {
+    display: block;
+    margin: 48px auto;
     background-color: white;
     width: 100px;
     height: 20px;
