@@ -303,6 +303,35 @@ main .filter-container button {
 
 /* ==================================================
 
+Nav
+
+===================================================*/
+
+nav {
+    background-color: rgba(234, 107, 102, 0.1);
+}
+
+nav ul {
+    margin: auto;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 10px;
+    width: 96px;
+    vertical-align: top;
+    color: #EA6B66;
+    cursor: pointer;
+}
+
+nav ul li:hover {
+    opacity: 0.5;
+}
+
+
+/* ==================================================
+
 Footer
 
 ===================================================*/
