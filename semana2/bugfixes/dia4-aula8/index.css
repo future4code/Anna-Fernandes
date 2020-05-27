@@ -36,9 +36,6 @@ div>p:first-child {
     margin: auto;
 }
 
-div img {
-    background: black;
-}
 
 .botao-amarelo {
     display: block;
@@ -62,6 +59,7 @@ div img {
 
 .icone {
     height: 15px;
+    width: 15px;
 }
 
 
