@@ -11,6 +11,10 @@
     text-decoration: none;
 }
 
+*:focus {
+    outline: none;
+}
+
 button {
     cursor: pointer;
 }
