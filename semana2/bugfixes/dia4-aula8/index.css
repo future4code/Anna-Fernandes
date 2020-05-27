@@ -32,7 +32,6 @@ img {
 div>p:first-child {
     display: block;
     margin: auto;
-    max-width: 200px;
 }
 
 div img {
@@ -76,6 +75,10 @@ div img {
     padding: 32px;
 }
 
+#container-de-descricao>p {
+    max-width: 200px;
+}
+
 #container-de-descricao>ol {
     padding: 15px 0px;
 }
@@ -104,6 +107,7 @@ div:last-child {
 
 table {
     width: 60%;
+    text-align: center;
 }
 
 td button {
