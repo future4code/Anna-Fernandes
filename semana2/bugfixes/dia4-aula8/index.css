@@ -62,6 +62,10 @@ div>p:first-child {
     border-radius: 5px;
     font-size: 20px;
     color: white;
+    position: relative;
+    top: 250px;
+    left: 0;
+    right: 0;
 }
 
 .botao-amarelo:hover {
@@ -93,15 +97,24 @@ div>p:first-child {
   *
   **/
 
+.container > * {
+    position: relative;
+    top: 35%;
+    left: 0;
+    right: 0;
+}
+
 #container-de-descricao {
     background-color: #2274a5;
     color: white;
     padding: 32px;
+    position: relative;
 }
 
 #container-de-descricao>p {
     max-width: 200px;
 }
+
 
 #container-de-descricao>ol {
     padding: 15px 0px;
@@ -112,11 +125,11 @@ div>p:first-child {
 
 #container-para-comprar {
     background-color: #e7eb90;
+    position: relative;
 }
 
 #container-para-comprar>p {
     color: #c44f00;
-    padding: 100px 0;
     font-size: 60px;
 }
 
