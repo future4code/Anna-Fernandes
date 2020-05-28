@@ -13,6 +13,15 @@
 	align-content: stretch;
 }
 
+.container>div {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    color: #ffffff;
+    text-transform: uppercase;
+
+}
+
 #header{
     background-color: #2ECC40;
     grid-area: 1 / 1 / 1 / 1;
