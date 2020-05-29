@@ -24,33 +24,42 @@
         </nav>
     </header>
     <main>
-        <h2>Adicionar produto</h2>
-        <form action="#" id="add-itens">
+        <h2>Venda(s)</h2>
+        <form action="#" id="sold-itens">
             <div>
                 <label for="produto">Produto</label>
                 <input type="text" name="produto" id="produto" placeholder="Nome do produto">
             </div>
             <div>
-                <label for="image">Foto</label>
-                <input type="file" id="image" name="image">
-            </div>
-            <div>
-                <label for="descrição">Descrição</label>
-                <textarea name="descrição" id="descrição" rows="10" cols="30" placeholder="Coloque aqui as características do produto."></textarea>
-            </div>
-            <div>
-                <label for="quantidade">Preço</label>
-                <input type="number" name="preco" id="preco" placeholder="x">
-            </div>
-            <div>
                 <label for="quantidade">Quantidade</label>
                 <input type="number" name="quantidade" id="quantidade" placeholder="x">
             </div>
-            <button type="submit">Adicionar</button>
+            <div>
+                <label for="cartao">Cartão</label>
+                <input type="checkbox" id="cartao" name="pagamento" value="cartao">
+                <label for="dinheiro">Dinheiro</label>
+                <input type="checkbox" id="dinheiro" name="pagamento" value="dinheiro">
+            </div>
+            <button type="submit">Adicionar Venda</button>
         </form>
         <div class="result">
             <p class="success">Produto adicionado com sucesso.</p>
             <p class="fail">Por favor, complete todas as informações.</p>
+            <div class="sold-products-container">
+                <h3>Produto(s) Vendido(s)</h3>
+                <table class="sold-products-table">
+                    <tr>
+                        <th>Produto</th>
+                        <th>Quantidade</th>
+                        <th>Pagamento</th>
+                    </tr>
+                    <tr>
+                        <td>Babbylook É Rinite</td>
+                        <td>1</td>
+                        <td>cartão</td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </main>
 

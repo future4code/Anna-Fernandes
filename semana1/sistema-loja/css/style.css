@@ -1,0 +1,359 @@
+/* EA6B66 */
+
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Raleway', sans-serif;
+    text-decoration: none;
+    color: inherit;
+    list-style: none;
+}
+
+
+/* ==================================================
+
+Header
+
+===================================================*/
+
+header {
+    margin: 32px;
+    border-top: 2px solid #EA6B66;
+}
+
+header h1 {
+    margin: 16px;
+    font-size: 48px;
+    font-weight: 400;
+    text-align: center;
+    color: #EA6B66;
+}
+
+header .intertitle {
+    padding: 8px 16px;
+    background-color: #EA6B66;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fefefe;
+}
+
+
+/* ==================================================
+
+Main
+
+===================================================*/
+
+
+main {
+    margin: 32px auto;
+    max-width: 960px;
+    min-height: calc(100vh - 300px);
+}
+
+main h2 {
+    margin: 16px;
+    font-size: 32px;
+    font-weight: 600;
+    text-align: center;
+    color: #EA6B66;
+}
+
+main h3 {
+    margin: 16px;
+    font-size: 24px;
+    font-weight: 600;
+    text-align: center;
+    color: #EA6B66;
+}
+
+main .intro-paragraph {
+    text-align: center;
+    font-size: 18px;
+}
+
+main .menu {
+    margin: 16px 0;
+}
+
+main .menu div {
+    display: inline-block;
+    width: calc(30% - 3px);
+    margin: 16px;
+}
+
+main .menu p {
+    margin: 32px 0;
+    text-align: center;
+    line-height: 1.5rem;
+}
+
+main .menu img {
+    display: block;
+    margin: 16px auto;
+    width: 144px;
+    height: 144px;
+    object-fit: contain;
+}
+
+main .menu button {
+    display: block;
+    width: 80px;
+    margin: 32px auto;
+    padding: 8px;
+    background-color: #EA6B66;
+    border-radius: 15px;
+    border: none;
+    text-decoration: none;
+    color: #fefefe;
+    cursor: pointer;
+}
+
+main .menu div button:hover, main .menu div button:active {
+    opacity: 0.6;
+}
+
+/* ==================================================
+
+Table
+
+===================================================*/
+
+main table {
+    margin: 32px 0;
+    width: 100%;
+}
+
+main table th {
+    padding: 16px;
+    background-color: #EA6B66;
+    color: #fefefe;
+    font-size: 18px;
+}
+
+main table td {
+    padding: 16px;
+    text-align: center;
+}
+
+main table tr:nth-child(even) {
+    background-color: rgba(234, 107, 102, 0.1);
+}
+
+main table td.product-name {
+    font-weight: 700;
+}
+
+main table td img {
+    height: 150px;
+}
+
+
+/* ==================================================
+
+Form
+
+===================================================*/
+
+main form {
+    max-width: 600px;
+    margin: 32px auto;
+}
+
+main form input, main form textarea {
+    width: 100%;
+    margin: 8px 0 16px 0;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+}
+
+main form label {
+    font-weight: 600;
+    color: #EA6B66;
+}
+
+main form input#image[type=file], main form input[type=checkbox]  {
+    padding: 0;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+}
+
+main form input[type=checkbox]  {
+    width: auto;
+    margin-right: 8px;
+}
+
+main form button {
+    display: block;
+    width: 80px;
+    margin: 8px 0;
+    padding: 8px;
+    background-color: #EA6B66;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fefefe;
+    cursor: pointer;
+}
+
+main form#sold-itens button {
+    width: 144px;
+}
+
+main .result {
+    margin: 32px auto;
+    max-width: 600px;
+    text-align: center;
+}
+
+main .success {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #51FCCB;
+}
+
+main .fail {
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #F2A0A6;
+}
+
+
+/* ==================================================
+
+Lists
+
+===================================================*/
+
+main ol {
+    text-align: center;
+}
+
+main ol > li {
+    display: inline-block;
+    margin: 32px 0;
+}
+
+main ul li {
+    min-width: 176px;
+    margin: 8px;
+}
+
+main ul li strong {
+    font-size: 18px;
+    color: #EA6B66;
+}
+
+main ul li img {
+    display: block;
+    width: 144px;
+    height: 144px;
+    margin: auto;
+}
+
+
+/* ==================================================
+
+Filter
+
+===================================================*/
+
+
+main .filter-container {
+    margin: 32px 0;
+}
+
+main .filter-container input {
+    min-width: 250px;
+    margin: 8px 0 16px 0;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    -webkit-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+    -moz-box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+    box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.35);
+}
+
+main .filter-container label {
+    display: block;
+    font-weight: 600;
+    color: #EA6B66;
+}
+
+main .filter-container button {
+    width: 80px;
+    margin: 8px;
+    padding: 8px;
+    background-color: #EA6B66;
+    border-radius: 5px;
+    border: none;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fefefe;
+    cursor: pointer;
+}
+
+
+/* ==================================================
+
+Nav
+
+===================================================*/
+
+nav {
+    background-color: rgba(234, 107, 102, 0.1);
+}
+
+nav ul {
+    margin: auto;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    margin: 10px;
+    width: 96px;
+    vertical-align: top;
+    color: #EA6B66;
+    cursor: pointer;
+}
+
+nav ul li:hover {
+    opacity: 0.5;
+}
+
+
+/* ==================================================
+
+Footer
+
+===================================================*/
+
+
+footer {
+    margin: 32px;
+    padding: 8px 0;
+    border-top: 2px solid #EA6B66;
+    text-align: right;
+}
+
+footer a {
+    padding: 0 8px;
+    color: #EA6B66;
+    cursor: pointer;
+}
+
+footer a:nth-of-type(2) {
+    border-left: 1px solid #EA6B66;
+}
+
+footer a:active, footer a:hover {
+    opacity: 0.6;
+}
