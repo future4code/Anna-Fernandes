@@ -138,20 +138,7 @@ const resposta4 = "Resposta: " + prompt(pergunta4)
 const pergunta5 = "5. Você coloca purê de batata no cachorro quente ou não mistura carboidratos?"
 const resposta5 = "Resposta: " + prompt(pergunta5)
 
-console.log(pergunta1)
-console.log(resposta1)
-
-console.log(pergunta2)
-console.log(resposta2)
-
-console.log(pergunta3)
-console.log(resposta3)
-
-console.log(pergunta4)
-console.log(resposta4)
-
-console.log(pergunta5)
-console.log(resposta5)
+console.log(pergunta1 + "\n" + resposta1 + "\n" + pergunta2 + "\n" + resposta2 + "\n" + pergunta3 + "\n" + resposta3 + "\n" + pergunta4 + "\n" + resposta4 + "\n" + pergunta5 + "\n" + resposta5)
 
 // Exercício 3
 
