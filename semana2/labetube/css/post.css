@@ -1,0 +1,89 @@
+.ft-video-main-content {
+    margin: auto;
+    max-width: 700px;
+}
+
+.ft-video-main-content h1 {
+    margin-bottom: 8px;
+    font-size: 3rem;
+}
+
+.ft-video-main-content .ft-metabox .ft-video-author {
+    color: #7E2E84;
+    font-weight: 700;
+}
+
+.ft-video-main-content .ft-metabox .ft-video-date {
+    font-size: 0.95rem;
+    opacity: 0.6;
+}
+
+.ft-video-main-content video {
+    margin: 32px auto;
+}
+
+.ft-comments {
+    max-width: 700px ;
+    margin: 32px auto;
+
+    display: flex;
+    flex-flow: column wrap;
+}
+
+.ft-comments h4 {
+    color: #7E2E84;
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+}
+
+.ft-comments input {
+    width: 100%;
+    height: 32px;
+    margin-bottom: 8px;
+    padding: 0 8px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+.ft-comments textarea {
+    width: 100%;
+    height: 160px;
+    margin-bottom: 8px;
+    padding: 8px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
+}
+
+.ft-comments button {
+    width: 80px;
+    height: 32px;
+    padding: 8px;
+    border-radius: 5px;
+    background-color: #7E2E84;
+    color: #fdfdfd;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.ft-page-btn {
+    margin: 32px auto;
+    text-align: center;
+}
+
+.ft-page-btn button {
+    padding: 0 8px;
+    margin: 32px auto;
+    background-color: transparent;
+    color: #7E2E84;
+    cursor: pointer;
+}
+
+.ft-page-btn a:nth-child(2) {
+    border-left: 1px solid #7E2E84;
+}
+
+@media screen and (max-width: 550px) {
+    .ft-video-main-content h1 {
+        font-size: 2rem;
+    }
+}
