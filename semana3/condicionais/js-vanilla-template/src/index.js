@@ -89,67 +89,67 @@
 
 // a. Crie um programa que receba dois números do usuário através do `prompt` e imprima-os na ordem **decrescente**. O que acontece com o seu programa se os 2 números forem iguais? (é só testar e colocar um comentário descrevendo o que aconteceu)
 
-// const numero1 = Number(prompt("Digite o primeiro número."))
-// const numero2 = Number(prompt("Digite o segundo número?"))
+const numero1 = Number(prompt("Digite o primeiro número."))
+const numero2 = Number(prompt("Digite o segundo número?"))
 
-// if(numero1 < numero2) {
-//     console.log(numero2 + ', ' + numero1)
-// } else {
-//     console.log(numero1 + ', ' + numero2)
-// }
+if(numero1 < numero2) {
+    console.log(numero2 + ', ' + numero1)
+} else {
+    console.log(numero1 + ', ' + numero2)
+}
 // Ele imprime a lista de números digitados da mesma forma, pois ele entende que o else vale tanto para número1 maior, quando para igual ao número 2.
 
 // b. Adapte o programa para que o usuário digite 3 números. Ainda os imprima na ordem **decrescente**. O que acontece como seu programa se os 3 números forem iguais? (é só testar e colocar um comentário descrevendo o que aconteceu)
 
-// const numero3 = Number(prompt("Digite o terceiro número?"))
+const numero3 = Number(prompt("Digite o terceiro número?"))
 
-// if(numero1 >= numero2 && numero1 >= numero3) {
-//     if (numero2 >= numero3){
-//         console.log(numero1 + ', ' + numero2 + ', ' + numero3)
-//     } else {
-//         console.log(numero1 + ', ' + numero3 + ', ' + numero2)
-//     }
-// } else if(numero2 >= numero3 && numero2 >= numero1)  {
-//     if (numero3 >= numero1){
-//         console.log(numero2 + ', ' + numero3 + ', ' + numero1)
-//     } else {
-//         console.log(numero2 + ', ' + numero1 + ', ' + numero3)
-//     }
-// } else if(numero3 >= numero2 && numero3 >= numero1)  {
-//     if (numero2 >= numero1){
-//         console.log(numero3 + ', ' + numero2 + ', ' + numero1)
-//     } else {
-//         console.log(numero3 + ', ' + numero1 + ', ' + numero2)
-//     }
-// }
+if(numero1 >= numero2 && numero1 >= numero3) {
+    if (numero2 >= numero3){
+        console.log(numero1 + ', ' + numero2 + ', ' + numero3)
+    } else {
+        console.log(numero1 + ', ' + numero3 + ', ' + numero2)
+    }
+} else if(numero2 >= numero3 && numero2 >= numero1)  {
+    if (numero3 >= numero1){
+        console.log(numero2 + ', ' + numero3 + ', ' + numero1)
+    } else {
+        console.log(numero2 + ', ' + numero1 + ', ' + numero3)
+    }
+} else if(numero3 >= numero2 && numero3 >= numero1)  {
+    if (numero2 >= numero1){
+        console.log(numero3 + ', ' + numero2 + ', ' + numero1)
+    } else {
+        console.log(numero3 + ', ' + numero1 + ', ' + numero2)
+    }
+}
 
-// Ele imprime a lista de números digitados da mesma forma
+Ele imprime a lista de números digitados da mesma forma
 
-// c. Agora, impeça que o usuário digite 3 números iguais. Caso todos sejam iguais, mostre um aviso ao usuário indicando que ele deve, ao menos, inserir um número diferente.
+c. Agora, impeça que o usuário digite 3 números iguais. Caso todos sejam iguais, mostre um aviso ao usuário indicando que ele deve, ao menos, inserir um número diferente.
 
-// if(numero3 === numero2 && numero3 === numero1) {
-//     alert("Você precisa inserir ao menos um número diferente.")
-// } else {
-//     if(numero1 >= numero2 && numero1 >= numero3) {
-//         if (numero2 >= numero3){
-//             console.log(numero1 + ', ' + numero2 + ', ' + numero3)
-//         } else {
-//             console.log(numero1 + ', ' + numero3 + ', ' + numero2)
-//         }
-//     } else if(numero2 >= numero3 && numero2 >= numero1)  {
-//         if (numero3 >= numero1){
-//             console.log(numero2 + ', ' + numero3 + ', ' + numero1)
-//         } else {
-//             console.log(numero2 + ', ' + numero1 + ', ' + numero3)
-//         }
-//     } else if(numero3 >= numero2 && numero3 >= numero1)  {
-//         if (numero2 >= numero1){
-//             console.log(numero3 + ', ' + numero2 + ', ' + numero1)
-//         } else {
-//             console.log(numero3 + ', ' + numero1 + ', ' + numero2)
-//         }
-//     }
-// }
+if(numero3 === numero2 && numero3 === numero1) {
+    alert("Você precisa inserir ao menos um número diferente.")
+} else {
+    if(numero1 >= numero2 && numero1 >= numero3) {
+        if (numero2 >= numero3){
+            console.log(numero1 + ', ' + numero2 + ', ' + numero3)
+        } else {
+            console.log(numero1 + ', ' + numero3 + ', ' + numero2)
+        }
+    } else if(numero2 >= numero3 && numero2 >= numero1)  {
+        if (numero3 >= numero1){
+            console.log(numero2 + ', ' + numero3 + ', ' + numero1)
+        } else {
+            console.log(numero2 + ', ' + numero1 + ', ' + numero3)
+        }
+    } else if(numero3 >= numero2 && numero3 >= numero1)  {
+        if (numero2 >= numero1){
+            console.log(numero3 + ', ' + numero2 + ', ' + numero1)
+        } else {
+            console.log(numero3 + ', ' + numero1 + ', ' + numero2)
+        }
+    }
+}
 
 // EXERCÍCIO 5
 
@@ -162,7 +162,7 @@
 
 // b. Escreva um programa que realize estas perguntas  e indique a classificação final considerada. As opções são: ser humano; mamífero não humano; ave; réptil; anfíbio; peixe ou é invertebrado
 
-const inicio = alert('Pense em um animal. Depois, responta as respostas com "sim" ou "não"')
+const inicio = alert('Pense em um animal. Depois, responta as perguntas com "sim" ou "não"')
 const vertebrado = prompt("É um animal vertebrado?")
 
 if(vertebrado[0] === "s") {
