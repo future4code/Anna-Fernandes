@@ -50,7 +50,7 @@ if(nomeDoCliente === "" || tipoDeJogo === "" || etapa === "" || categoria === ""
     }    
 
     if(tipoDeJogo === "internacional") {
-        valorDoJogo = valorDoJogo * 4,1
+        valorDoJogo = valorDoJogo * 4.1
         let valorTotal = valorDoJogo * quantidade
         alert(templateNota + ` Valor do ingresso:  U$ ${valorDoJogo}
             Valor total:  U$ ${valorTotal} `
@@ -80,7 +80,7 @@ if(nomeDoCliente === "" || tipoDeJogo === "" || etapa === "" || categoria === ""
     }
     
     if(tipoDeJogo === "internacional") {
-        valorDoJogo = valorDoJogo * 4,1
+        valorDoJogo = valorDoJogo * 4.1
         let valorTotal = valorDoJogo * quantidade
         alert(templateNota + ` Valor do ingresso:  U$ ${valorDoJogo}
             Valor total:  U$ ${valorTotal} `
@@ -110,7 +110,7 @@ if(nomeDoCliente === "" || tipoDeJogo === "" || etapa === "" || categoria === ""
     }
     
     if(tipoDeJogo === "internacional") {
-        valorDoJogo = valorDoJogo * 4,1
+        valorDoJogo = valorDoJogo * 4.1
         let valorTotal = valorDoJogo * quantidade
         alert(templateNota + ` Valor do ingresso:  U$ ${valorDoJogo}
             Valor total:  U$ ${valorTotal} `
