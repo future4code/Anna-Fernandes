@@ -1,98 +1,245 @@
-/**
- * EXEMPLO DE UTILIZAÇÃO DA 'comprarCarta'
- * 
- * 
-    const carta = comprarCarta(); // Sorteia uma carta. Por exemplo, o rei de ouros
-    
-    console.log(carta.texto) // imprime o texto da carta. Exemplo: "K♦️" (indica "K" de ouros)
-    console.log(carta.valor) // imprime o valor da carta (um número). Exemplo: 10 (dado que "K" vale 10)
- * 
- * 
- * 
- */
+console.log("Bem-vindo ao jogo");
 
+let novaRodada = false;
 
-// - Dicas Gerais (clique para ver)
-//     - As cartas dos jogadores (usuário e computador) podem ser armazenadas em  `array`.
-//     - Faça cada etapa com calma! Teste bem; e utilize bastante o site fornecido para se basear
+if (confirm("Quer iniciar uma nova rodada?")) {
+   novaRodada = true;
+} else {
+   novaRodada;
+   console.log("O jogo acabou");
+}
 
-// Resolva esta etapa no arquivo `desafio.js`
+if (novaRodada) {
 
-// Lembre de comentar o link para o script do `nossoJogo.js` enquanto faz o desafio!
+   let user = [];
+   let comp = [];
 
-// O desafio consiste em adicionar regras ao jogo, mantendo as originais. Faça na ordem solicitada.
+   let cartasUser = [];
+   let cartasComp = [];
 
-// 8 - Se as duas cartas iniciais do usuário ou do computador forem dois ases (`A`), as cartas devem ser sorteadas novamente.
+   let pontuacaoUser = 0;
+   let pontuacaoComp = 0;
 
-// 9 - Após o sorteio das 2 cartas para cada jogador, as duas primeiras cartas do usuário continuando sendo reveladas. A primeira carta do computador é revelada, a segunda é oculta por enquanto. Você deve perguntar ao usuário se ele deseja comprar mais uma carta. Veja abaixo:
+   const carta1 = comprarCarta();
+   const carta2 = comprarCarta();
 
-// ```jsx
-// confirm(
-// 	"Suas cartas são A♥️ J♣️. A carta revelada do computador é 4♣️." +
-// 	"\n"+  // \n faz pular a linha
-// 	"Deseja comprar mais uma carta?"
-// )
+   const carta3 = comprarCarta();
+   const carta4 = comprarCarta();
 
-// /*
+   user.push(carta1, carta2);
+   comp.push(carta3, carta4);
 
-// Este confirm resulta na mensagem:
+   for (let elemento of user) {
+      cartasUser.push(elemento.texto)
+      pontuacaoUser += Number(elemento.valor)
+   }
 
-// 	Suas cartas são A♥️ J♣️. A carta revelada do computador é 4♣️.
-// 	Deseja comprar mais uma carta?
+   for (let elemento of comp) {
+      cartasComp.push(elemento.texto)
+      pontuacaoComp += Number(elemento.valor)
+   }
 
-// */
-// ```
+   console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+   console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
 
-// 10 - A cada carta comprada pelo usuário, a pontuação dele será somada com o valor da nova carta. Ele poderá comprar cartas até atingir a pontuação de 21 pontos; ou até decidir parar de comprar. Assim que o usuário chegar no limite de pontuação, a mensagem de fim de jogo deve ser mostrada, indicando quem venceu. Veja abaixo, uma sequência possível de mensagens mostradas ao usuário (usando `confirm` e `alert`)
+   let compra = false;
 
-// - Dica
+   if (confirm(`Suas cartas são ${cartasUser}. A carta revelada do computador é ${cartasUser[0]}
+   Deseja comprar mais uma?
+   `)) {
+      console.log("Compra mais uma");
+      compra = true;
+   } else {
+      console.log("não compra");
+      compra = false;
 
-//     Os `confirm` devem ser utilizados quando as mensagem são perguntas. Quando formos só mostrar uma informação ao usuário, vamos utilizar o `alert` (como, por exemplo, ao mostrar quem ganhou o jogo)
+      if (pontuacaoUser > pontuacaoComp) {
+         console.log("O usuário ganhou!");
 
-//     ```jsx
-//     alert(
-//     "Suas cartas são 3♣️ J♥️ 5♣️ 4♣️ . Sua pontuação é 22.\n" +
-//     "As cartas do computador são Q♠️ K♦️ . A pontuação do computador é 20.\n" +
-//     "O computador ganhou!"
-//     )
-//     ```
+         if (confirm(`
+         Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+         As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+         Você ganhou!
+         
+         Quer iniciar uma nova rodada?
+         `)) {
+            novaRodada = true;
+         } else {
+            novaRodada = false;
+            console.log("O jogo acabou");
+         }
 
-// ```jsx
-// "Quer iniciar uma nova rodada?"
-// /* Responde *ok* */
+      } else if (pontuacaoUser < pontuacaoComp) {
+         console.log("O computador ganhou!");
 
-// "Suas cartas são 3♣️ J♥️. A carta revelada do computador é Q♠️."
-// "Deseja comprar mais uma carta?"
-// /* Responde *ok* */
+         if (confirm(`
+         Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+         As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+         O computador ganhou!
+         
+         Quer iniciar uma nova rodada?
+         `)) {
+            novaRodada = true;
+         } else {
+            novaRodada = false;
+            console.log("O jogo acabou");
+         }
+      } else if (pontuacaoUser === pontuacaoComp) {
+         console.log("Empate");
 
-// "Suas cartas são 3♣️ J♥️ 5♣️ . A carta revelada do computador é Q♠️." 
-// "Deseja comprar mais uma carta?"
-// /* Responde *ok* */
+         if (confirm(`
+         Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+         As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+         Empate!
+         
+         Quer iniciar uma nova rodada?
+         `)) {
+            novaRodada = true;
+         } else {
+            novaRodada = false;
+            console.log("O jogo acabou");
+         }
+      } else if ((cartasUser[0] === "A") && (cartasComp[0] === "A")) {
+         // 8 - Se as duas cartas iniciais do usuário ou do computador forem dois ases (`A`), as cartas devem ser sorteadas novamente.
+         console.log("Tente de novo");
+         if (confirm(`
+         Suas cartas são ${cartasUser}. Sua pontuação '${pontuacaoUser}.
+         As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+         Empate!
+         
+         Você deve iniciar uma nova rodada.
+         `)) {
+            novaRodada = true;
+         } else {
+            console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+            console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
+            console.log("O jogo acabou");
+            if (pontuacaoUser < pontuacaoUser) {
+               alert(`
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               O computador ganhou!
+               `)
+            } else if (pontuacaoUser > pontuacaoUser) {
+               alert(`
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               Você ganhou!
+               `)
+            } else {
+               alert(`
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               Empatou!
+               `)
+            }
+            novaRodada = false;
+         }
+      }
+   }
 
-// /* Mensagem de fim de jogo */
-// "Suas cartas são 3♣️ J♥️ 5♣️ 4♣️ . Sua pontuação é 22."
-// "As cartas do computador são Q♠️ K♦️ . A pontuação do computador é 20." 
-// "O computador ganhou!"
-// ```
+   while (compra) {
 
-// 11 - **Quando** o jogador **parar** de comprar cartas (Ter clicado `cancel` ao receber a pergunta "**Deseja comprar mais uma carta?**") **e** tiver a pontuação **menor** ou igual a 21, inicia-se a rodada do computador. Ele deverá comprar cartas até que sua pontuação seja igual ou superior a do usuário. Veja abaixo, uma sequência possível de mensagens mostradas ao usuário.
+      const novacarta = comprarCarta();
+      user.push(novacarta);
+      cartasUser = [];
+      pontuacaoUser = 0;
 
-// ```jsx
-// "Quer iniciar uma nova rodada?"
-// /* Responde *ok* */
+      for (let elemento of user) {
+         cartasUser.push(elemento.texto)
+         pontuacaoUser += Number(elemento.valor)
+      }
 
-// "Suas cartas são 2♥️ 6♥️. A carta revelada do computador é J♦️." 
-// "Deseja comprar mais uma carta?"
-// /* Responde *ok* */
+      console.log(cartasUser);
+      console.log(pontuacaoUser);
 
-// "Suas cartas são 2♥️ 6♥️ 10♠️ . A carta revelada do computador é J♦️." 
-// "Deseja comprar mais uma carta?"
-// /* Responde *cancel* */
+      if (pontuacaoUser <= 21) {
 
-// /* Mensagem de fim de jogo */
-// "Suas cartas são 2♥️ 6♥️ 10♠️ . Sua pontuação é 18." 
-// "As cartas do computador são J♦️ 5♣️ 8♣️. A pontuação do computador é 23." 
-// "O usuário ganhou!"
-// ```
+         console.log("Segue comprando");
 
-// 12 - Se a pontuação do usuário for maior que 21, ele perde o jogo. Se a pontuação do computador for maior que 21 (e a do usuário não for), o usuário ganha o jogo.  Se as pontuações do usuário e do computador forem iguais, o jogo termina em empate.
+         if (confirm(`
+         Suas cartas são ${cartasUser}. A carta revelada do computador é ${cartasUser[0]}.
+         Deseja comprar mais uma carta?
+         `)) {
+            compra = true;
+         } else {
+            compra = false;
+            console.log("O jogo acabou. Usuário não quis mais cartas.");
+
+            while (pontuacaoComp <= pontuacaoUser) {
+               const novacarta = comprarCarta();
+               comp.push(novacarta);
+               cartasComp = [];
+               pontuacaoComp = 0;
+
+               for (let elemento of comp) {
+                  cartasComp.push(elemento.texto)
+                  pontuacaoComp += Number(elemento.valor)
+               }
+
+               console.log(cartasComp);
+               console.log(pontuacaoComp);
+            }
+
+            if ((pontuacaoUser < pontuacaoComp && pontuacaoComp <= 21) || (pontuacaoUser > pontuacaoComp && pontuacaoUser > 21)) {
+               alert(`
+               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               O computador ganhou!
+               `)
+            } else if ((pontuacaoUser > pontuacaoComp && pontuacaoUser <= 21) || (pontuacaoUser < pontuacaoComp && pontuacaoComp > 21)) {
+               alert(`
+               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               Você ganhou!
+               `)
+            } else {
+               alert(`
+               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+               Empatou!
+               `)
+            }
+            break;
+         }
+      } else {
+         compra = false;
+         console.log("O jogo acabou. Aguarde a rodada do computador");
+
+         while (pontuacaoComp <= pontuacaoUser) {
+            const novacarta = comprarCarta();
+            comp.push(novacarta);
+            cartasComp = [];
+            pontuacaoComp = 0;
+
+            for (let elemento of comp) {
+               cartasComp.push(elemento.texto)
+               pontuacaoComp += Number(elemento.valor)
+            }
+
+            console.log(cartasComp);
+            console.log(pontuacaoComp);
+         }
+
+         if ((pontuacaoUser < pontuacaoComp && pontuacaoComp <= 21) || (pontuacaoUser > pontuacaoComp && pontuacaoUser > 21)) {
+            alert(`
+            Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+            As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+            O computador ganhou!
+            `)
+         } else if ((pontuacaoUser > pontuacaoComp && pontuacaoUser <= 21) || (pontuacaoUser < pontuacaoComp && pontuacaoComp > 21)) {
+            alert(`
+            Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+            As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+            Você ganhou!
+            `)
+         } else {
+            alert(`
+            Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
+            As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
+            Empatou!
+            `)
+         }
+      }
+   }
+}
