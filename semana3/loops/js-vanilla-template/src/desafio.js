@@ -62,7 +62,7 @@
 // Quando resolver o exercício, pare e faça a seguinte reflexão: foi fácil fazer esta alteração? O que você poderia ter feito para que fosse mais fácil? **Deixe comentários no seu código sobre esta reflexão.**
 
 const numero = Math.floor((Math.random() * 100) + 1);
-console.log(numero);
+
 let resposta = prompt("Tente acertar o número em que o computador pensou. (ps.: ele é muito esperto, mas você também, campeão)");
 let tentativas = 0;
 
