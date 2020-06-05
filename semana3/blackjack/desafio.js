@@ -1,15 +1,15 @@
-console.log("Bem-vindo ao jogo");
+console.log("Let the games begin");
 
 let novaRodada = false;
 
-if (confirm("Quer iniciar uma nova rodada?")) {
+if (confirm("Bem-vindo ao jogo. Quer iniciar uma nova rodada?")) {
    novaRodada = true;
 } else {
    novaRodada;
    console.log("O jogo acabou");
 }
 
-if (novaRodada) {
+while (novaRodada) {
 
    let user = [];
    let comp = [];
@@ -20,14 +20,15 @@ if (novaRodada) {
    let pontuacaoUser = 0;
    let pontuacaoComp = 0;
 
-   const carta1 = comprarCarta();
-   const carta2 = comprarCarta();
+   for( let i = 0; i < 2; i++ ) {
+      const carta = comprarCarta();
+      user.push(carta);
+   }
 
-   const carta3 = comprarCarta();
-   const carta4 = comprarCarta();
-
-   user.push(carta1, carta2);
-   comp.push(carta3, carta4);
+   for( let i = 0; i < 2; i++ ) {
+      const carta = comprarCarta();
+      comp.push(carta);
+   }
 
    for (let elemento of user) {
       cartasUser.push(elemento.texto)
@@ -44,16 +45,20 @@ if (novaRodada) {
 
    let compra = false;
 
-   if (confirm(`Suas cartas são ${cartasUser}. A carta revelada do computador é ${cartasUser[0]}
+   if (confirm(`
+   Suas cartas são ${cartasUser}. A carta revelada do computador é ${cartasUser[0]}
    Deseja comprar mais uma?
    `)) {
       console.log("Compra mais uma");
       compra = true;
    } else {
-      console.log("não compra");
+      console.log("Não compra");
+      novaRodada = false;
       compra = false;
 
       if (pontuacaoUser > pontuacaoComp) {
+         console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+         console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
          console.log("O usuário ganhou!");
 
          if (confirm(`
@@ -66,10 +71,12 @@ if (novaRodada) {
             novaRodada = true;
          } else {
             novaRodada = false;
-            console.log("O jogo acabou");
+            console.log("O jogo acabou.");
          }
 
       } else if (pontuacaoUser < pontuacaoComp) {
+         console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+         console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
          console.log("O computador ganhou!");
 
          if (confirm(`
@@ -78,13 +85,15 @@ if (novaRodada) {
          O computador ganhou!
          
          Quer iniciar uma nova rodada?
-         `)) {
+         `  )) {
             novaRodada = true;
          } else {
             novaRodada = false;
             console.log("O jogo acabou");
          }
       } else if (pontuacaoUser === pontuacaoComp) {
+         console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+         console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
          console.log("Empate");
 
          if (confirm(`
@@ -100,8 +109,10 @@ if (novaRodada) {
             console.log("O jogo acabou");
          }
       } else if ((cartasUser[0] === "A") && (cartasComp[0] === "A")) {
-         // 8 - Se as duas cartas iniciais do usuário ou do computador forem dois ases (`A`), as cartas devem ser sorteadas novamente.
-         console.log("Tente de novo");
+         console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+         console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
+         console.log("Tente de novo.");
+
          if (confirm(`
          Suas cartas são ${cartasUser}. Sua pontuação '${pontuacaoUser}.
          As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
@@ -110,30 +121,6 @@ if (novaRodada) {
          Você deve iniciar uma nova rodada.
          `)) {
             novaRodada = true;
-         } else {
-            console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
-            console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
-            console.log("O jogo acabou");
-            if (pontuacaoUser < pontuacaoUser) {
-               alert(`
-               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
-               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
-               O computador ganhou!
-               `)
-            } else if (pontuacaoUser > pontuacaoUser) {
-               alert(`
-               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
-               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
-               Você ganhou!
-               `)
-            } else {
-               alert(`
-               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
-               As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
-               Empatou!
-               `)
-            }
-            novaRodada = false;
          }
       }
    }
@@ -150,9 +137,6 @@ if (novaRodada) {
          pontuacaoUser += Number(elemento.valor)
       }
 
-      console.log(cartasUser);
-      console.log(pontuacaoUser);
-
       if (pontuacaoUser <= 21) {
 
          console.log("Segue comprando");
@@ -164,11 +148,15 @@ if (novaRodada) {
             compra = true;
          } else {
             compra = false;
+
+            console.log(`Usuário - cartas: ${cartasUser} - pontuação ${pontuacaoUser}`);
+            console.log(`Computador - cartas: ${cartasComp} - pontuação ${pontuacaoComp}`);
             console.log("O jogo acabou. Usuário não quis mais cartas.");
 
             while (pontuacaoComp <= pontuacaoUser) {
                const novacarta = comprarCarta();
                comp.push(novacarta);
+               
                cartasComp = [];
                pontuacaoComp = 0;
 
@@ -176,31 +164,33 @@ if (novaRodada) {
                   cartasComp.push(elemento.texto)
                   pontuacaoComp += Number(elemento.valor)
                }
-
-               console.log(cartasComp);
-               console.log(pontuacaoComp);
             }
 
             if (((pontuacaoUser < pontuacaoComp) && (pontuacaoComp <= 21)) || ((pontuacaoComp < 22) && (pontuacaoUser > 21))) {
                alert(`
-               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
                As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
                O computador ganhou!
-               `)
+               
+               Quer iniciar uma nova rodada?
+               `  );
             } else if (((pontuacaoUser > pontuacaoComp) && (pontuacaoUser <= 21)) || ((pontuacaoComp > 21) && (pontuacaoUser < 22))) {
                alert(`
-               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
                As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
                Você ganhou!
-               `)
+               
+               Quer iniciar uma nova rodada?
+               `);
             } else {
                alert(`
-               Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
+               Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
                As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
-               Empatou!
-               `)
+               Empate!
+               
+               Quer iniciar uma nova rodada?
+               `);
             }
-            break;
          }
       } else {
          compra = false;
@@ -226,19 +216,28 @@ if (novaRodada) {
             Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
             As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
             O computador ganhou!
-            `)
+            
+            Quer iniciar uma nova rodada?
+            `  )
+            compra = false;
          } else if (((pontuacaoUser > pontuacaoComp) && (pontuacaoUser <= 21)) || ((pontuacaoComp > 21) && (pontuacaoUser < 22))) {
             alert(`
             Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
             As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
             Você ganhou!
+            
+            Quer iniciar uma nova rodada?
             `)
+            compra = false;
          } else {
             alert(`
             Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
             As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
-            Empatou!
+            Empate!
+            
+            Quer iniciar uma nova rodada?
             `)
+            compra = false;
          }
       }
    }
