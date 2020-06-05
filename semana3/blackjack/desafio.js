@@ -181,13 +181,13 @@ if (novaRodada) {
                console.log(pontuacaoComp);
             }
 
-            if ((pontuacaoUser < pontuacaoComp && pontuacaoComp <= 21) || (pontuacaoUser > pontuacaoComp && pontuacaoUser > 21)) {
+            if (((pontuacaoUser < pontuacaoComp) && (pontuacaoComp <= 21)) || ((pontuacaoComp < 22) && (pontuacaoUser > 21))) {
                alert(`
                Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
                As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
                O computador ganhou!
                `)
-            } else if ((pontuacaoUser > pontuacaoComp && pontuacaoUser <= 21) || (pontuacaoUser < pontuacaoComp && pontuacaoComp > 21)) {
+            } else if (((pontuacaoUser > pontuacaoComp) && (pontuacaoUser <= 21)) || ((pontuacaoComp > 21) && (pontuacaoUser < 22))) {
                alert(`
                Suas cartas são ${cartasUser}. A sua pontuação é ${pontuacaoUser}.
                As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
@@ -221,13 +221,13 @@ if (novaRodada) {
             console.log(pontuacaoComp);
          }
 
-         if ((pontuacaoUser < pontuacaoComp && pontuacaoComp <= 21) || (pontuacaoUser > pontuacaoComp && pontuacaoUser > 21)) {
+         if (((pontuacaoUser < pontuacaoComp) && (pontuacaoComp <= 21)) || ((pontuacaoComp < 22) && (pontuacaoUser < 21))) {
             alert(`
             Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
             As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
             O computador ganhou!
             `)
-         } else if ((pontuacaoUser > pontuacaoComp && pontuacaoUser <= 21) || (pontuacaoUser < pontuacaoComp && pontuacaoComp > 21)) {
+         } else if (((pontuacaoUser > pontuacaoComp) && (pontuacaoUser <= 21)) || ((pontuacaoComp > 21) && (pontuacaoUser < 22))) {
             alert(`
             Suas cartas são ${cartasUser}. Sua pontuação é ${pontuacaoUser}.
             As cartas do computador são ${cartasComp}. A pontuação do computador é ${pontuacaoComp}.
