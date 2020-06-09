@@ -3,24 +3,30 @@ const seletor = document.getElementById("dia-da-semana");
 const horarios = document.getElementById("horarios");
 const tarefas = document.getElementsByClassName("tarefa");
 
-let mostrarHorarios = () => {
-    for (i = 0; i < 25; i++) {
-        horarios.innerHTML += `<option class="seletor-hora" value=${i}>${i}h</option>`
+const diasDaSemana = document.getElementsByTagName("ul");
+for (i = 0; i < diasDaSemana.length; i++) {
+    for (j = 0; j < 25; j++) {
+        diasDaSemana[i].innerHTML += `<li class="tarefa" id="${diasDaSemana[i].id}-hora-${j}"><strong>${j}h: </strong></li>`
     }
+}
+
+for (i = 0; i < 25; i++) {
+    horarios.innerHTML += `<option class="seletor-hora" value=hora-${i}>${i}h</option>`
 }
 
 let adicionarTarefa = () => {
     let tarefa = taskInput.value;
 
     const seletorDia = seletor.value;
-    const dia = document.getElementById(seletorDia);
+    const seletorHorario = horarios.value;
     
-    const horario = horarios.value;
+    const diasHorario = seletorDia + '-' + seletorHorario;
+    const horario = document.getElementById(diasHorario)
 
     if (tarefa === "" || seletorDia === "" || horario === "") {
         alert("Você precisa digitar uma tarefa e selecionar o dia e o horário!")
     } else {
-        dia.innerHTML += `<li class="tarefa" onclick="riscarTarefa()"><strong>${horario}h:</strong> ${tarefa}</li>`
+        horario.innerHTML += `${tarefa}<br>`
     }
     
     taskInput.value = "";
@@ -33,9 +39,15 @@ let riscarTarefa = () => {
 }
 
 let apagarTarefas = () => {
-    for (i = 0; i < tarefas.length; i++) {
-        console.log(tarefas[i])
-        tarefas[i].innerHTML = ""
+    
+    for (i = 0; i < diasDaSemana.length; i++) {
+        diasDaSemana[i].innerHTML = ""
+    }
+    
+    for (i = 0; i < diasDaSemana.length; i++) {
+        for (j = 0; j < 25; j++) {
+            diasDaSemana[i].innerHTML += `<li class="tarefa" id="${diasDaSemana[i].id}-hora-${j}"><strong>${j}h: </strong></li>`
+        }
     }
 
     taskInput.value = "";
