@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="index.js" defer></script>
+    <title>Planner</title>
+</head>
+<body>
+    <header>
+        <h1>Minha semana</h1>
+        <div class="input-container">
+            <input type="text" value="" id="task-input">
+            <select id="dia-da-semana" onchange="mostrarHorarios()">
+                <option class="seletor-dia" value="">Selecione o dia</option>
+                <option class="seletor-dia" value="segunda">segunda</option>
+                <option class="seletor-dia" value="terca">terça</option>
+                <option class="seletor-dia" value="quarta">quarta</option>
+                <option class="seletor-dia" value="quinta">quinta</option>
+                <option class="seletor-dia" value="sexta">sexta</option>
+                <option class="seletor-dia" value="sabado">sabado</option>
+                <option class="seletor-dia" value="domingo">domingo</option>
+            </select>
+            <select id="horarios">
+                <option class="seletor-hora" value="">Selecione o horário</option>
+            </select>
+            <button id="task-btn" onclick="adicionarTarefa()">Adicionar tarefa</button>
+            <button id="clear-btn" onclick="apagarTarefas()">Apagar todas</button>
+        </div>
+    </header>
+    <main role="main">
+        <div class="planner-container">
+            <div class="dias">
+                <h3>Segunda</h3>
+                <ul id="segunda"></ul>
+            </div>
+            <div class="dias">
+                <h3>Terça</h3>
+                <ul id="terca"></ul>
+            </div>
+            <div class="dias">
+                <h3>Quarta</h3>
+                <ul id="quarta"></ul>
+            </div>
+            <div class="dias">
+                <h3>Quinta</h3>
+                <ul id="quinta"></ul>
+            </div>
+            <div class="dias">
+                <h3>Sexta</h3>
+                <ul id="sexta"></ul>
+            </div>
+            <div class="dias">
+                <h3>Sábado</h3>
+                <ul id="sabado"></ul>
+            </div>
+            <div class="dias">
+                <h3>Domingo</h3>
+                <ul id="domingo"></ul>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
