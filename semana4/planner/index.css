@@ -87,7 +87,8 @@ h1 {
     min-width: calc(100%/7);
     min-height: calc(100vh - 320px);
     padding: 16px;
-    border: 1px solid #439FD9;
+    border-left: 1px solid #439FD9;
+    border-right: 1px solid #439FD9;
 }
 
 .planner-container .dias h3 {
