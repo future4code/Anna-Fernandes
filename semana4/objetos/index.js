@@ -21,7 +21,6 @@ let pressionaEnter = () => {
 }
 
 let publicarPost = () => {
-    postPage.classList.remove("display-none");
 
     post = {
         titulo: title.value,
@@ -34,14 +33,17 @@ let publicarPost = () => {
     if ((post.titulo === "")|| (post.autor === "") || (post.texto === "")) {
         alert("Os campos de título, autor e texto devem estar preenchidos!");
     } else {
+        postPage.classList.remove("display-none");
+
         postsContainer.innerHTML += `
         <div class="post">
             <h2>${post.titulo}</h2>
-            <p class="post-author">${post.autor}</p>
+            <p class="post-author">por ${post.autor}</p>
             <img class="post-image" src=${post.imagem}>
             <p class="paragraph">${post.texto}</p>
         </div>
         `
+        createPage.classList.add("display-none");
     }
 
     todosPosts.push(post);
@@ -51,5 +53,14 @@ let publicarPost = () => {
     image.value = "";
     text.value = "";
 
-    createPage.classList.add("display-none");
+}
+
+let mostrarTodosPosts = () => {
+    console.log(post)
+    if (post === undefined){
+        alert("Não há posts. Comece criando um.")
+    } else {
+        createPage.classList.add("display-none")
+        postPage.classList.remove("display-none")
+    }
 }

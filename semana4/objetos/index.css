@@ -81,7 +81,7 @@ h1 {
 }
 
 button {
-    margin: 24px auto;
+    margin: 8px auto;
     padding: 8px;
     min-width: 160px;
     border-radius: 5px;
@@ -93,9 +93,15 @@ button {
 }
 
 #show-create-page {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+    margin: 0;
+    position: sticky;
+    top: 8px;
+    right: 8px;
+}
+
+#delete-btn {
+    margin-top: 40px;
+    background-color: #F26457;
 }
 
 button:hover {
@@ -109,8 +115,10 @@ button:hover {
 }
 
 #posts-container .post {
-    margin: 32px auto;
+    margin: 16px auto 64px auto;
+    padding-bottom: 64px;
     max-width: 696px;
+    border-bottom: 2px solid #F26457;
 }
 
 #posts-container h2 {
