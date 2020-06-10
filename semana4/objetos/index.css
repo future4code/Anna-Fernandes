@@ -92,16 +92,11 @@ button {
     text-transform: uppercase;
 }
 
-#show-create-page {
+#create-post {
     margin: 0;
     position: sticky;
     top: 8px;
     right: 8px;
-}
-
-#delete-btn {
-    margin-top: 40px;
-    background-color: #F26457;
 }
 
 button:hover {

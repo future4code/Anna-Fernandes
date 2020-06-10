@@ -22,16 +22,15 @@
                     <input type="text" id="create-author" placeholder="Autor">
                     <input type="text" id="create-image" placeholder="Link da imagem">
                     <textarea id="create-text" placeholder="Escreva aqui seu post." onkeydown="pressionaEnter()"></textarea>
-                    <button id="create-btn" onclick="publicarPost()">Publicar</button>
-                    <button id="show-create-page" onclick="mostrarTodosPosts()">Todos os posts</button>
+                   <button id="create-btn" onclick="publicarPost(event)">Publicar</button>
+                    <!-- <button id="show-create-page" onclick="mostrarTodosPosts()">Todos os posts</button> -->
                 </div>
             </section>
-            <section id="post-page" class="display-none">
-                <button id="show-create-page" onclick="mostrarCreatePage()">Criar novo post</button>
+            <!-- <section id="post-page">
                 <div id="posts-container">
-
+    
                 </div>
-            </section>
+            </section> -->
         </article>
     </main>
 
