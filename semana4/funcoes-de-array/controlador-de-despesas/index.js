@@ -26,7 +26,7 @@ let cadastraDespesa = () => {
         valor.value = ""
         tipo.value = ""
         descricao.value = ""
-        criaLista();
+        criaLista(despesas);
         calculaTotal();
     }
 }
@@ -42,11 +42,16 @@ let filtra = () => {
         limpaLista();
 
         let listaFiltrada = todasDespesas.filter((despesas, idx, arr) => {
-            return (despesas.tipo === filtroTipo.value) && (despesas.valor >= Number(filtroMinimo.value)) || ((despesas.valor <= Number(filtroMaximo.value)))
+            return (despesas.tipo === filtroTipo.value) && (despesas.valor >= Number(filtroMinimo.value)) && ((despesas.valor <= Number(filtroMaximo.value)))
         })
-
         listaFiltrada.forEach((despesas, index, array) => {
-            criaLista();
+            listaDespesas.innerHTML += `
+            <div class="despesa">
+                <p><strong>Valor: </strong>${despesas.valor}</p>
+                <p><strong>Tipo: </strong>${despesas.tipo}</p>
+                <p><strong>Descrição: </strong>${despesas.descricao}</p>
+            </div>
+            `
         })
         
     }
@@ -56,9 +61,19 @@ let limpaFiltro = () => {
     filtroTipo.value = ""
     filtroMinimo.value = ""
     filtroMaximo.value = ""
+
+    limpaLista();
+
+        let listaFiltrada = todasDespesas.filter((despesas, idx, arr) => {
+            return despesas
+        })
+        
+        listaFiltrada.forEach((despesas, index, array) => {
+            criaLista(despesas)
+        })
 }
 
-let criaLista = () => {
+let criaLista = (despesas) => {
     listaDespesas.innerHTML += `
     <div class="despesa">
         <p><strong>Valor: </strong>${despesas.valor}</p>
@@ -86,12 +101,6 @@ let colocaEmOrdem = () => {
     })
 
     todasDespesasOrdenada.forEach((despesas) => {
-        listaDespesas.innerHTML += `
-        <div class="despesa">
-            <p><strong>Valor: </strong>${despesas.valor}</p>
-            <p><strong>Tipo: </strong>${despesas.tipo}</p>
-            <p><strong>Descrição: </strong>${despesas.descricao}</p>
-        </div>
-        `
+        criaLista(despesas)
      })
 }
