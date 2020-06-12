@@ -130,4 +130,22 @@ let funcaoNaoNomeada = () => {
     alert("Hello Future4");
 }
 
-funcaoNaoNomeada()
+// funcaoNaoNomeada()
+
+// Exercícios de Objetos
+
+// RESPOSTAS
+    // 1. Array é uma lista de elementos, utilizados entre [ ], enquanto objeto é um elemento composto por diferentes chaves (ou propriedades), apresentado entre { }. Um array pode ser composto por objetos, assim como a propriedade de um objeto pode ser um array.
+    // 2.
+let criaRetangulo = (lado1, lado2) => {
+        let retangulo = {
+            "largura": lado1,
+            "altura": lado2,
+            "perímetro": 2 * (lado1 + lado2),
+            "área": (lado1 * lado2)
+        }
+        return retangulo;
+}
+
+// let retangulo = criaRetangulo(5, 8)
+// console.log(retangulo)
