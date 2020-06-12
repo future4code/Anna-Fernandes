@@ -9,3 +9,25 @@
     //    8
     //  4.-10
     //    1590 
+
+// 1. Exercícios de lógica de programação
+    // 1. While, for (let i = 0; i < x; i++) e for (let elemento of array). Exemplos:
+let tresManeirasDeIterar = () => {
+    let i = 0;
+    
+    while (i < 15) {
+        i ++
+        console.log(i)
+    }
+    
+    for (let j = 0; j < 16; j++) {
+        console.log(j)
+    }
+    
+    let frutas = ["banana", "maçã", "pêra", "uva", "carambola"]
+    for ( fruta of frutas ) {
+        console.log("Vamos comer uma fruta? Sugiro " + fruta);
+    }
+}
+
+tresManeirasDeIterar();
