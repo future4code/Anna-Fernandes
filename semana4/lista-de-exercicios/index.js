@@ -16,14 +16,16 @@
 
     // 1. While, for (let i = 0; i < x; i++) e for (let elemento of array). Exemplos:
 let tresManeirasDeIterar = () => {
-    let i = 0;
-    
-    while (i < 15) {
-        i ++
-        console.log(i)
+    let array = [1, 2, 3, 4, 5];
+    let i = 0
+
+    while (i < 10) {
+        i++
+        array.push(i)
     }
+    console.log(array)
     
-    for (let j = 0; j < 16; j++) {
+    for (let j = 0; j < array.length; j++) {
         console.log(j)
     }
     
@@ -32,6 +34,8 @@ let tresManeirasDeIterar = () => {
         console.log("Vamos comer uma fruta? Sugiro " + fruta);
     }
 }
+
+// tresManeirasDeIterar()
 
     // 2. a) false
     //    b) false
@@ -49,3 +53,18 @@ let imprimirNumerosPares = (numero) => {
     }
 }
 
+// imprimirNumerosPares(10)
+
+    //4.
+
+let tipoDeTriangulo = (a, b, c) => {
+    if ( a === b && b === c ) {
+        console.log("Esse é um triângulo equilátero")
+    } else if ( a !== b && b !== c && a !== c) {
+        console.log("Esse é um triângulo escaleno")
+    } else {
+        console.log("Esse é um triângulo isósceles")
+    }
+}
+
+// tipoDeTriangulo(1, 3, 3)
