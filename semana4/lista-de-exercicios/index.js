@@ -234,14 +234,12 @@ console.log(arrayTriploString);
 
     // c.
     
-let arrayParEImpar = [];
-array.forEach((numero, idx, array) => {
+let arrayParEImpar = array.map((numero, idx, array) => {
     if (numero % 2 === 0) {
-        numero = numero + " é par"
+        return numero + " é par"
     } else {
-        numero = numero + " é ímpar"
+        return numero + " é ímpar"
     }
-    arrayParEImpar.push(numero)
 });
 
 console.log(arrayParEImpar);
