@@ -268,3 +268,33 @@ let naoTemPermissao = arrayPessoasMontanhaRussa.filter((pessoas, idx, arr) => {
     return (pessoas.idade <= 14) || (pessoas.idade >= 60) || (pessoas.altura < 1.55)
 })
 console.log(naoTemPermissao)
+
+    //4.
+    const consultas = [
+        { nome: "João", genero: "masculino", cancelada: true, dataDaConsulta: "01/10/2019" },
+        { nome: "Pedro", genero: "masculino", cancelada: false, dataDaConsulta: "02/10/2019" },
+        { nome: "Paula", genero: "feminino", cancelada: true, dataDaConsulta: "03/11/2019" },
+        { nome: "Márcia", genero: "feminino", cancelada: false, dataDaConsulta: "04/11/2019" }
+    ]
+
+let consultasEmail = []
+
+consultas.forEach((consulta, idx, array) => {
+
+    if (consulta.genero === "feminino") {
+        pronome = "Sra."
+        pronomeLembrar = "lembrá-la"
+
+    } else {
+        pronome = "Sr."
+        pronomeLembrar = "lembrá-lo"
+    }
+
+    if(consulta.cancelada) {
+        consultasEmail.push(`Olá, ${pronome} ${consulta.nome}. Infelizmente, sua consulta marcada para o dia ${consulta.dataDaConsulta} foi cancelada. Se quiser, pode entrar em contato conosco para remarcá-la`)
+    } else {
+        consultasEmail.push(`Olá, ${pronome } ${consulta.nome}. Estamos enviando esta mensagem para ${pronomeLembrar} da sua consulta no dia ${consulta.dataDaConsulta}. Por favor, acuse o recebimento deste e-mail.`)
+    }
+})
+
+console.log(consultasEmail)
