@@ -124,4 +124,10 @@ let segundoMaiorEsegundoMenor = (array) => {
     console.log(menorNum)
 }
 
-segundoMaiorEsegundoMenor([8, 64, 52, 54, 11, 3])
+// segundoMaiorEsegundoMenor([8, 64, 52, 54, 11, 3])
+    // 2.
+let funcaoNaoNomeada = () => {
+    alert("Hello Future4");
+}
+
+funcaoNaoNomeada()
