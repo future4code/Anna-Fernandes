@@ -246,3 +246,25 @@ array.forEach((numero, idx, array) => {
 
 console.log(arrayParEImpar);
 
+    //3.
+    const arrayPessoasMontanhaRussa = [
+        { nome: "Paula", idade: 12, altura: 1.8},
+        { nome: "João", idade: 20, altura: 1.3},
+        { nome: "Pedro", idade: 15, altura: 1.9},
+        { nome: "Luciano", idade: 22, altura: 1.8},
+        { nome: "Artur", idade: 10, altura: 1.2},
+        { nome: "Soter", idade: 70, altura: 1.9}
+    ]
+
+    //  a.
+
+let temPermissao = arrayPessoasMontanhaRussa.filter((pessoas, idx, arr) => {
+    return (pessoas.idade > 14) && (pessoas.idade < 60) && (pessoas.altura >= 1.55)
+})
+console.log(temPermissao)
+
+    //  b.
+let naoTemPermissao = arrayPessoasMontanhaRussa.filter((pessoas, idx, arr) => {
+    return (pessoas.idade <= 14) || (pessoas.idade >= 60) || (pessoas.altura < 1.55)
+})
+console.log(naoTemPermissao)
