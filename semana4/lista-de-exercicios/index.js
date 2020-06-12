@@ -211,3 +211,38 @@ let djovens = arrayPessoas.filter((pessoa, idx, arr) => {
     return pessoa.idade < 20 
 })
 console.log(djovens)
+
+    //2.
+
+const array = [1, 2, 3, 4, 5, 6]
+    //  a.
+let arrayDobro = [];
+array.forEach((numero, idx, array) => {
+    arrayDobro.push(numero * 2)
+});
+
+console.log(arrayDobro);
+
+    //  b.
+let arrayTriploString = [];
+array.forEach((numero, idx, array) => {
+    numero = numero * 3
+    arrayTriploString.push(numero.toString())
+});
+
+console.log(arrayTriploString);
+
+    // c.
+    
+let arrayParEImpar = [];
+array.forEach((numero, idx, array) => {
+    if (numero % 2 === 0) {
+        numero = numero + " é par"
+    } else {
+        numero = numero + " é ímpar"
+    }
+    arrayParEImpar.push(numero)
+});
+
+console.log(arrayParEImpar);
+
