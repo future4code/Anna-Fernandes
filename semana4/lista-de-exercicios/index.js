@@ -68,3 +68,34 @@ let tipoDeTriangulo = (a, b, c) => {
 }
 
 // tipoDeTriangulo(1, 3, 3)
+
+    //5.
+let comparacaoEntreDoisNumeros = (a, b) => {
+    if ( a < b ) {
+        console.log("O maior é " + b)
+    } else {
+        console.log("O maior é " + a)
+    }
+
+    if ( a % b === 0) {
+        console.log(a + "é divisível por" + b)
+    } else {
+        console.log(a + " não é divisível por " + b)
+    }
+    
+    if ( b % a === 0) {
+        console.log(b + " é divisível por " + a)
+    } else {
+        console.log(b + " não é divisível por " + a)
+    }
+
+    let diferenca = a - b
+    
+    if ( b > a ) {
+        diferenca = diferenca * -1
+    }
+    
+    console.log( "A diferenca entre eles é " + diferenca)
+}
+
+// comparacaoEntreDoisNumeros(15, 30)
