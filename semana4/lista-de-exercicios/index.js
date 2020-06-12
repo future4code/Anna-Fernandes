@@ -164,3 +164,22 @@ let filmeFavorito = () => {
 }
 
 // filmeFavorito();
+
+    //4.
+const pessoa = {
+    nome: "Margarida",
+    idade: 45,
+    email: "margaridaamaflores@gmail.com",
+    endereco: "Rua das Bromélias, 145"
+}
+
+let anonimizarPessoa = (anonimos) => {
+    anonimos = {
+        ...pessoa,
+        nome: "Anônima(o)"
+    }
+    return anonimos
+}
+
+const pessoaAnonima = anonimizarPessoa()
+console.log(pessoaAnonima)
