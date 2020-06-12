@@ -181,5 +181,33 @@ let anonimizarPessoa = (anonimos) => {
     return anonimos
 }
 
-const pessoaAnonima = anonimizarPessoa()
-console.log(pessoaAnonima)
+// const pessoaAnonima = anonimizarPessoa()
+// console.log(pessoaAnonima)
+
+
+// Exercícios de Funções de array
+
+// RESPOSTAS
+
+    //1.
+    //  a.
+
+const arrayPessoas = [
+	{ nome: "Pedro", idade: 20 },
+	{ nome: "João", idade: 10 },
+	{ nome: "Paula", idade: 12 },
+	{ nome: "Artur", idade: 89 } 
+];
+
+let adultos = arrayPessoas.filter((pessoa, idx, arr) => {
+    return pessoa.idade >= 20 
+})
+
+console.log(adultos)
+
+//  b.
+
+let djovens = arrayPessoas.filter((pessoa, idx, arr) => {
+    return pessoa.idade < 20 
+})
+console.log(djovens)
