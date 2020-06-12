@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="index.js" defer></script>
+    <title>Blog</title>
+</head>
+<body>
+
+    <header>
+        <h1>Um Blog</h1>
+    </header>
+
+    <main role="main" id="main-container">
+        <article class="blog">
+            <section id="create-page">
+                <div id="create-post-container">
+                    <input type="text" id="create-title" placeholder="Título">
+                    <input type="text" id="create-author" placeholder="Autor">
+                    <input type="text" id="create-image" placeholder="Link da imagem">
+                    <textarea id="create-text" placeholder="Escreva aqui seu post." onkeydown="pressionaEnter()"></textarea>
+                   <button id="create-btn" onclick="publicarPost(event)">Publicar</button>
+                </div>
+            </section>
+        </article>
+    </main>
+
+</body>
+</html>
