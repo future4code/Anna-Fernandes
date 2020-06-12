@@ -136,16 +136,31 @@ let funcaoNaoNomeada = () => {
 
 // RESPOSTAS
     // 1. Array é uma lista de elementos, utilizados entre [ ], enquanto objeto é um elemento composto por diferentes chaves (ou propriedades), apresentado entre { }. Um array pode ser composto por objetos, assim como a propriedade de um objeto pode ser um array.
+    
     // 2.
 let criaRetangulo = (lado1, lado2) => {
         let retangulo = {
-            "largura": lado1,
-            "altura": lado2,
-            "perímetro": 2 * (lado1 + lado2),
-            "área": (lado1 * lado2)
+            largura: lado1,
+            altura: lado2,
+            perimetro: 2 * (lado1 + lado2),
+            area: (lado1 * lado2)
         }
         return retangulo;
 }
 
 // let retangulo = criaRetangulo(5, 8)
 // console.log(retangulo)
+
+    //3. 
+let filmeFavorito = () => {
+    const meuFilme = {
+        titulo: "Jojo Rabbit",
+        ano: "2019",
+        diretor:"Taika Waititi",
+        elenco: ["Taika Waitit", "Scarlett Johansson", "Roman Griffin", "Sam Rockwell", "Thomasin McKenzie"]
+    }
+
+    console.log(`Venha assistir ao filme ${meuFilme.titulo}, de ${meuFilme.ano}, dirigido por ${meuFilme.diretor} e estrelado por ${meuFilme.elenco}`)
+}
+
+// filmeFavorito();
