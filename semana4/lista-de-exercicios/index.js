@@ -99,3 +99,29 @@ let comparacaoEntreDoisNumeros = (a, b) => {
 }
 
 // comparacaoEntreDoisNumeros(15, 30)
+
+// Exercícios de Funções
+
+// RESPOSTAS
+
+    //1.
+let segundoMaiorEsegundoMenor = (array) => {
+    let menorNum = Infinity;
+    let maiorNum = 0;
+
+    for (let numero of array) {
+        if (numero > maiorNum) {
+            maiorNum = numero;
+        }
+    }
+
+    for (let numero of array) {
+        if (numero < maiorNum) {
+            menorNum = numero;
+        }
+    }
+    console.log(maiorNum)
+    console.log(menorNum)
+}
+
+segundoMaiorEsegundoMenor([8, 64, 52, 54, 11, 3])
