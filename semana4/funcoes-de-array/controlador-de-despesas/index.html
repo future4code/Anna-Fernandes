@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="index.js" defer></script>
+    <title>Controlador de despesa</title>
+</head>
+
+<body>
+
+    <header>
+        <h1>Controlador de despesas</h1>
+    </header>
+
+    <main role="main" id="main">
+        <article class="cadastro-e-total">
+            <section class="cadastro-container">
+                <h2>Cadastro de despesas</h2>
+                <div class="form">
+                    <label for="valor">Valor</label>
+                    <input type="number" name="valor" id="valor" placeholder="Valor">
+                    <label for="tipo">Tipo de despesa</label>
+                    <select name="tipo" id="tipo">
+                        <option value="">Selecione um tipo</option>
+                        <option value="casa">Casa</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="educacao">Educação</option>
+                        <option value="viagens">Viagens</option>
+                        <option value="lazer">Lazer</option>
+                    </select>
+                    <label for="descricao">Descrição da despesa</label>
+                    <textarea type="text" name="descricao" id="descricao" placeholder="Descrição"></textarea>
+                    <button id="cadastro-btn" onclick="cadastraDespesa()">Cadastrar</button>
+                </div>
+            </section>
+            <section class="extrato-container">
+                <h2>Extrato</h2>
+                <p id="valor-total">Você ainda não cadastrou algum gasto.</p>
+            </section>
+        </article>
+        <article class="lista-detalhada">
+            <section class="lista-despesas-container">
+                <h2>Despesas detalhadas</h2>
+                <div class="form">
+                    <label for="filtro-tipo">Tipo de despesa</label>
+                    <select name="filtro-tipo" id="filtro-tipo">
+                        <option value="">Selecione um tipo</option>
+                        <option value="casa">Casa</option>
+                        <option value="alimentacao">Alimentação</option>
+                        <option value="transporte">Transporte</option>
+                        <option value="educacao">Educação</option>
+                        <option value="viagens">Viagens</option>
+                        <option value="lazer">Lazer</option>
+                    </select>
+                    <label for="filtro-minimo">Valor mínimo:</label>
+                    <input type="number" name="filtro-minimo" id="filtro-minimo" placeholder="R$0">
+                    <label for="filtro-maximo">Valor máximo:</label>
+                    <input type="number" name="filtro-maximo" id="filtro-maximo" placeholder="R$9999">
+                    <div class="filtro-btns">
+                        <button id="filtro-btn" onclick="filtra()">Filtrar</button>
+                        <button id="filtro-limpa-btn" onclick="limpaFiltro()">Limpar filtros</button>
+                        <button id="filtro-limpa-btn" onclick="colocaEmOrdem()">Ordenar</button>
+                    </div>
+                </div>
+                <div id="lista-despesas">
+                </div>
+            </section>
+        </article>
+    </main>
+
+</body>
+
+</html>
