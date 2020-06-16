@@ -1,0 +1,11 @@
+.card-conhecimentos-container {
+    margin: 8px 0;
+    padding: 16px 8px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+}
+
+.card-conhecimentos-container img {
+    height: 24px;
+    margin: 8px 0;
+}
