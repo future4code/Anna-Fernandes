@@ -1,48 +1,99 @@
 import React, {Component} from 'react'
-import './SecaoShare.css'
+import styled from 'styled-components'
 
 import logoInstagram from '../../img/instagram.svg'
 import logoFacebook from '../../img/facebook.svg'
 import logoTwitter from '../../img/twitter.svg'
 
+const ShareContainer = styled.div `
+	padding: 8px;
+	background-color: #f5f5f5;
+`
+
+const ShareBtnsContainer = styled.div `
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`
+
+const ShareBtn = styled.button `
+	padding: 0;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+`
+
+const ShareBtnImg = styled.img `
+    max-height: 24px;
+    margin: 8px;
+`
+
+const ShareInput = styled.input `
+    display: block;
+    margin: auto;
+    width: 90%;
+	margin: 4px auto;
+	padding: 4px;
+	border: none;
+	border-radius: 5px;
+	box-shadow: 0px 0px 2px rgba(50, 50, 50, 0.5);
+`
+
+const ShareMensagem = styled.p `
+	text-align: center;
+	font-style: italic;
+`
+
 export class SecaoShare extends Component {
 	state = {
-		texto: ""
+		texto: "",
+		inputTexto: ""
 	}
 
 	onChangeTexto = (event) => {
 		this.setState({
-			texto: event.target.value
+			inputTexto: event.target.value
 		})
 	}
 
 	onClickInstagram = () => {
-		console.log(`Post compartilhado no Instagram com a mensagem: ${this.state.texto}`)
+		const novoTexto =  this.state.inputTexto;
+		this.setState({
+			texto: "Post compartilhado no Instagram com a mensagem: " + novoTexto,
+			inputTexto: "" 
+		});
 	}
 
 	onClickFacebook = () => {
-		console.log(`Post compartilhado no Facebook com a mensagem: ${this.state.texto}`)
+		const novoTexto =  this.state.inputTexto;
+		this.setState({
+			texto: "Post compartilhado no Twitter com a mensagem: " + novoTexto,
+			inputTexto: "" 
+		});
 	}
 
 	onClickTwitter = () => {
-		console.log(`Post compartilhado no Twitter com a mensagem: ${this.state.texto}`)
+		const novoTexto =  this.state.inputTexto;
+		this.setState({
+			texto: "Post compartilhado no Twitter com a mensagem: " + novoTexto,
+			inputTexto: "" 
+		});
 	}
 
 	render() {
-		return <div className={'share-container'}>
-			<div className={'texto-share'}>
-				<input
-					className={'input-share'}
-					placeholder={'Texto de compartilhamento'}
-					value={this.state.texto}
-					onChange={this.onChangeTexto}
-				/>
-			</div>
-			<div className={'share-btns-container'}>
-				<button onClick={this.onClickInstagram}><img src={logoInstagram} alt="logo redes sociais" /></button>
-				<button onClick={this.onClickFacebook}><img src={logoFacebook} alt="logo redes sociais" /></button>
-				<button onClick={this.onClickTwitter}><img src={logoTwitter} alt="logo redes sociais" /></button>
-			</div>
-		</div>
+		return <ShareContainer>
+			<ShareInput
+				className={'input-share'}
+				placeholder={'Texto de compartilhamento'}
+				value={this.state.inputTexto}
+				onChange={this.onChangeTexto}
+			/>
+			<ShareBtnsContainer>
+				<ShareBtn onClick={this.onClickInstagram}><ShareBtnImg src={logoInstagram} alt="logo redes sociais" /></ShareBtn>
+				<ShareBtn onClick={this.onClickFacebook}><ShareBtnImg src={logoFacebook} alt="logo redes sociais" /></ShareBtn>
+				<ShareBtn onClick={this.onClickTwitter}><ShareBtnImg src={logoTwitter} alt="logo redes sociais" /></ShareBtn>
+			</ShareBtnsContainer>
+			<ShareMensagem>{this.state.texto}</ShareMensagem>
+		</ShareContainer>
 	}
 }
