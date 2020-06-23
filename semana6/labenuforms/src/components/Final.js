@@ -6,15 +6,16 @@ const EtapaContainer = styled.div `
   flex-direction: column;
   align-items: center;
 `
-const LabelPergunta = styled.div `
-  margin: 16px 0 8px 0;
+const Medium =  styled.p `
+    text-align: center;
+    font-size: 20px;
+    color: #163840;
 `
-
 
 function Etapa1() {
   return (
     <EtapaContainer>
-        <p>Agradecemos a participação na nossa pesquisa.</p>
+        <Medium>Agradecemos a participação na nossa pesquisa.</Medium>
     </EtapaContainer>
   );
 }
