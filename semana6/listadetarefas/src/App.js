@@ -32,6 +32,10 @@ const InputsContainer = styled.div`
   gap: 10px;
 `
 
+const FiltroTarefa = styled.div`
+  background-color: #f5f5f5;
+`
+
 class App extends React.Component {
     state = {
       tarefas: [
@@ -49,6 +53,8 @@ class App extends React.Component {
         }
       ],
       inputValue: '',
+      buscar: false,
+      inputBusca: '',
       inputAlteraValue: '',
       filter: '',
       order: true,
@@ -89,7 +95,7 @@ class App extends React.Component {
       if ( id === tarefa.id) {
         const novaTarefa = {
           ...tarefa,
-          editar: true
+          editar: !tarefa.editar
         }
         return novaTarefa
       } else {
@@ -135,7 +141,6 @@ class App extends React.Component {
 
   onChangeFilter = (event) => {
     this.setState({ filter: event.target.value })
-
   }
 
   removeTarefa = tarefaParaRemover => {
@@ -149,11 +154,31 @@ class App extends React.Component {
   }
 
   onClickOrdenaCrescente = () => {
-    this.setState({ order: true });
+    const novoTarefas = this.state.tarefas.sort( (tarefa1, tarefa2) => {
+      if (tarefa1.texto > tarefa2.texto) {
+        return 1
+      } else {
+        return -1
+      }
+    })
+
+    this.setState({ tarefas: novoTarefas });
   }
 
   onClickOrdenaDecrescente = () => {
-    this.setState({ order: false });
+    const novoTarefas = this.state.tarefas.sort( (tarefa1, tarefa2) => {
+      if (tarefa1.texto > tarefa2.texto) {
+        return -1
+      } else {
+        return 1
+      }
+    })
+
+    this.setState({ tarefas: novoTarefas });
+  }
+
+  onClickBuscaTarefas = () => {
+    this.setState({ buscar: !this.state.buscar });
   }
 
   apagaTodas = () => {
@@ -168,16 +193,75 @@ class App extends React.Component {
     this.setState({ tarefas: tarefasEmBranco, id:"", texto:"", completa:"", inputValue:"" })
   }
 
+  onChangeInputPesquisaTarefa = event => {
+    this.setState({ inputBusca: event.target.value })
+  }
+
   render() {
     const listaFiltradaPendentes = this.state.tarefas
       .filter(tarefa => {
         return !tarefa.completa
-      })
+      });
       
     const listaFiltradaCompletas = this.state.tarefas
       .filter(tarefa => {
         return tarefa.completa
-      })
+      });
+      
+    const listaFiltradaTarefa = this.state.tarefas
+      .filter(tarefa => {
+        if (tarefa.texto === this.state.inputBusca) {
+          return tarefa.texto
+        }
+      });
+
+    const mostrarResultado = () => {
+      if (this.state.buscar) {
+        return (
+        <TarefaList>
+            <TarefaFiltrada>
+            <h3>Resultado da busca</h3>
+              {listaFiltradaTarefa.map(tarefa => {
+                if (tarefa.editar) {
+                  return (
+                    <div>
+                      <Tarefa
+                        completa={tarefa.completa}
+                        editar={tarefa.editar}
+                        key={tarefa.id}
+                        onClick={() => this.selectTarefa(tarefa.id)}
+                        onDoubleClick={() => this.removeTarefa(tarefa.id)}
+                      >
+                        {tarefa.texto}
+                      </Tarefa>
+                      <input onChange={this.onChangeAlteraTarefa}></input> 
+                      <button onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</button> 
+                      <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
+                    </div>
+                  )
+                } else {
+                  return (
+                    <div>
+                      <Tarefa
+                        completa={tarefa.completa}
+                        editar={tarefa.editar}
+                        key={tarefa.id}
+                        onClick={() => this.selectTarefa(tarefa.id)}
+                        onDoubleClick={() => this.removeTarefa(tarefa.id)}
+                      >
+                        {tarefa.texto}
+                      </Tarefa>
+                      <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
+                    </div>
+                  )
+                }
+              })}
+            </TarefaFiltrada>
+          </TarefaList>
+        )
+      }
+    
+    }
 
 
     return (
@@ -188,8 +272,6 @@ class App extends React.Component {
           <button onClick={this.criaTarefa}>Adicionar</button>
         </InputsContainer>
         <br/>
-
-
 {/* 
         <InputsContainer>
           <label>Filtro</label>
@@ -200,13 +282,12 @@ class App extends React.Component {
           </select>
         </InputsContainer>
          */}
-
-
-        <InputsContainer>
+        <FiltroTarefa>
           <label>Filtre por tarefa</label>
           <input value={this.state.filterTarefa} onChange={this.onChangeInputPesquisaTarefa}></input>
-          <button>Filtrar</button>
-        </InputsContainer>
+          <button onClick={this.onClickBuscaTarefas}>Filtrar</button>
+          {mostrarResultado()}
+        </FiltroTarefa>
         <TarefaList>
           <TarefaFiltrada>
           <h3>Tarefas pendentes</h3>
