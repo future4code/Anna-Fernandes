@@ -2,38 +2,145 @@ import React from 'react'
 import styled from 'styled-components'
 import './styles.css'
 
+import iconeEdita from './images/edit.svg'
+import iconeDeleta from './images/delete.svg'
+
+const HeaderTitle = styled.h1 `
+  display: block;
+  width: 100%;
+  padding: 24px 8px;
+  margin: 0;
+  background-color: #5086F2;
+  color: #F2F2F2;
+  font-size: 3rem;
+`
+
 const TarefaList = styled.ul`
-  padding: 24px;
+  margin: 0 auto 24px auto;
+  padding: 0;
   max-width: 800px;
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
+  justify-content: center;
+    flex-wrap: wrap;
 
   @media screen (max-width: 550px) {
     display: block;
   }
 `
 
-const TarefaFiltrada = styled.ul`
-  padding: 0;
-  margin: 0 40px;
-  width: 200px;
-  min-height: 300px;
+const TarefaFiltrada = styled.div`
+  width: calc(100%/2 - 48px);
+  padding: 16px 8px;
+  margin: 16px!important;
+  min-height: 200px;
+  margin: 0 8px;
+  border-radius: 5px;
+  background-color: #F2EEB6;
+  list-style: none;
+`
+
+const ResultadoBusca = styled.div`
+  min-width: 300px;
+  padding: 16px 8px;
+  margin-top: 24px!important;
+  min-height: 200px;
+  margin: 0 8px;
+  border-radius: 5px;
+  background-color: #F2EEB6;
+  list-style: none;
+`
+const TarefasContainer = styled.div`
+  display: flex;
+  align-items: space-between;
+  flex-wrap: wrap;
 `
 
 const Tarefa = styled.li`
+  width: calc(100% - 60px);
   text-align: left;
   text-decoration: ${({completa}) => (completa ? 'line-through' : 'none')};
 `
 
 const InputsContainer = styled.div`
-  display: grid;
-  grid-auto-flow: column;
-  gap: 10px;
+  margin: 32px auto;
+  max-width: 600px;
+`
+
+const InputLarge = styled.input `
+  min-width: 360px;
+  margin: 0 8px;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+
+  @media screen and (max-width: 400px) {
+    min-width: 300px;
+  }
+`
+
+const InputSmall = styled.input `
+  height: 24px;
+  margin: 4px 0px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+`
+
+const Btn = styled.button `
+  font-weight: 700;
+  margin: 0 8px;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+  background-color: #5086F2;
+  color: #F2F2F2;
+  cursor: pointer;
+`
+
+const BtnSmall = styled.button `
+  height: 26px;
+  font-weight: 700;
+  margin: 4px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+  background-color: #5086F2;
+  color: #F2F2F2;
+  cursor: pointer;
+`
+
+const BtnDelete = styled.button `
+  font-weight: 700;
+  margin: 24px 0;
+  padding: 8px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25);
+  border: none;
+  background-color: #F28585;
+  color: #F2F2F2;
+  cursor: pointer;
+`
+
+const BtnTransparent = styled.button `
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+`
+
+const Icone = styled.img `
+  height: 16px;
 `
 
 const FiltroTarefa = styled.div`
   background-color: #f5f5f5;
+  padding: 24px 8px;
+`
+
+const LabelInput = styled.label`
+  opacity: 0.8;
 `
 
 class App extends React.Component {
@@ -198,6 +305,19 @@ class App extends React.Component {
   }
 
   render() {
+    
+    // const listaFiltrada = this.state.tarefas
+    //   .filter(tarefa => {
+    //     switch (this.state.filter) {
+    //       case 'pendentes':
+    //         return !tarefa.completa
+    //       case 'completas':
+    //         return tarefa.completa
+    //       default:
+    //         return true
+    //     }
+    //   })
+
     const listaFiltradaPendentes = this.state.tarefas
       .filter(tarefa => {
         return !tarefa.completa
@@ -210,21 +330,20 @@ class App extends React.Component {
       
     const listaFiltradaTarefa = this.state.tarefas
       .filter(tarefa => {
-        if (tarefa.texto === this.state.inputBusca) {
+        if ((tarefa.texto.includes(this.state.inputBusca)) && (this.state.inputBusca !== "" )) {
           return tarefa.texto
-        }
+        } 
       });
 
     const mostrarResultado = () => {
       if (this.state.buscar) {
         return (
         <TarefaList>
-            <TarefaFiltrada>
-            <h3>Resultado da busca</h3>
+            <ResultadoBusca>
               {listaFiltradaTarefa.map(tarefa => {
                 if (tarefa.editar) {
                   return (
-                    <div>
+                    <TarefasContainer>
                       <Tarefa
                         completa={tarefa.completa}
                         editar={tarefa.editar}
@@ -234,29 +353,29 @@ class App extends React.Component {
                       >
                         {tarefa.texto}
                       </Tarefa>
-                      <input onChange={this.onChangeAlteraTarefa}></input> 
-                      <button onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</button> 
-                      <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                    </div>
+                      <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                      <BtnTransparent onClick={() => this.removeTarefa(tarefa.id)}><Icone src={iconeDeleta} /></BtnTransparent>
+                      <InputSmall onChange={this.onChangeAlteraTarefa}></InputSmall> 
+                      <BtnSmall onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</BtnSmall> 
+                    </TarefasContainer>
                   )
                 } else {
                   return (
-                    <div>
+                    <TarefasContainer>
                       <Tarefa
                         completa={tarefa.completa}
                         editar={tarefa.editar}
                         key={tarefa.id}
                         onClick={() => this.selectTarefa(tarefa.id)}
-                        onDoubleClick={() => this.removeTarefa(tarefa.id)}
                       >
                         {tarefa.texto}
                       </Tarefa>
-                      <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                    </div>
+                      <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                    </TarefasContainer>
                   )
                 }
               })}
-            </TarefaFiltrada>
+            </ResultadoBusca>
           </TarefaList>
         )
       }
@@ -266,10 +385,10 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <h1>Lista de tarefas</h1>
+        <HeaderTitle>Lista de tarefas</HeaderTitle>
         <InputsContainer>
-          <input value={this.state.inputValue} onChange={this.onChangeInput}/>
-          <button onClick={this.criaTarefa}>Adicionar</button>
+          <InputLarge value={this.state.inputValue} onChange={this.onChangeInput}/>
+          <Btn onClick={this.criaTarefa}>Adicionar</Btn>
         </InputsContainer>
         <br/>
 {/* 
@@ -282,19 +401,13 @@ class App extends React.Component {
           </select>
         </InputsContainer>
          */}
-        <FiltroTarefa>
-          <label>Filtre por tarefa</label>
-          <input value={this.state.filterTarefa} onChange={this.onChangeInputPesquisaTarefa}></input>
-          <button onClick={this.onClickBuscaTarefas}>Filtrar</button>
-          {mostrarResultado()}
-        </FiltroTarefa>
         <TarefaList>
           <TarefaFiltrada>
           <h3>Tarefas pendentes</h3>
           {listaFiltradaPendentes.map(tarefa => {
             if (tarefa.editar) {
               return (
-                <div>
+                <TarefasContainer>
                   <Tarefa
                     completa={tarefa.completa}
                     editar={tarefa.editar}
@@ -304,25 +417,26 @@ class App extends React.Component {
                   >
                     {tarefa.texto}
                   </Tarefa>
-                  <input onChange={this.onChangeAlteraTarefa}></input> 
-                  <button onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</button> 
-                  <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                </div>
+                  <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                  <BtnTransparent onClick={() => this.removeTarefa(tarefa.id)}><Icone src={iconeDeleta} /></BtnTransparent>
+                  <InputSmall onChange={this.onChangeAlteraTarefa}></InputSmall> 
+                  <BtnSmall onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</BtnSmall> 
+                </TarefasContainer>
               )
             } else {
               return (
-                <div>
+                <TarefasContainer>
                   <Tarefa
                     completa={tarefa.completa}
                     editar={tarefa.editar}
                     key={tarefa.id}
                     onClick={() => this.selectTarefa(tarefa.id)}
-                    onDoubleClick={() => this.removeTarefa(tarefa.id)}
                   >
                     {tarefa.texto}
                   </Tarefa>
-                  <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                </div>
+                  <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                  <BtnTransparent onClick={() => this.removeTarefa(tarefa.id)}><Icone src={iconeDeleta} /></BtnTransparent>
+                </TarefasContainer>
               )
             }
           })}
@@ -332,7 +446,7 @@ class App extends React.Component {
           {listaFiltradaCompletas.map(tarefa => {
             if (tarefa.editar) {
               return (
-                <div>
+                <TarefasContainer>
                   <Tarefa
                     completa={tarefa.completa}
                     editar={tarefa.editar}
@@ -342,14 +456,15 @@ class App extends React.Component {
                   >
                     {tarefa.texto}
                   </Tarefa>
-                  <input onChange={this.onChangeAlteraTarefa}></input> 
-                  <button onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</button> 
-                  <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                </div>
+                  <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                  <BtnTransparent onClick={() => this.removeTarefa(tarefa.id)}><Icone src={iconeDeleta} /></BtnTransparent>
+                  <InputSmall onChange={this.onChangeAlteraTarefa}></InputSmall> 
+                  <BtnSmall onClick={() => this.alteraTarefa(tarefa.id)}>Alterar</BtnSmall> 
+                </TarefasContainer>
               )
             } else {
               return (
-                <div>
+                <TarefasContainer>
                   <Tarefa
                     completa={tarefa.completa}
                     editar={tarefa.editar}
@@ -359,19 +474,25 @@ class App extends React.Component {
                   >
                     {tarefa.texto}
                   </Tarefa>
-                  <button onClick={() => this.abreInputEditar(tarefa.id)}>Editar</button>
-                </div>
+                  <BtnTransparent onClick={() => this.abreInputEditar(tarefa.id)}><Icone src={iconeEdita} /></BtnTransparent>
+                  <BtnTransparent onClick={() => this.removeTarefa(tarefa.id)}><Icone src={iconeDeleta} /></BtnTransparent>
+                </TarefasContainer>
               )
             }
           })}
           </TarefaFiltrada>
         </TarefaList>
-        <p>Clique duas vezes para deletar a tarefa.</p>
         <div>
-          <button onClick={this.onClickOrdenaCrescente}>Ordenar de forma crescente</button>
-          <button onClick={this.onClickOrdenaDecrescente}>Ordenar de forma decrescente</button>
+          <Btn onClick={this.onClickOrdenaCrescente}>Ordenar de forma crescente</Btn>
+          <Btn onClick={this.onClickOrdenaDecrescente}>Ordenar de forma decrescente</Btn>
         </div>
-        <button onClick={this.apagaTodas}>Apagar todas as tarefas</button>
+        <BtnDelete onClick={this.apagaTodas}>Apagar todas as tarefas</BtnDelete>
+        <FiltroTarefa>
+          <LabelInput>Filtre por tarefa</LabelInput>
+          <InputLarge value={this.state.filterTarefa} onChange={this.onChangeInputPesquisaTarefa}></InputLarge>
+          <Btn onClick={this.onClickBuscaTarefas}>Filtrar</Btn>
+          {mostrarResultado()}
+        </FiltroTarefa>
       </div>
     )
   }
