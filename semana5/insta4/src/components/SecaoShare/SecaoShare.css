@@ -1,0 +1,23 @@
+.share-btns-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+}
+
+.share-btns-container button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.share-btns-container img {
+    max-height: 24px;
+    margin: 8px;
+}
+
+.share-container input {
+    display: block;
+    margin: auto;
+    width: 90%;
+}
