@@ -29,7 +29,9 @@ class App extends React.Component {
     editarEmailValue: "",
     inputBuscaValue: "",
 
-    usuarioClicado: ""
+    usuarioClicado: "",
+    usuarioBuscado: "",
+    abreBusca: false
   };
 
   componentDidMount = () => {
@@ -51,7 +53,6 @@ class App extends React.Component {
       })
       .catch(error => {
         console.log(error)
-        console.log(error.data);
       });
   };
 
@@ -78,7 +79,7 @@ class App extends React.Component {
         alert("Usuário criado com sucesso");
       })
       .catch(error => {
-        alert(error.data);
+        alert(error);
       });
 
   };
@@ -106,7 +107,6 @@ class App extends React.Component {
 
   editarUsuario = id => {
     this.setState({ abreEditar: false });
-    console.log(this.state.editarUsuarioValue)
 
     const body = {
       name: this.state.editarUsuarioValue,
@@ -114,7 +114,7 @@ class App extends React.Component {
     };
 
       axios
-        .get(
+        .put(
           "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/" + id,
           body,
           {
@@ -124,7 +124,8 @@ class App extends React.Component {
           }
         )
         .then(response => {
-          alert("Usuário buscado com sucesso");
+          this.pegarListaUsuarios();
+          alert("Usuário editado com sucesso");
         })
         .catch(error => {
           alert(error);
@@ -132,10 +133,9 @@ class App extends React.Component {
   };
 
   buscarUsuario = () => {
-    this.setState({ abreEditar: false });
     const busca = this.state.inputBuscaValue;
       axios
-        .put(
+        .get(
           "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/search?name=" + busca + "&email=" ,
           {
             headers: {
@@ -145,7 +145,6 @@ class App extends React.Component {
         )
         .then(response => {
           this.setState({usuarios: response.data});
-          alert("Usuário editado com sucesso");
         })
         .catch(error => {
           alert(error);
@@ -158,10 +157,24 @@ class App extends React.Component {
 
   abrirUsuario = id => {
     this.setState({ abreUsuario: true })
-    this.setState({ usuarioClicado: id })
-
     this.setState({ abreCadastro: false })
     this.setState({ abreLista: false })
+    
+    axios
+      .get(
+        "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/"  + id,
+        {
+          headers: {
+            Authorization: "anna-fernandes-turing",
+          }
+        }
+      )
+      .then(response => {
+        this.setState({usuarioClicado: response.data});
+      })
+      .catch(error => {
+        console.log(error)
+      });
   }
 
   abrirLista = () => {
@@ -198,11 +211,40 @@ class App extends React.Component {
   }
 
   render() {
-    const lista = <Lista lista={this.state.usuarios} botao={this.abrirCadastro} textoBotao= "Ir para a página de registro" funcaoDeleta={this.deletarUsuario} funcaoAbreUsuario={this.abrirUsuario} funcaoBusca={this.buscarUsuario} inputBusca={this.onChangeInputBuscaValue} />
+    const lista = <Lista 
+      lista={this.state.usuarios} 
+      botao={this.abrirCadastro} 
+      textoBotao= "Ir para a página de registro" 
+      funcaoDeleta={this.deletarUsuario} 
+      funcaoAbreUsuario={this.abrirUsuario} 
+      funcaoBusca={this.buscarUsuario} 
+      inputBusca={this.onChangeInputBuscaValue} 
+      usuarioBuscadoId={this.state.usuarioBuscado.id} 
+      usuarioBuscadoNome={this.state.usuarioBuscado.name} 
+      abreBusca={this.state.abreBusca} 
+      funcaoLimparBusca={this.pegarListaUsuarios}/>
 
-    const usuario = <Usuario lista={this.state.usuarios} usuarioId={this.state.usuarioClicado} funcaoLista={this.abrirLista} funcaoDeleta={this.deletarUsuario} funcaoEdita={this.abreEditar} abreEditar={this.state.abreEditar} funcaoSalvaEdicao={this.editarUsuario} mudaInputEditarNome={this.onChangeEditarUsuarioValue} mudaInputEditarEmail={this.onChangeEditarEmailValue}/>
+    const usuario = <Usuario 
+      lista={this.state.usuarios} 
+      usuarioId={this.state.usuarioClicado} 
+      funcaoLista={this.abrirLista} 
+      funcaoDeleta={this.deletarUsuario} 
+      funcaoEdita={this.abreEditar} 
+      abreEditar={this.state.abreEditar} 
+      funcaoSalvaEdicao={this.editarUsuario}
+       mudaInputEditarNome={this.onChangeEditarUsuarioValue} mudaInputEditarEmail={this.onChangeEditarEmailValue} 
+       usuarioNome={this.state.usuarioClicado.name} 
+       usuarioEmail={this.state.usuarioClicado.email} 
+       usuarioID={this.state.usuarioClicado.id}/>
 
-    const cadastro = <Cadastro usuarioValue={this.state.usuarioValue} emailValue={this.state.emailValue} funcao={this.criarUsuario} botao={this.abrirLista} textoBotao= "Ir para a página da lista" mudaInputNome={this.onChangeUsuarioValue} mudaInputEmail={this.onChangeEmailValue}/>
+    const cadastro = <Cadastro 
+      usuarioValue={this.state.usuarioValue} 
+      emailValue={this.state.emailValue} 
+      funcao={this.criarUsuario} 
+      botao={this.abrirLista} 
+      textoBotao= "Ir para a página da lista" 
+      mudaInputNome={this.onChangeUsuarioValue} 
+      mudaInputEmail={this.onChangeEmailValue}/>
         
     return (
       <AppContainer>

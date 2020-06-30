@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import styled from "styled-components";
 
 const UsuarioContainer = styled.div `
@@ -29,6 +28,7 @@ const BtnContainer = styled.div `
 `
 const Title = styled.h2 `
     text-align: center;
+    margin-bottom: 4px;
 `
 const Label = styled.label `
     margin-top: 16px;
@@ -64,8 +64,10 @@ const BtnDeleta = styled.button `
     cursor: pointer;
 `
 
-const UsuarioNome = styled.p `
-    
+const UsuarioEmail = styled.p `
+    text-align: center;
+    margin: 0;
+    padding: 0;
 `
 
 class Usuario extends React.Component {
@@ -82,23 +84,15 @@ class Usuario extends React.Component {
         }
     return (
       <UsuarioContainer>
-          {this.props.lista.map(usuario => {
-            if ( usuario.id === this.props.usuarioId ) {
-                return (
-                    <div key={usuario.id}>
-                        <Title>{usuario.name}</Title>
-                        <UsuarioNome>{usuario.email}</UsuarioNome>
-                        <BtnContainer>
-                            <BtnDeleta onClick={()=>this.props.funcaoDeleta(usuario.id)}>x</BtnDeleta>
-                            <BtnDeleta onClick={this.props.funcaoEdita}>editar</BtnDeleta>
-                        </BtnContainer>
-                        {this.props.abreEditar && editar(usuario.id)}
-                        <Btn  color="#5086F2" onClick={this.props.funcaoLista}>Voltar à lista</Btn>
-                    </div>
-                )
-            }
-            })
-          }
+          <Title>{this.props.usuarioNome}</Title>
+            <UsuarioEmail>{this.props.usuarioEmail}</UsuarioEmail>
+            <BtnContainer>
+                <BtnDeleta onClick={()=>this.props.funcaoDeleta(this.props.usuarioID)}>x</BtnDeleta>
+                <BtnDeleta onClick={this.props.funcaoEdita}>editar</BtnDeleta>
+            </BtnContainer>
+            {this.props.abreEditar && editar(this.props.usuarioID)}
+            <Btn  color="#5086F2" onClick={this.props.funcaoLista}>Voltar à lista</Btn>
+   
       </UsuarioContainer>
     );
   }

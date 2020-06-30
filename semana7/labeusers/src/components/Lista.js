@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import styled from "styled-components";
 
 const ListaContainer = styled.div `
@@ -34,7 +33,7 @@ const Input = styled.input `
 `
 const Btn = styled.button `
     width: 100%;
-    margin: 16px auto;
+    margin: 8px auto;
     padding: 8px;
     border-radius: 5px;
     border: none;
@@ -67,6 +66,7 @@ class Lista extends React.Component {
           <Label>Buscar por nome</Label>
           <Input onChange={this.props.inputBusca}/>
           <Btn color="#F28585" onClick={this.props.funcaoBusca}>Buscar</Btn>
+          <Btn color="#5086F2" onClick={this.props.funcaoLimparBusca}>Limpar Busca</Btn>
           {this.props.lista.map(usuario => {
               return (
                 <UsuarioLista key={usuario.id}>
