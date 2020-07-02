@@ -9,7 +9,7 @@ const PokeContainer = styled.div `
   justify-content: center;
 `
 
-export class App extends React.Component {
+export class PokeApi extends React.Component {
   state = {
     pokeList: [],
     pokeImage: "",
@@ -61,4 +61,4 @@ export class App extends React.Component {
   }
 }
 
-export default App;
+export default PokeApi;
