@@ -41,7 +41,8 @@ class SearchTracks extends React.Component {
             trackArtist: "",
             trackUrl: "",
             playlists: [],
-            playlitId: ""
+            playlitId: "",
+            trackClickedId: ""
         }
     }
 
@@ -80,7 +81,7 @@ class SearchTracks extends React.Component {
                 return artist.name;
             })
             
-            this.setState({ trackName: response.name, trackArtist: trackArtist, trackUrl: response.preview_url, addTrack: true });
+            this.setState({ trackName: response.name, trackArtist: trackArtist, trackUrl: response.preview_url, addTrack: true, trackClickedId: response.id });
             this.getAllPlaylists();
         })
         .catch( err => {
@@ -120,14 +121,18 @@ class SearchTracks extends React.Component {
 
   render() {
 
-    const isAdding = <select onChange={this.addTrack}>
-        <option>Selecione uma playlist</option>
-        {this.state.playlists.map( playlist => {
-            return <option  value={playlist.id} key={playlist.id}>
-                {playlist.name}
-            </option>
-        })}
-    </select>
+    const isAdding = id => {
+        if ( this.state.trackClickedId === id ) {
+            return <select onChange={this.addTrack}>
+                <option>Selecione uma playlist</option>
+                {this.state.playlists.map( playlist => {
+                    return <option  value={playlist.id} key={playlist.id}>
+                        {playlist.name}
+                    </option>
+                })}
+            </select>
+        }
+    } 
 
     return (
         <div>
@@ -149,7 +154,7 @@ class SearchTracks extends React.Component {
                                 return <p>{artist.name}</p>
                             })}
                             
-                            {this.state.addTrack && isAdding}
+                            {isAdding(track.id)}
                         </TrackResult>
                 })}
             </ResultsContainer>
