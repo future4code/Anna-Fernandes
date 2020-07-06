@@ -1,18 +1,12 @@
 import React from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
 
-import imgRock from '../../images/rock.jpg';
+import { PlaylistContainer, PlaylistImg, PlaylistTracks, AddTrack, AddTrackTitle, PlaylistTitle, PlaylistTrackDetails, TrackText, Name, Artist, Icon, Iconbtn } from './style';
 
-const PlaylistContainer = styled.div `
-  width: 100%;
-`
-const PlaylistTracks = styled.div `
-  width: 100%;
-`
-const AddTrack = styled.div `
-  width: 100%;
-`
+import iconDelete from '../../images/delete.svg';
+import iconAdd from '../../images/add.svg';
+import iconPlay from '../../images/play.svg';
+import iconPause from '../../images/pause.svg';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists";
 
@@ -29,7 +23,8 @@ class Playlist extends React.Component {
       inputTrackArtist: "",
       inputTrackUrl: "",
       isPlaying: false,
-      audioPlaying: ""
+      audioPlaying: "",
+      trackPlaying: ""
     }
   
     onChangeInputTrackName = event => {
@@ -56,6 +51,7 @@ class Playlist extends React.Component {
       axios.post(`${baseUrl}/${id}/tracks`, body, axiosConfig)
       .then( () => {
         alert("Música adicionada com sucesso");
+        this.setState({ inputTrackName: "", inputTrackArtist: "", inputTrackUrl: "" });
         this.props.updatePlaylist();
       })
       .catch(err => {
@@ -64,14 +60,16 @@ class Playlist extends React.Component {
     }
   
     removeTrack = (id, playlistId) => {
-      axios.delete(`${baseUrl}/${playlistId}/tracks/${id}`, axiosConfig)
-      .then( () => {
-        alert("Música deletada com sucesso");
-        this.props.updatePlaylist();
-      })
-      .catch(err => {
-        alert("Ops, algo deu errado: " + err.message)
-      })
+        if ( window.confirm("Você tem certeza de que deseja deletar essa música?") ) {
+            axios.delete(`${baseUrl}/${playlistId}/tracks/${id}`, axiosConfig)
+            .then( () => {
+              alert("Música deletada com sucesso");
+              this.props.updatePlaylist();
+            })
+            .catch(err => {
+              alert("Ops, algo deu errado: " + err.message)
+            })
+        }
     }
 
     
@@ -80,11 +78,8 @@ class Playlist extends React.Component {
         const trackUrl = url;
         const audio = new Audio(trackUrl);
         
-        console.log()
-
         audio.play();
-        this.setState({ audioPlaying: audio });
-        this.setState({ isPlaying: true })
+        this.setState({ audioPlaying: audio, isPlaying: true, trackPlaying: url });
     }
 
     pauseTrack = () => {
@@ -94,12 +89,33 @@ class Playlist extends React.Component {
 
     render() {
 
-        const audioControl = url => !this.state.isPlaying ? <button onClick={() => this.playTrack(url)}>Play</button> : <button onClick={this.pauseTrack}>Pause</button>
+        const audioControl = url => {
+          if ( this.state.isPlaying && this.state.trackPlaying === url ) {
+            return <Iconbtn onClick={this.pauseTrack}><Icon src={iconPause} alt="ícone de pausar" /></Iconbtn>
+          } else {
+            return <Iconbtn onClick={() => this.playTrack(url)}><Icon src={iconPlay} alt="ícone de play" /></Iconbtn>
+          }
+      }
 
         return (
-          <PlaylistContainer>              
+          <PlaylistContainer> 
+            <PlaylistTitle>{this.props.playlistName}</PlaylistTitle>
+            <p>{this.props.playlistQuantity > 1 ? `${this.props.playlistQuantity} músicas` : `${this.props.playlistQuantity} música` } </p>
+            <PlaylistImg src="https://picsum.photos/800/600" alt="Imagem da playlist"/>
+            {this.props.playlistTracks.map( track => {
+                return <PlaylistTracks key={track.id}>
+                    <PlaylistTrackDetails>
+                        {audioControl(track.url)}
+                        <TrackText>
+                            <Name>{track.name}</Name>
+                            <Artist>{track.artist}</Artist>
+                        </TrackText>
+                    </PlaylistTrackDetails>
+                    <Iconbtn onClick={() => this.removeTrack(track.id, this.props.playlistId)}><Icon src={iconDelete} alt="ícone de deletar" /></Iconbtn>
+                    </PlaylistTracks>
+                })}             
             <AddTrack>
-                <h3>Adicione uma música a uma de suas playlists</h3>
+                <AddTrackTitle>Adicione uma nova música</AddTrackTitle>
                 <input 
                     onChange={this.onChangeInputTrackName}
                     value={this.state.inputTrackName}
@@ -112,20 +128,9 @@ class Playlist extends React.Component {
                     onChange={this.onChangeInputTrackUrl}
                     value={this.state.inputTrackUrl}
                     placeholder="Link"/>
-                <button onClick={ this.addTrack}>Adicionar</button>
+                <Iconbtn onClick={ this.addTrack}><Icon src={iconAdd} alt="ícone de adicionar" /></Iconbtn>
             </AddTrack>
             
-            <h3>{this.props.playlistName}</h3>
-            <p>{this.props.playlistQuantity} músicas</p>
-            <img src={imgRock} alt="Imagem da playlist"/>
-            {this.props.playlistTracks.map( track => {
-                return <PlaylistTracks key={track.id}>
-                    {audioControl(track.url)}
-                    <h4>{track.name}</h4>
-                    <h5>{track.artist}</h5>
-                    <button onClick={() => this.removeTrack(track.id, this.props.playlistId)}>Delete</button>
-                    </PlaylistTracks>
-                })}
           </PlaylistContainer>
         );
     }

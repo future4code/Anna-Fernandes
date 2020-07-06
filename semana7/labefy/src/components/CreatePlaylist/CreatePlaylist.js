@@ -1,10 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import styled from 'styled-components';
 
-const CreatePlaylistContainer = styled.div `
-  
-`
+import { CreatePlaylistContainer, Icon, Iconbtn } from './style';
+
+import iconAdd from '../../images/add.svg';
+
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists";
 
 const axiosConfig = {
@@ -30,8 +30,9 @@ class CreatePlaylist extends React.Component {
 
         axios.post(baseUrl, body, axiosConfig )
         .then( () => {
-            alert("Playlist criada com sucesso")
-            this.setState({ inputNewPlaylist:"" })
+            alert("Playlist criada com sucesso");
+            this.props.updatePlaylists();
+            this.setState({ inputNewPlaylist:"" });
         })
         .catch( err => {
             if ( err.message === "Request failed with status code 400") {
@@ -48,8 +49,8 @@ class CreatePlaylist extends React.Component {
           <input 
             value={this.state.inputNewPlaylist}
             onChange={this.onChangeInputNewPlaylist}
-            placeholder="Nome da Playlist"/>
-          <button onClick={this.createPlaylist}>Criar</button>
+            placeholder="Nova Playlist"/>
+          <Iconbtn onClick={this.createPlaylist}><Icon src={iconAdd} alt="ícone de adicionar" /></Iconbtn>
       </CreatePlaylistContainer>
     );
   }

@@ -17,28 +17,37 @@ const GlobalStyle = createGlobalStyle`
     font-family: 'Lato', sans-serif!important;
   }
 
-  button, p, input, h1, h2, h3, h4, h5, h6 {
+  button, p, h1, h2, h3, h4, h5, h6 {
     font-family: 'Lato', sans-serif!important;
-  }
-
-  img {
-    max-height: 300px;
+    color: #f5f5f5;
   }
 
   input {
-    margin: 8px;
+    font-family: 'Lato', sans-serif!important;
+    margin-right: 4px;
+    margin-bottom: 8px;
     padding: 8px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: inset 0px 0px 2px rgba(0, 0, 0, 0.5);
+
+    flex: 1;
   }
 
   button {
-    margin: 8px;
+    margin-left: 4px;
+    margin-bottom: 8px;
     padding: 8px;
     border: none;
     border-radius: 5px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
+    background-color: #3F0059;
+    font-weight: 700;
+  }
+
+  button:hover {
+    background-color: #500078;
+    cursor: pointer
   }
 
 `;
