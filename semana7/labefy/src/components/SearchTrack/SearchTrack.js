@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 
 import SpotifyWebApi from 'spotify-web-api-js';
+import auth, { getAuth } from './auth';
 
 
 import { SearchTracksContainer, Icon, Iconbtn, ResultsContainer, TrackTitle, TrackResult } from './style';
@@ -9,10 +10,19 @@ import { SearchTracksContainer, Icon, Iconbtn, ResultsContainer, TrackTitle, Tra
 import iconSearch from '../../images/search.svg';
 import iconAdd from '../../images/add.svg';
 
+const token = getAuth();
+
+const headersSearchSpotify = {
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
+    Authorization: `Bearer ${token}`
+    }
+}
+
+const urlSearchSpotify = "https://api.spotify.com/v1/search";
+
 const spotifyApi = new SpotifyWebApi();
-
-const baseUrl = "https://api.spotify.com/v1/search";
-
 
 const baseUrlLabefy = "https://us-central1-labenu-apis.cloudfunctions.net/labefy/playlists";
 
@@ -28,12 +38,12 @@ class SearchTracks extends React.Component {
     constructor(){
         super();
         const params = this.getHashParams();
-        const token = params.access_token;
-        if( token ) {
-            spotifyApi.setAccessToken(token);
+        const getToken = token;
+        if( getToken ) {
+            spotifyApi.setAccessToken(getToken);
         }
+
         this.state = {
-            loggedIn: token ? true :  false,
             searchResults: [],
             inputSearchPlaylist: "",
             addTrack: false,
@@ -60,6 +70,18 @@ class SearchTracks extends React.Component {
         }
         return hashParams;
     }
+
+    // spotifySearchTracks = async () => {
+    //         try {
+    //           const response = await axios.get(
+    //             urlSearchSpotify + `?q=${this.state.inputSearchPlaylist}&type=track&market=BR`,
+    //             headersSearchSpotify
+    //           );
+    //           console.log(response);
+    //         } catch (err) {
+    //           console.log(err);
+    //         }
+    // }
 
     spotifySearchTracks = () => {
         
@@ -143,10 +165,10 @@ class SearchTracks extends React.Component {
                     onChange={this.onChangeInputSearchPlaylist}
                 />
                 <Iconbtn onClick={this.spotifySearchTracks}><Icon src={iconSearch} alt="ícone de buscar" /></Iconbtn>
-                <a href="http://localhost:8888"><button>Logar com Spotify</button></a>
+                {/* <a href="http://localhost:8888"><button>Logar com Spotify</button></a> */}
             </SearchTracksContainer>
             <ResultsContainer>
-                {this.state.loggedIn && this.state.searchResults.map( track => {
+                {this.state.searchResults.map( track => {
                     return <TrackResult key={track.id}>
                             <Iconbtn onClick={() => this.spotifyGetTrack(track.id)}><Icon src={iconAdd} alt="ícone de Adicionar" /></Iconbtn>
                             <TrackTitle>{track.name}</TrackTitle>
