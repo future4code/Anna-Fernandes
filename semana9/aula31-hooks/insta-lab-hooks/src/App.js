@@ -2,6 +2,8 @@ import React from 'react';
 import Post from './components/Post/Post';
 import styled from "styled-components"
 
+import { GlobalStyle } from "./global"
+
 const AppContainer = styled.div `
   display: flex;
   justify-content: center;
@@ -12,6 +14,7 @@ const AppContainer = styled.div `
 const App = () => {
   return (
     <AppContainer>
+      <GlobalStyle />
       <Post
         nomeUsuario={'Usuário'}
         fotoUsuario={'https://picsum.photos/50/50'}

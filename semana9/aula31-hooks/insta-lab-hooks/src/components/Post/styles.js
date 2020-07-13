@@ -1,9 +1,12 @@
 import styled from "styled-components"
 
 export const PostContainer = styled.div `
-    border: 1px solid gray;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
     width: 300px;
     margin-bottom: 10px;
+    padding: 16px 0;
 `
 
 export const PostHeader = styled.div `

@@ -6,6 +6,7 @@ const IconeContainer = styled.div`
 
 	img {
 		margin-right: 5px;
+		cursor: pointer;
 	}
 `
 
