@@ -17,7 +17,7 @@ const axiosConfig = {
 const path = "anna-fernandes"
 
 function IconsMatch(props) {
-
+  
     const isMatch = async profileid => {
         const body = {
             id: profileid,
@@ -25,9 +25,11 @@ function IconsMatch(props) {
         }
 
         const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig);
-        props.getProfile();
-        console.log(body);
-        console.log(response.data)
+        props.animation("right");
+        setTimeout(() => {
+            props.animation("none");
+            props.getProfile();
+        }, 300);
     }
 
     const isNotMatch = async profileid => {
@@ -37,9 +39,11 @@ function IconsMatch(props) {
         }
 
         const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig );
-        props.getProfile();
-        console.log(body);
-        console.log(response.data)
+        props.animation("left");
+        setTimeout(() => {
+            props.animation("none");
+            props.getProfile();
+        }, 300);
     }
     
     return (

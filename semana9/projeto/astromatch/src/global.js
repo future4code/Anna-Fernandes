@@ -12,8 +12,6 @@ export const GlobalStyle = createGlobalStyle`
   
   img {
       width: 100%;
-      max-height: 160px;
-      object-fit: cover;
   }
   
   button {

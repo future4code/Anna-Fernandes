@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import { MatchesContainer, Match, MatchImg } from './styles';
+import { MatchesContainer, Match, MatchImg, LoadingContainer, LoadingBox, Loading } from './styles';
 
 
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch"
@@ -29,7 +29,7 @@ function Matches(props) {
                         <p>{match.name}</p>
                     </Match>
                 )
-            }) : <p>loading...</p>}
+            }) : <LoadingContainer><LoadingBox><Loading></Loading></LoadingBox></LoadingContainer>}
     </MatchesContainer>
   );
 }
