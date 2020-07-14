@@ -8,28 +8,28 @@ const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch
 
 const path = "anna-fernandes"
 
-function Matches() {
+function Matches(props) {
     const [matches, setMatches] = useState([])
-
-    useEffect(() => {
-        getMatches();
-    }, [])
 
     const getMatches = async () => {
         const response = await axios.get(`${baseUrl}/${path}/matches`)
         setMatches(response.data.matches)
     }
+
+    useEffect(() => {
+        getMatches();
+    }, [props.currentPage])
+
   return (
-    <MatchesContainer>
-        <h2>Matches</h2>  
-            {matches.length !== 0 && matches.map( match => {
+    <MatchesContainer> 
+            {matches.length !== 0 ? matches.map( match => {
                 return (
                     <Match key={match.id}>
                         <MatchImg src={match.photo} />
                         <p>{match.name}</p>
                     </Match>
                 )
-            })}
+            }) : <p>loading...</p>}
     </MatchesContainer>
   );
 }

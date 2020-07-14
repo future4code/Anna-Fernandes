@@ -8,28 +8,29 @@ const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch
 
 const path = "anna-fernandes"
 
-function Profiles() {
+function Profiles(props) {
 
     const [profile, setProfile] = useState({})
 
-    useEffect(() => {
-        getProfile();
-    }, [])
-
     const getProfile = async () => {
         const response = await axios.get(`${baseUrl}/${path}/person`)
-        setProfile(response.data.profile)
+        setProfile(response.data.profile);
     }
+
+    useEffect(() => {
+        getProfile();
+    }, [props.currentPage]);
     
     return (
     <ProfileContainer>
-        <h2>Perfis candidatos</h2>
-        <div key={profile.id}>
+        {profile && !profile.name && <p>loading...</p>}
+        {profile && profile.name && <div key={profile.id}>
             <img src={profile.photo} alt={profile.name} />
             <h4>{profile.name}, {profile.age}</h4>
             <p>{profile.bio}</p>
             <IconsMatch id={profile.id} getProfile={getProfile} />
-        </div>
+        </div>}
+        { !profile && <p>Não há mais candidatos. Tente limpar seus matches e swipes e começar de novo.</p>}
     </ProfileContainer>
   );
 }

@@ -24,9 +24,10 @@ function IconsMatch(props) {
             choice: true
         }
 
-        await axios.post(`${baseUrl}/{path}/choose-person`, body, axiosConfig);
+        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig);
         props.getProfile();
-        console.log(body)
+        console.log(body);
+        console.log(response.data)
     }
 
     const isNotMatch = async profileid => {
@@ -35,9 +36,10 @@ function IconsMatch(props) {
             choice: false
         }
 
-        await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig );
+        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig );
         props.getProfile();
-        console.log(body)
+        console.log(body);
+        console.log(response.data)
     }
     
     return (

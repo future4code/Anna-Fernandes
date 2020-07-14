@@ -10,8 +10,16 @@ export const Screen = styled.div `
 `
 
 export const AppContainer = styled.div `
-    max-width: 320px;
+    width: 320px;
+    height: 80vh;
     padding: 16px;
     border-radius: 8px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+`
+
+export const PageBtn = styled.button `
+    width: 40px;
+    height: 40px;
+    border: none;
+    background-color: transparent;
 `
