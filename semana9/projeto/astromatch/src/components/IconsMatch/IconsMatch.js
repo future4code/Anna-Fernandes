@@ -8,12 +8,6 @@ import { IconsContainer, Icon } from './styles';
 
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch"
 
-const axiosConfig = {
-    headers: {
-        'Content-Type': 'application/json'
-    }
-};
-
 const path = "anna-fernandes"
 
 function IconsMatch(props) {
@@ -32,7 +26,7 @@ function IconsMatch(props) {
             choice: true
         }
 
-        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig);
+        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body);
         
         props.animation("right");
         props.getProfile();
@@ -44,7 +38,7 @@ function IconsMatch(props) {
             choice: false
         }
 
-        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig );
+        const response = await axios.post(`${baseUrl}/${path}/choose-person`, body);
         props.animation("left");
         props.getProfile();
     }

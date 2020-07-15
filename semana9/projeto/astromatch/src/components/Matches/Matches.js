@@ -3,7 +3,6 @@ import axios from 'axios';
 
 import { MatchesContainer, Match, MatchImg, LoadingContainer, LoadingBox, Loading } from './styles';
 
-
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch"
 
 const path = "anna-fernandes"
