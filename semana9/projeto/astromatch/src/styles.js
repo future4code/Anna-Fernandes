@@ -14,6 +14,7 @@ export const AppContainer = styled.div `
     height: 80vh;
     border-radius: 8px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+    background-image: linear-gradient(to right top, #f52d51, #ec274b, #e22045, #d9193f, #d01039);
     overflow: hidden;
 `
 
@@ -22,14 +23,13 @@ export const Header = styled.div `
     align-items: center;
     justify-content: space-between;
     margin: 0;
-    padding: 8px 16px;
-    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.5);
+    padding: 8px;
 `
 
-export const HeaderLogo = styled.h3 `
+export const HeaderLogo = styled.img `
+    width: 160px;
     margin: 0;
     padding: 0;
-    color: #04BFAD;
 `
 
 export const PageBtn = styled.button `

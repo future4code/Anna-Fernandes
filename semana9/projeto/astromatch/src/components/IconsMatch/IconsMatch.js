@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 
 import matchIcon from '../../images/match.svg';
@@ -17,7 +17,15 @@ const axiosConfig = {
 const path = "anna-fernandes"
 
 function IconsMatch(props) {
-  
+
+
+    useEffect(() => {
+        document.addEventListener("keydown", onKeyPressed);
+        return () => {
+            document.removeEventListener('keydown', onKeyPressed) 
+        }
+    }, []);
+
     const isMatch = async profileid => {
         const body = {
             id: profileid,
@@ -25,11 +33,9 @@ function IconsMatch(props) {
         }
 
         const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig);
+        
         props.animation("right");
-        setTimeout(() => {
-            props.animation("none");
-            props.getProfile();
-        }, 300);
+        props.getProfile();
     }
 
     const isNotMatch = async profileid => {
@@ -40,16 +46,21 @@ function IconsMatch(props) {
 
         const response = await axios.post(`${baseUrl}/${path}/choose-person`, body, axiosConfig );
         props.animation("left");
-        setTimeout(() => {
-            props.animation("none");
-            props.getProfile();
-        }, 300);
+        props.getProfile();
+    }
+  
+    const onKeyPressed = event => {
+        if( event.keyCode === 39 ) {
+            isMatch(props.profileId);
+        } else if( event.keyCode === 37 ) {
+            isNotMatch(props.profileId);
+        }
     }
     
     return (
     <IconsContainer>
-            <Icon src={notMatchIcon} alt="Ícone de rejeitar" onClick={() => isNotMatch(props.id)} />
-            <Icon src={matchIcon} alt="Ícone de aceitar" onClick={()=>isMatch(props.id)}/>
+            <Icon src={notMatchIcon} alt="Ícone de rejeitar" onClick={() => isNotMatch(props.profileId)}/>
+            <Icon src={matchIcon} alt="Ícone de aceitar" onClick={()=>isMatch(props.profileId)}/>
     </IconsContainer>
   );
 }

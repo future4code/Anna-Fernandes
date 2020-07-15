@@ -1,17 +1,22 @@
 import styled, {keyframes} from 'styled-components';
 
 export const ProfileContainer = styled.div `
+    width: 320px;
+    height: calc(100% - 40px);
+    margin: 0;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: calc(100% - 40px);
     transition: all 0.3 ease-in-out;
 `
 
 export const ProfileImg = styled.img `
-    width: 100%;
-    height: 100%;
+    display: block;
+    width: 90%;
+    height: calc(100% - 224px);
+    margin: 16px auto;
     border-radius: 8px;
     object-fit: cover;
     object-position: top center;
@@ -52,12 +57,11 @@ const slideOutRight = keyframes `
 `
 
 export const ProfileContent = styled.div `
-    margin-bottom: 16px;
-    height: 60vh;
     width: 100%;
+    height: 100%;
+    padding: 0;
     border-radius: 8px;
     position: relative;
-    text-shadow: 0px 0px 2px rgba(0, 0, 0, 1);
     transition: all 0.3 ease-in-out;
     animation: ${ props => {
         if(props.animate === "right"){
@@ -71,17 +75,42 @@ export const ProfileContent = styled.div `
     ;
 `
 
+export const ProfileBackground = styled.div `
+  width: 100%;
+  height: 100%;
+  background-image: ${props => props.profileImage};
+  background-size: cover;
+  background-position: center center;
+  filter: brightness(0.3);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+`
+
 export const ProfileText = styled.div `
-    color: #fff;
-    position: absolute;
-    bottom: 8px;
-    left: 8px;
-    z-index: 2;
+    width: 288px;
+    height: 240px;
+    padding: 16px;
+    border-radius: 8px;
+    background-color: #fff;
+`
+
+export const ProfileName = styled.h3 `
+    padding: 0;
+    margin: 0 0 8px 0;
+`
+
+export const ProfileBio = styled.p `
+    padding: 0;
+    margin: 0;
 `
 
 export const Message = styled.p `
     text-align: center;
-    color: #D90B31;
+    color: #fff;
     font-weight: 700;
     padding: 0 16px;
 `
@@ -130,7 +159,7 @@ export const Loading = styled.div `
     position: absolute;
     width: 32px;
     height: 32px;
-    background: #04BFAD;
+    background: #fff;
     animation: ${ldsHeart} 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
     &:after,
     &:before {
@@ -139,7 +168,7 @@ export const Loading = styled.div `
         display: block;
         width: 32px;
         height: 32px;
-        background: #04BFAD;
+        background: #fff;
     }
     &:before {
         left: -24px;

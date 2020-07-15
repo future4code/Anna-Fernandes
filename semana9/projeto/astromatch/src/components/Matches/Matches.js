@@ -18,7 +18,7 @@ function Matches(props) {
 
     useEffect(() => {
         getMatches();
-    }, [props.currentPage])
+    }, [props.currentPage, props.updateAfterClear])
 
   return (
     <MatchesContainer> 

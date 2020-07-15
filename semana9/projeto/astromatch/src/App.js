@@ -7,6 +7,7 @@ import { Header, HeaderLogo, Screen, AppContainer, PageBtn,ResetBtn } from './st
 import Profiles from './components/Profiles/Profiles';
 import Matches from './components/Matches/Matches';
 
+import logoAstromatch from './images/astromatch.svg';
 import matchesIcon from './images/matches.svg';
 import profilesIcon from './images/find_love.svg';
 
@@ -54,7 +55,7 @@ function App() {
       <AppContainer>
         <GlobalStyle />
         <Header>
-          <HeaderLogo>astromatch</HeaderLogo>
+          <HeaderLogo src={logoAstromatch} alt="Logo Astromatch" />
           <PageBtn onClick={changePage}><img src={iconPage} alt="Ícone do botão de mudar a página"/></PageBtn>
         </Header>
         {page}

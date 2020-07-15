@@ -1,9 +1,12 @@
 import styled, {keyframes} from 'styled-components';
 
 export const MatchesContainer = styled.ul `
+    height: 100%;
     list-style: none;
     margin: 0;
     padding: 16px;
+    background-color: #fff;
+    overflow-y: scroll;
 `
 
 export const Match = styled.li `
@@ -21,6 +24,7 @@ export const MatchImg = styled.img `
     height: 40px;
     margin-right: 16px;
     border-radius: 50%;
+    object-fit: cover;
 `
 
 export const LoadingContainer = styled.div `
@@ -67,7 +71,7 @@ export const Loading = styled.div `
     position: absolute;
     width: 32px;
     height: 32px;
-    background: #04BFAD;
+    background: #fff;
     animation: ${ldsHeart} 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
     &:after,
     &:before {
@@ -76,7 +80,7 @@ export const Loading = styled.div `
         display: block;
         width: 32px;
         height: 32px;
-        background: #04BFAD;
+        background: #fff;
     }
     &:before {
         left: -24px;

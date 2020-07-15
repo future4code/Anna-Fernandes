@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import IconsMatch from '../IconsMatch/IconsMatch';
-import { ProfileContainer, LoadingContainer, LoadingBox, Loading, Message, ProfileImg, ProfileContent, ProfileText } from './styles';
+import { ProfileContainer, LoadingContainer, LoadingBox, Loading, Message, ProfileImg, ProfileContent, ProfileText, ProfileName, ProfileBio, ProfileBackground } from './styles';
 
 const baseUrl = "https://us-central1-missao-newton.cloudfunctions.net/astroMatch"
 
@@ -16,6 +16,7 @@ function Profiles(props) {
     const getProfile = async () => {
         const response = await axios.get(`${baseUrl}/${path}/person`)
         setProfile(response.data.profile);
+        setAnimation("none");
     }
 
     const animation = side => {
@@ -37,16 +38,15 @@ function Profiles(props) {
     <ProfileContainer>
         {profile && !profile.name && <LoadingContainer><LoadingBox><Loading></Loading></LoadingBox></LoadingContainer>}
 
-        {profile && profile.name && <div key={profile.id}>
-            <ProfileContent animate={animate}>
-                <ProfileImg src={profile.photo} alt={profile.name} />
-                <ProfileText>
-                    <h3>{profile.name}, {profile.age}</h3>
-                    <p>{profile.bio}</p>
-                </ProfileText>
-            </ProfileContent>
-            <IconsMatch id={profile.id} getProfile={getProfile} animation={animation}/>
-        </div>}
+        {profile && profile.name && <ProfileContent animate={animate} key={profile.id}>
+            <ProfileBackground profileImage={'url(' + profile.photo + ')'} />
+            <ProfileImg src={profile.photo} alt={profile.name} />
+            <ProfileText>
+                <ProfileName>{profile.name}, {profile.age}</ProfileName>
+                <ProfileBio>{profile.bio}</ProfileBio>
+                <IconsMatch profileId={profile.id} getProfile={getProfile} animation={animation} />
+            </ProfileText>
+        </ProfileContent>}
 
         { !profile && <Message>Não há mais candidatos. Tente limpar seus matches e swipes e começar de novo.</Message>}
     </ProfileContainer>
