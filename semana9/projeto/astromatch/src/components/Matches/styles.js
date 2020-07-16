@@ -71,7 +71,7 @@ export const Loading = styled.div `
     position: absolute;
     width: 32px;
     height: 32px;
-    background: #fff;
+    background: #D90B31;
     animation: ${ldsHeart} 1.2s infinite cubic-bezier(0.215, 0.61, 0.355, 1);
     &:after,
     &:before {
@@ -80,7 +80,7 @@ export const Loading = styled.div `
         display: block;
         width: 32px;
         height: 32px;
-        background: #fff;
+        background: #D90B31;
     }
     &:before {
         left: -24px;

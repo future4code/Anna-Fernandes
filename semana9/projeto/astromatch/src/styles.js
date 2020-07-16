@@ -49,9 +49,14 @@ export const PageBtn = styled.button `
 export const ResetBtn = styled.div `
     margin-top: 8px;
     padding: 8px;
-    background-color: #D90B31;
+    border: 2px solid #D90B31;
     border-radius: 8px;
-    color: #fff;
     font-weight: 700;
+    color: #D90B31; 
     cursor: pointer;
+    transition: color 0.3s ease;
+    &:hover {
+        background-color: #D90B31;
+        color: #fff; 
+    }
 `
