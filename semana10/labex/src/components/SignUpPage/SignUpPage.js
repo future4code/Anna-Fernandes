@@ -31,7 +31,7 @@ const useStyles = makeStyles({
     }
   });
 
-function LoginPage() {
+function SignUpPage() {
     const classes = useStyles();
 
     const [email, atualizaEmail] = useInput("");
@@ -43,7 +43,6 @@ function LoginPage() {
             <TextField
             required
             className={classes.input}
-            id="outlined-required"
             label="usuário"
             variant="outlined"
             value={email}
@@ -52,7 +51,6 @@ function LoginPage() {
             <TextField
             required
             className={classes.input}
-            id="outlined-password-input"
             label="senha"
             type="password"
             autoComplete="current-password"
@@ -60,11 +58,10 @@ function LoginPage() {
             value={senha}
             onChange={atualizaSenha}
             />
-            <Button className={classes.button}  color="primary" variant="contained">entrar</Button>
-            <Button className={classes.button}  color="primary" variant="contained">cadastrar</Button>
+            <Button className={classes.button} color="primary" variant="contained">cadastrar</Button>
         </form>
     </Container>
   );
 }
 
-export default LoginPage;
+export default SignUpPage;
