@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -23,22 +24,58 @@ const axiosConfig = {
 };
 
 function CandidatesPage(props) {
-    const classes = useStyles();
-    const pathParams = useParams();
+  const classes = useStyles();
+  const pathParams = useParams();
+  const history = useHistory();
     
-    const [tripDetails, setTripDetails] = useState({})
-    const [candidates, setCandidates] = useState([])
+  const [tripDetails, setTripDetails] = useState({})
+  const [candidates, setCandidates] = useState([])
 
-    const getTripDetails = async () => {
-        const id = pathParams.id;
-        const response = await axios.get(`${baseUrl}/${id}`, axiosConfig)
-        setTripDetails(response.data.trip)
-        setCandidates(response.data.trip.candidates)
+  const getTripDetails = () => {
+    const id = pathParams.id;
+    axios.get(`${baseUrl}/${id}`, axiosConfig)
+    .then( response => {
+      setTripDetails(response.data.trip)
+      setCandidates(response.data.trip.candidates)
+    })
+    .catch( err => {
+      alert("Ops, algo deu errado: " + err.message)
+    })
+  }
+
+  useEffect(() => {
+    getTripDetails();
+  }, []);
+
+  const decideCandidate = (candidate, approve) => {
+    const id = pathParams.id;
+    const candidateId = candidate;
+    const body = {
+      "approve": approve
     }
 
-    useEffect(() => {
-        getTripDetails();
-    }, []);
+    axios.put(`${baseUrl}s/${id}/candidates/${candidateId}/decide`, body, axiosConfig)
+    .then(() => {
+      approve ? alert("Candidato aprovado :)") : alert("Candidato rejeitado :(");
+      getTripDetails();
+    })
+    .catch( err => {
+      alert("Ops, algo deu errado: " + err.message)
+    })
+  }
+  
+  const deleteTrip = () => {
+    const id = pathParams.id;
+
+    axios.delete(`${baseUrl}s/${id}`, axiosConfig)
+    .then(() => {
+      alert("Viagem deletada com sucesso!");
+      history.push("/trips/list");
+    })
+    .catch(err => {
+      alert("Ops, algo deu errado: " + err.message);
+    })
+  }
 
   return (
     <>
@@ -47,16 +84,18 @@ function CandidatesPage(props) {
          <Typography align="center" variant="h3" component="h3" className={classes.pos} >
          {tripDetails.name}
         </Typography>
-        <Divider />
-         <Typography align="center" variant="body2" component="p" className={classes.pos} >
-         {tripDetails.date} – {tripDetails.durationInDays}
-        </Typography>
-         <Typography align="center" variant="body2" component="p" className={classes.pos} >
-         {tripDetails.planet}
-        </Typography>
-         <Typography align="center" variant="body2" component="p" className={classes.pos} >
-         {tripDetails.description}
-        </Typography>
+        <Divider  className={classes.pos} />
+        <Container  maxWidth="sm">
+          <Typography align="center" variant="body2" component="p" className={classes.pos} >
+          {tripDetails.date} – {tripDetails.durationInDays}
+          </Typography>
+          <Typography align="center" variant="body2" component="p" className={classes.pos} >
+          {tripDetails.planet}
+          </Typography>
+          <Typography align="center" variant="body2" component="p" className={classes.pos} >
+          {tripDetails.description}
+          </Typography>
+        </Container>
         <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
                 return (
@@ -73,13 +112,21 @@ function CandidatesPage(props) {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button className={classes.button} color="primary" size="medium" variant="contained">aceitar</Button>
-                            <Button className={classes.button} color="secondary" size="medium" variant="contained">recusar</Button>
+                            <Button className={classes.button} color="primary" size="medium" variant="contained" onClick={()=>{decideCandidate(candidate.id, true)}}>aceitar</Button>
+                            <Button className={classes.button} color="secondary" size="medium" variant="contained" onClick={()=>{decideCandidate(candidate.id, false)}}>recusar</Button>
                         </CardActions>
                     </Card>
                 )
             })}
         </Container>
+        
+        <Button
+          className={classes.button} color="secondary"
+          size="medium"
+          variant="contained"
+          onClick={deleteTrip}>
+            deletar viagem
+        </Button>
       </Container>
     </>
   );

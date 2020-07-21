@@ -48,12 +48,12 @@ export const useStyles = makeStyles((theme) => ({
         margin: '24px!important',
       },
       input: {
-          minWidth: '240px!important',
+          minWidth: '400px!important',
           margin: '8px!important',
       },
       button: {
           minWidth: '160px!important',
-          margin: '8px auto!important',
+          margin: 'auto!important',
           backgroundColor: "#3BD97F",
           color: "#ffffff",
       },

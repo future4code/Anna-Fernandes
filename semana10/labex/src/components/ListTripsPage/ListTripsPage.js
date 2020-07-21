@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import useRequestData from '../../hooks/useRequestData';
 import { useHistory } from 'react-router-dom';
 
@@ -14,12 +15,18 @@ import Header from '../Header/Header';
 
 import { useStyles } from '../../styles';
 
-
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
+
+const axiosConfig = {
+    headers: {
+        auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IndXUGhLZDNzSzB1SlJraWR4dnpwIiwiZW1haWwiOiJhc3Ryb2RldkBnbWFpbC5jb20uYnIiLCJpYXQiOjE1OTUyNTY1MzZ9.dB20BczThbqRPooTcq1LDEeI9ywDtG82BGYm01d7nlc"
+    }
+};
 
 function ListTripsPage() {
   const classes = useStyles();
-  const trips = useRequestData(baseUrl, []);
+  let needToRefresh = false;
+  const trips = useRequestData(baseUrl, [], needToRefresh);
 
   const history = useHistory();
   const goToApplication = id => {
@@ -27,8 +34,8 @@ function ListTripsPage() {
   }
   const goToCandidates = id => {
     history.push("/trips/details/" + id);
-  }
-
+  }    
+  
   return (
     <>
     <Header />
@@ -66,7 +73,7 @@ function ListTripsPage() {
                         className={classes.button} color="primary"
                         size="medium"
                         variant="contained"
-                        onClick={() => goToCandidates(trip.id)}>candidatos</Button>
+                        onClick={() => goToCandidates(trip.id)}>detalhes</Button>
                       </CardActions>
                     </Card>
                 )

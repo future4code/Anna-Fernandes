@@ -9,7 +9,12 @@ import ApplicationFormPage from '../ApplicationFormPage/ApplicationFormPage';
 import CandidatesPage from '../CandidatesPage/CandidatesPage';
 import CreateTripPage from '../CreateTripPage/CreateTripPage';
 
+import { useStyles } from '../../styles';
+import Typography from '@material-ui/core/Typography';
+
 const Router = () => {
+  const classes = useStyles();
+  
   return (
     <BrowserRouter>
       <Switch>
@@ -35,9 +40,9 @@ const Router = () => {
           <CandidatesPage />
         </Route>
         <Route path="/">
-          <div>
-            <h4>Opa, algo deu errado!</h4>
-          </div>
+            <Typography variant="h5" component="h2" className={classes.center}>
+              Opa, algo errado não está certo
+            </Typography>
         </Route>
       </Switch>
     </BrowserRouter>

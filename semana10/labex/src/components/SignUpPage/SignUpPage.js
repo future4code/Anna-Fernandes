@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import useInput from '../../hooks/useInput';
 import { useHistory } from 'react-router-dom';
 import Header from '../Header/Header';
@@ -10,6 +11,8 @@ import Container from '@material-ui/core/Container';
 import { useStyles } from '../../styles';
 
 
+const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/signup"
+
 function SignUpPage() {
     const classes = useStyles();
 
@@ -17,9 +20,23 @@ function SignUpPage() {
     const [senha, atualizaSenha] = useInput("");
 
     const history = useHistory();
-    const goToCreateForm = () => {
-      history.push("/trips/create");
+
+    const signUp = () => {
+        const body = {
+          "email": email,
+          "password": senha
+      }
+
+        axios.post(baseUrl, body)
+        .then(() => {
+          alert("Usuário cadastrado com sucesso!")
+          history.push("/trips/create");
+        })
+        .catch(err => {
+          alert("Ops, algo deu errado:" + err.message)
+        })
     }
+
 
   return (
     <>
@@ -44,7 +61,7 @@ function SignUpPage() {
             value={senha}
             onChange={atualizaSenha}
             />
-            <Button className={classes.button} color="primary" variant="contained" onClick={goToCreateForm}>cadastrar</Button>
+            <Button className={classes.button} color="primary" variant="contained" onClick={signUp}>cadastrar</Button>
         </form>
     </Container>
     </>
