@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -10,32 +10,9 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 
-const useStyles = makeStyles({
-    root: {
-        padding: 24,
-    },
-    cards: {
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      flexDirection: "column",
-      padding: 16,
-    },
-    card: {
-      width: "100%",
-      margin: 16,
-      padding: 8
-    },
-    title: {
-      fontSize: 14,
-    },
-    pos: {
-      marginBottom: 16,
-    },
-    button: {
-      marginBottom: 16,
-    },
-  });
+import { useStyles } from '../../styles';
+
+import Header from '../Header/Header';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trip"
 
@@ -47,12 +24,13 @@ const axiosConfig = {
 
 function CandidatesPage(props) {
     const classes = useStyles();
+    const pathParams = useParams();
     
     const [tripDetails, setTripDetails] = useState({})
     const [candidates, setCandidates] = useState([])
 
     const getTripDetails = async () => {
-        const id = "yBWreQUoP3rjFwoBwfQm";
+        const id = pathParams.id;
         const response = await axios.get(`${baseUrl}/${id}`, axiosConfig)
         setTripDetails(response.data.trip)
         setCandidates(response.data.trip.candidates)
@@ -60,11 +38,12 @@ function CandidatesPage(props) {
 
     useEffect(() => {
         getTripDetails();
-    }, [])
+    }, []);
 
   return (
-      
-    <Container maxWidth="lg" className={classes.root}>
+    <>
+      <Header />
+      <Container maxWidth="lg" className={classes.container}>
          <Typography align="center" variant="h3" component="h3" className={classes.pos} >
          {tripDetails.name}
         </Typography>
@@ -81,7 +60,7 @@ function CandidatesPage(props) {
         <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
                 return (
-                    <Card className={classes.card} key={candidate.id}>
+                    <Card className={classes.cardLarge} key={candidate.id}>
                         <CardContent>
                             <Typography variant="h6" component="h2">
                             {candidate.name}, {candidate.age}, {candidate.profession}
@@ -101,7 +80,8 @@ function CandidatesPage(props) {
                 )
             })}
         </Container>
-    </Container>
+      </Container>
+    </>
   );
 }
 

@@ -1,43 +1,33 @@
 import React from 'react';
 import useInput from '../../hooks/useInput';
+import { useHistory } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
+import Header from '../Header/Header';
+
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
-
-const useStyles = makeStyles({
-    root: {
-      background: '#f5f5f5',
-      border: 0,
-      borderRadius: 4,
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      margin: 24,
-    },
-    input: {
-        minWidth: 240,
-        margin: 8,
-    },
-    button: {
-        minWidth: 240,
-        margin: 8,
-        backgroundColor: "#3BD97F",
-        color: "#ffffff",
-    }
-  });
+import { useStyles } from '../../styles';
 
 function LoginPage() {
-    const classes = useStyles();
+  const classes = useStyles();
 
-    const [email, atualizaEmail] = useInput("");
-    const [senha, atualizaSenha] = useInput("");
+  const [email, atualizaEmail] = useInput("");
+  const [senha, atualizaSenha] = useInput("");
+
+  const history = useHistory();
+  
+  const goToSignUp = () => {
+    history.push("/signup");
+  }
+  
+  const goToCreateForm = () => {
+    history.push("/trips/create");
+  }
 
   return (
+    <>
+    <Header />
     <Container>
         <form className={classes.form} noValidate autoComplete="off">
             <TextField
@@ -60,10 +50,11 @@ function LoginPage() {
             value={senha}
             onChange={atualizaSenha}
             />
-            <Button className={classes.button}  color="primary" variant="contained">entrar</Button>
-            <Button className={classes.button}  color="primary" variant="contained">cadastrar</Button>
+            <Button className={classes.button}  color="primary" variant="contained" onClick={goToCreateForm}>entrar</Button>
+            <Button className={classes.button}  color="primary" variant="contained" onClick={goToSignUp}>cadastrar</Button>
         </form>
     </Container>
+    </>
   );
 }
 

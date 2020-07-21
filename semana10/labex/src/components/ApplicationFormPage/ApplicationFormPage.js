@@ -1,49 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import useInput from '../../hooks/useInput';
+import { useParams } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
+import { useStyles } from '../../styles';
 
-const useStyles = makeStyles({
-    root: {
-      background: '#f5f5f5',
-      border: 0,
-      borderRadius: 4,
-    },
-    form: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      margin: 24,
-    },
-    input: {
-        minWidth: 240,
-        margin: 8,
-    },
-    button: {
-        minWidth: 240,
-        margin: 8,
-        backgroundColor: "#3BD97F",
-        color: "#ffffff",
+import Header from '../Header/Header';
+
+const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trip"
+
+const axiosConfig = {
+    headers: {
+        auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IndXUGhLZDNzSzB1SlJraWR4dnpwIiwiZW1haWwiOiJhc3Ryb2RldkBnbWFpbC5jb20uYnIiLCJpYXQiOjE1OTUyNTY1MzZ9.dB20BczThbqRPooTcq1LDEeI9ywDtG82BGYm01d7nlc"
     }
-  });
-
+};
 
 function ApplicationsFormPage() {
     const classes = useStyles();
+    const pathParams = useParams();
 
     const [name, updateName] = useInput("");
     const [age, updateAge] = useInput("");
     const [applicationText, updateApplicationText] = useInput("");
     const [profession, updateProfession] = useInput("");
     const [country, updateCountry] = useInput([]);
+
+    const getTripDetails = async () => {
+        const id = pathParams.id;
+        const response = await axios.get(`${baseUrl}/${id}`, axiosConfig)
+    }
+
+    useEffect(() => {
+        getTripDetails();
+    }, []);
+
   return (
-    <Container>
+    <>
+    <Header />
+    <Container className={classes.container}>
         <form className={classes.form} noValidate autoComplete="off">
             <TextField
             required
@@ -97,6 +96,7 @@ function ApplicationsFormPage() {
             <Button className={classes.button}  color="primary" variant="contained">enviar</Button>
         </form>
     </Container>
+    </>
   );
 }
 

@@ -1,40 +1,64 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
-import ListTripsPage from '../ListTripsPage/ListTripsPage';
+import Header from '../Header/Header';
 
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
+import { useStyles } from '../../styles';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-    },
-    title: {
-      flexGrow: 1,
-    },
-  }));
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
 
 function HomePage() {
     const classes = useStyles();
 
+    const history = useHistory();
+    const goToLogin = () => {
+      history.push("/login");
+    }
+    const goToTripsList = () => {
+      history.push("/trips/list");
+    }
+
   return (
     <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            LabeX
-          </Typography>
-          <Button color="inherit">Login</Button>
-        </Toolbar>
-      </AppBar>
-      <ListTripsPage />
+      <Header />
+      <Container maxWidth="md" className={classes.cards}>
+        <Card className={classes.cardLarge}>
+          <CardContent>
+            <Typography variant="h5" component="h2" className={classes.center}>
+                Se inscreva em uma viagem
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              className={classes.button} color="primary"
+              size="medium"
+              variant="contained"
+              onClick={goToTripsList}>
+                viagens
+            </Button>
+          </CardActions>
+        </Card>
+        <Card className={classes.cardLarge}>
+          <CardContent>
+            <Typography variant="h5" component="h2" className={classes.center}>
+                Adicione uma viagem
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              className={classes.button} color="primary"
+              size="medium"
+              variant="contained"
+              onClick={goToLogin}>
+                login
+            </Button>
+          </CardActions>
+        </Card>
+      </Container>
     </div>
   );
 }
