@@ -53,7 +53,7 @@ export const useStyles = makeStyles((theme) => ({
       },
       button: {
           minWidth: '160px!important',
-          margin: 'auto!important',
+          margin: '8px auto!important',
           backgroundColor: "#3BD97F",
           color: "#ffffff",
       },

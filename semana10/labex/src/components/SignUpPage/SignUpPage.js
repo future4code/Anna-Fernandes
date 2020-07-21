@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
-import useInput from '../../hooks/useInput';
 import { useHistory } from 'react-router-dom';
+
+import useInput from '../../hooks/useInput';
 import Header from '../Header/Header';
 
 import Button from '@material-ui/core/Button';
@@ -9,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 
 import { useStyles } from '../../styles';
-
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/signup"
 
