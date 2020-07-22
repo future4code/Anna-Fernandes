@@ -23,7 +23,7 @@ function LoginPage() {
   }
   
   const goToCreateForm = () => {
-    history.push("/trips/create");
+    history.push("/");
   }
 
   const login = () => {

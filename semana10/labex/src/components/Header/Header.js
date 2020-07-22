@@ -30,12 +30,12 @@ function Header() {
     const loginBtn = isLoggedIn ? 
     <Button 
       color="inherit" 
-      onClick={goToLoginPage}> 
+      onClick={handleLogout}> 
         logout 
     </Button> :
     <Button 
       color="inherit" 
-      onClick={handleLogout}> 
+      onClick={goToLoginPage}> 
         login
     </Button>
 

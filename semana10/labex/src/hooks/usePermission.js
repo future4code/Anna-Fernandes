@@ -7,6 +7,7 @@ const usePermission = () => {
     
     useEffect(() => {
         const getPermission = window.localStorage.getItem("permission");
+        
         if(getPermission) {
             setPermission(getPermission);
         } else {

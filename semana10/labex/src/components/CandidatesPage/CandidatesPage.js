@@ -115,7 +115,7 @@ function CandidatesPage() {
           {tripDetails.description}
           </Typography>
         </Container>
-        {permission === "rev" || permission === "admin" && <Container maxWidth="sm" className={classes.cards}>
+        {permission === "reviewer" || permission === "admin" && <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
                 return (
                     <Card className={classes.cardLarge} key={candidate.id}>

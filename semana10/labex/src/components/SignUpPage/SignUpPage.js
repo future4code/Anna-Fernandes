@@ -31,10 +31,11 @@ function SignUpPage() {
       }
 
         axios.post(baseUrl, body)
-        .then(() => {
+        .then(response => {
           alert("Usuário cadastrado com sucesso!");
           window.localStorage.setItem("permission", permission);
-          history.push("/trips/create");
+          window.localStorage.setItem("token", response.data.token);
+          history.push("/");
         })
         .catch(err => {
           alert("Ops, algo deu errado:" + err.message)
@@ -70,13 +71,13 @@ function SignUpPage() {
               className={classes.input}
               value={permission}
               onChange={setPermission}
-              label="País"
+              label="permissão"
               >
                 <MenuItem value="">
                   <em>tipo de permissão</em>
                 </MenuItem>
                 <MenuItem value={"admin"}>administrador</MenuItem>
-                <MenuItem value={"reviwer"}>revisor</MenuItem>
+                <MenuItem value={"reviewer"}>revisor</MenuItem>
                 <MenuItem value={"user"}>usuario</MenuItem>
             </Select>
             <Button 

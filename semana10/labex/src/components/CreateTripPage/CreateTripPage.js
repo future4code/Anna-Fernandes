@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import axios from 'axios';
 import useInput from '../../hooks/useInput';
 import { useHistory } from 'react-router-dom';
@@ -8,6 +8,7 @@ import usePermission from '../../hooks/usePermission';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import Typography from '@material-ui/core/Typography';
 import { useStyles } from '../../styles';
 
 import Header from '../Header/Header';
@@ -51,19 +52,15 @@ function CreateTripPage() {
       .catch(err => {
         alert("Ops, algo deu errado:" + err.message)
       })
-    }
-    
-    useEffect(() => {
-      if(token === null || permission !== "admin") {
-        alert("Acesso negado!")
-        history.push("/");
-      }
-    }, [history]);
+  }
 
   return (
     <>
     <Header />
-    <Container>
+    {permission !== "admin" && <Container maxWidth="sm"> <Typography variant="h5" component="h2" className={classes.center}>
+      Você não tem permissão para criar viagens.
+    </Typography></Container>}
+    {permission === "admin" && <Container>
         <form className={classes.form} noValidate autoComplete="off">
             <TextField
               required
@@ -117,7 +114,7 @@ function CreateTripPage() {
                 enviar
             </Button>
         </form>
-    </Container>
+    </Container>}
     </>
   );
 }
