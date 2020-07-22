@@ -2,6 +2,8 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
+import usePermission from '../../hooks/usePermission';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,26 +12,31 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 
 import { useStyles } from '../../styles';
 
 import Header from '../Header/Header';
 
-const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trip"
 
-const axiosConfig = {
-    headers: {
-        auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IndXUGhLZDNzSzB1SlJraWR4dnpwIiwiZW1haWwiOiJhc3Ryb2RldkBnbWFpbC5jb20uYnIiLCJpYXQiOjE1OTUyNTY1MzZ9.dB20BczThbqRPooTcq1LDEeI9ywDtG82BGYm01d7nlc"
-    }
-};
-
-function CandidatesPage(props) {
+function CandidatesPage() {
   const classes = useStyles();
   const pathParams = useParams();
   const history = useHistory();
-    
+  const token = useProtectedRoute();
+  const permission = usePermission();
+  
   const [tripDetails, setTripDetails] = useState({})
   const [candidates, setCandidates] = useState([])
+  
+  const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trip"
+  const axiosConfig = {
+    headers: {
+        auth: token
+    }
+  };
+
+  console.log(permission)
 
   const getTripDetails = () => {
     const id = pathParams.id;
@@ -44,8 +51,12 @@ function CandidatesPage(props) {
   }
 
   useEffect(() => {
-    getTripDetails();
-  }, []);
+    if(token === null) {
+      history.push("/login");
+    } else {
+      getTripDetails();
+    }
+  }, [history]);
 
   const decideCandidate = (candidate, approve) => {
     const id = pathParams.id;
@@ -63,6 +74,10 @@ function CandidatesPage(props) {
       alert("Ops, algo deu errado: " + err.message)
     })
   }
+
+  const goToTripsList = () => {
+    history.push("/trips/list");
+  }
   
   const deleteTrip = () => {
     const id = pathParams.id;
@@ -70,7 +85,7 @@ function CandidatesPage(props) {
     axios.delete(`${baseUrl}s/${id}`, axiosConfig)
     .then(() => {
       alert("Viagem deletada com sucesso!");
-      history.push("/trips/list");
+      goToTripsList();
     })
     .catch(err => {
       alert("Ops, algo deu errado: " + err.message);
@@ -81,8 +96,12 @@ function CandidatesPage(props) {
     <>
       <Header />
       <Container maxWidth="lg" className={classes.container}>
-         <Typography align="center" variant="h3" component="h3" className={classes.pos} >
-         {tripDetails.name}
+         <Typography 
+          align="center" 
+          variant="h3" 
+          component="h3" 
+          className={classes.pos} >
+          {tripDetails.name}
         </Typography>
         <Divider  className={classes.pos} />
         <Container  maxWidth="sm">
@@ -96,7 +115,7 @@ function CandidatesPage(props) {
           {tripDetails.description}
           </Typography>
         </Container>
-        <Container maxWidth="sm" className={classes.cards}>
+        {permission === "rev" || permission === "admin" && <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
                 return (
                     <Card className={classes.cardLarge} key={candidate.id}>
@@ -112,21 +131,43 @@ function CandidatesPage(props) {
                             </Typography>
                         </CardContent>
                         <CardActions>
-                            <Button className={classes.button} color="primary" size="medium" variant="contained" onClick={()=>{decideCandidate(candidate.id, true)}}>aceitar</Button>
-                            <Button className={classes.button} color="secondary" size="medium" variant="contained" onClick={()=>{decideCandidate(candidate.id, false)}}>recusar</Button>
+                            <Button 
+                              className={classes.button} 
+                              color="primary" 
+                              size="medium" 
+                              variant="contained" 
+                              onClick={()=>{decideCandidate(candidate.id, true)}}>
+                                aceitar
+                            </Button>
+                            <Button 
+                              className={classes.button} 
+                              color="secondary" 
+                              size="medium" 
+                              variant="contained" 
+                              onClick={()=>{decideCandidate(candidate.id, false)}}>
+                                recusar
+                              </Button>
                         </CardActions>
                     </Card>
                 )
             })}
-        </Container>
-        
-        <Button
-          className={classes.button} color="secondary"
-          size="medium"
-          variant="contained"
-          onClick={deleteTrip}>
-            deletar viagem
-        </Button>
+        </Container>}
+        <Box className={classes.centralize}>
+          <Button
+            className={classes.button} color="primary"
+            size="medium"
+            variant="contained"
+            onClick={goToTripsList}>
+              voltar
+          </Button>
+          {permission === "admin" && <Button
+            className={classes.button} color="secondary"
+            size="medium"
+            variant="contained"
+            onClick={deleteTrip}>
+              deletar viagem
+          </Button>}
+        </Box>
       </Container>
     </>
   );

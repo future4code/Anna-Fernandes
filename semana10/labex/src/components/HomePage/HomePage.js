@@ -13,14 +13,16 @@ import Container from '@material-ui/core/Container';
 
 function HomePage() {
     const classes = useStyles();
-
     const history = useHistory();
+
     const goToLogin = () => {
       history.push("/login");
     }
+
     const goToTripsList = () => {
       history.push("/trips/list");
     }
+
 
   return (
     <div className={classes.root}>

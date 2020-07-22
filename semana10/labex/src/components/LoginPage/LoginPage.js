@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import useInput from '../../hooks/useInput';
 import { useHistory } from 'react-router-dom';
 
@@ -11,11 +12,11 @@ import { useStyles } from '../../styles';
 
 function LoginPage() {
   const classes = useStyles();
-
   const [email, atualizaEmail] = useInput("");
   const [senha, atualizaSenha] = useInput("");
-
   const history = useHistory();
+  
+  const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/login"
   
   const goToSignUp = () => {
     history.push("/signup");
@@ -23,6 +24,22 @@ function LoginPage() {
   
   const goToCreateForm = () => {
     history.push("/trips/create");
+  }
+
+  const login = () => {
+    const body = {
+      "email": email,
+      "password": senha
+    }
+
+    axios.post(baseUrl, body)
+    .then( response => {
+      window.localStorage.setItem("token", response.data.token);
+      goToCreateForm();
+    })
+    .catch( err => {
+      alert("Usuário ou senha incorretos.")
+    })
   }
 
   return (
@@ -50,7 +67,7 @@ function LoginPage() {
             value={senha}
             onChange={atualizaSenha}
             />
-            <Button className={classes.button}  color="primary" variant="contained" onClick={goToCreateForm}>entrar</Button>
+            <Button className={classes.button}  color="primary" variant="contained" onClick={login}>entrar</Button>
             <Button className={classes.button}  color="primary" variant="contained" onClick={goToSignUp}>cadastrar</Button>
         </form>
     </Container>

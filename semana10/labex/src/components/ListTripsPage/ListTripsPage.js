@@ -1,7 +1,7 @@
 import React from 'react';
-import axios from 'axios';
 import useRequestData from '../../hooks/useRequestData';
 import { useHistory } from 'react-router-dom';
+import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -17,25 +17,20 @@ import { useStyles } from '../../styles';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
 
-const axiosConfig = {
-    headers: {
-        auth: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IndXUGhLZDNzSzB1SlJraWR4dnpwIiwiZW1haWwiOiJhc3Ryb2RldkBnbWFpbC5jb20uYnIiLCJpYXQiOjE1OTUyNTY1MzZ9.dB20BczThbqRPooTcq1LDEeI9ywDtG82BGYm01d7nlc"
-    }
-};
-
 function ListTripsPage() {
   const classes = useStyles();
-  let needToRefresh = false;
-  const trips = useRequestData(baseUrl, [], needToRefresh);
-
+  const trips = useRequestData(baseUrl, [],);
   const history = useHistory();
+  const isLoggedIn = useIsLoggedIn();
+
   const goToApplication = id => {
     history.push("/trips/application-form/" + id);
   }
+
   const goToCandidates = id => {
     history.push("/trips/details/" + id);
-  }    
-  
+  }
+
   return (
     <>
     <Header />
@@ -68,13 +63,14 @@ function ListTripsPage() {
                         onClick={() => goToApplication(trip.id)}
                         >inscrever-se</Button>
                       </CardActions>
-                      <CardActions>
+                      {isLoggedIn && <CardActions>
                         <Button
                         className={classes.button} color="primary"
                         size="medium"
                         variant="contained"
                         onClick={() => goToCandidates(trip.id)}>detalhes</Button>
                       </CardActions>
+                      }
                     </Card>
                 )
             })}

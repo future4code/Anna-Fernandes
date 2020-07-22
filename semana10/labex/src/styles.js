@@ -34,6 +34,12 @@ export const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         padding: '24px!important',
       },
+      centralize: {
+        display: 'flex!important',
+        alignItems: 'center',
+        justifyContent: 'space-between!important',
+        padding: '24px!important',
+      },
       center: {
         textAlign: 'center',
       },
@@ -79,6 +85,9 @@ export const useStyles = makeStyles((theme) => ({
       },
       pos: {
         marginBottom: '16px!important',
+      },
+      whiteLink: {
+        color: '#fff',
       }
 }));
   

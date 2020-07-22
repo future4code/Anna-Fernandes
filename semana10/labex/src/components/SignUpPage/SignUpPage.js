@@ -8,6 +8,8 @@ import Header from '../Header/Header';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 
 import { useStyles } from '../../styles';
 
@@ -16,20 +18,22 @@ const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-f
 function SignUpPage() {
     const classes = useStyles();
 
-    const [email, atualizaEmail] = useInput("");
-    const [senha, atualizaSenha] = useInput("");
+    const [mail, setMail] = useInput("");
+    const [password, setPassword] = useInput("");
+    const [permission, setPermission] = useInput("");
 
     const history = useHistory();
 
     const signUp = () => {
         const body = {
-          "email": email,
-          "password": senha
+          "email": mail,
+          "password": password
       }
 
         axios.post(baseUrl, body)
         .then(() => {
-          alert("Usuário cadastrado com sucesso!")
+          alert("Usuário cadastrado com sucesso!");
+          window.localStorage.setItem("permission", permission);
           history.push("/trips/create");
         })
         .catch(err => {
@@ -44,24 +48,44 @@ function SignUpPage() {
     <Container>
         <form className={classes.form} noValidate autoComplete="off">
             <TextField
-            required
-            className={classes.input}
-            label="usuário"
-            variant="outlined"
-            value={email}
-            onChange={atualizaEmail}
+              required
+              className={classes.input}
+              label="usuário"
+              variant="outlined"
+              value={mail}
+              onChange={setMail}
             />
             <TextField
-            required
-            className={classes.input}
-            label="senha"
-            type="password"
-            autoComplete="current-password"
-            variant="outlined"
-            value={senha}
-            onChange={atualizaSenha}
+              required
+              className={classes.input}
+              label="senha"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+              value={password}
+              onChange={setPassword}
             />
-            <Button className={classes.button} color="primary" variant="contained" onClick={signUp}>cadastrar</Button>
+            <Select
+              variant="outlined"
+              className={classes.input}
+              value={permission}
+              onChange={setPermission}
+              label="País"
+              >
+                <MenuItem value="">
+                  <em>tipo de permissão</em>
+                </MenuItem>
+                <MenuItem value={"admin"}>administrador</MenuItem>
+                <MenuItem value={"reviwer"}>revisor</MenuItem>
+                <MenuItem value={"user"}>usuario</MenuItem>
+            </Select>
+            <Button 
+              className={classes.button} 
+              color="primary" 
+              variant="contained" 
+              onClick={signUp}>
+                cadastrar
+            </Button>
         </form>
     </Container>
     </>
