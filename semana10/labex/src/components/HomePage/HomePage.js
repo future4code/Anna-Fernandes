@@ -31,7 +31,10 @@ function HomePage() {
       <Container maxWidth="md" className={classes.cards}>
         <Card className={classes.cardLarge}>
           <CardContent>
-            <Typography variant="h5" component="h2" className={classes.center}>
+            <Typography 
+              variant="h5" 
+              component="h2" 
+              className={classes.center}>
                 Se inscreva em uma viagem
             </Typography>
           </CardContent>
@@ -45,9 +48,12 @@ function HomePage() {
             </Button>
           </CardActions>
         </Card>
-        {permission === "admin" && <Card className={classes.cardLarge}>
+        {permission === "adm" && <Card className={classes.cardLarge}>
           <CardContent>
-            <Typography variant="h5" component="h2" className={classes.center}>
+            <Typography 
+              variant="h5" 
+              component="h2" 
+              className={classes.center}>
                 Adicione uma viagem
             </Typography>
           </CardContent>

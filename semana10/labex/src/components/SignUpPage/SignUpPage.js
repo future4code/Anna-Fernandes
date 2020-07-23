@@ -1,90 +1,84 @@
 import React from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
+import useForm from '../../hooks/useForm';
 
-import useInput from '../../hooks/useInput';
 import Header from '../Header/Header';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
 
 import { useStyles } from '../../styles';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/signup"
 
 function SignUpPage() {
-    const classes = useStyles();
+  const classes = useStyles();
+  const { form, onChange, resetForm } = useForm({ email: "", password: ""});
 
-    const [mail, setMail] = useInput("");
-    const [password, setPassword] = useInput("");
-    const [permission, setPermission] = useInput("");
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    onChange(name, value)
+  }
 
-    const history = useHistory();
+  const history = useHistory();
 
-    const signUp = () => {
-        const body = {
-          "email": mail,
-          "password": password
-      }
+  const signUp = event => {
+    event.preventDefault();
 
-        axios.post(baseUrl, body)
-        .then(response => {
-          alert("Usuário cadastrado com sucesso!");
-          window.localStorage.setItem("permission", permission);
-          window.localStorage.setItem("token", response.data.token);
-          history.push("/");
-        })
-        .catch(err => {
-          alert("Ops, algo deu errado:" + err.message)
-        })
+    const body = {
+      "email": form.email,
+      "password": form.password
     }
 
+    axios.post(baseUrl, body)
+    .then(() => {
+      alert("Usuário cadastrado com sucesso!");
+      resetForm();
+      history.push("/login");
+    })
+    .catch(err => {
+      alert("Ops, algo deu errado:" + err.message)
+    })
+  }
 
   return (
     <>
     <Header />
     <Container>
-        <form className={classes.form} noValidate autoComplete="off">
+        <form 
+          className={classes.form}
+          autoComplete="off"
+          onSubmit={signUp}
+        >
             <TextField
               required
               className={classes.input}
+              name="email"
               label="usuário"
+              type="email"
               variant="outlined"
-              value={mail}
-              onChange={setMail}
+              value={form.email}
+              onChange={handleInputChange}
             />
             <TextField
               required
               className={classes.input}
+              name="password"
               label="senha"
               type="password"
               autoComplete="current-password"
               variant="outlined"
-              value={password}
-              onChange={setPassword}
+              value={form.password}
+              onChange={handleInputChange}
             />
-            <Select
-              variant="outlined"
-              className={classes.input}
-              value={permission}
-              onChange={setPermission}
-              label="permissão"
-              >
-                <MenuItem value="">
-                  <em>tipo de permissão</em>
-                </MenuItem>
-                <MenuItem value={"admin"}>administrador</MenuItem>
-                <MenuItem value={"reviewer"}>revisor</MenuItem>
-                <MenuItem value={"user"}>usuario</MenuItem>
-            </Select>
             <Button 
               className={classes.button} 
               color="primary" 
-              variant="contained" 
-              onClick={signUp}>
+              variant="contained"
+              type="submit"
+            >
                 cadastrar
             </Button>
         </form>

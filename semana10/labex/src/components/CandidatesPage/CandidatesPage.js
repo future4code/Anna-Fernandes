@@ -36,8 +36,6 @@ function CandidatesPage() {
     }
   };
 
-  console.log(permission)
-
   const getTripDetails = () => {
     const id = pathParams.id;
     axios.get(`${baseUrl}/${id}`, axiosConfig)
@@ -115,7 +113,7 @@ function CandidatesPage() {
           {tripDetails.description}
           </Typography>
         </Container>
-        {permission === "reviewer" || permission === "admin" && <Container maxWidth="sm" className={classes.cards}>
+        {permission === "rev" || permission === "adm" && <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
                 return (
                     <Card className={classes.cardLarge} key={candidate.id}>
@@ -160,7 +158,7 @@ function CandidatesPage() {
             onClick={goToTripsList}>
               voltar
           </Button>
-          {permission === "admin" && <Button
+          {permission === "adm" && <Button
             className={classes.button} color="secondary"
             size="medium"
             variant="contained"

@@ -1,19 +1,20 @@
 import React from 'react';
 import axios from 'axios';
-import useInput from '../../hooks/useInput';
+import useForm from '../../hooks/useForm';
 import { useHistory } from 'react-router-dom';
 
 import Header from '../Header/Header';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Box';
 import { useStyles } from '../../styles';
 
 function LoginPage() {
   const classes = useStyles();
-  const [email, atualizaEmail] = useInput("");
-  const [senha, atualizaSenha] = useInput("");
+  const { form, onChange, resetForm } = useForm({ email: "", password: ""});
   const history = useHistory();
   
   const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/login"
@@ -26,16 +27,25 @@ function LoginPage() {
     history.push("/");
   }
 
-  const login = () => {
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    onChange(name, value)
+  }
+
+  const login = event => {
+    event.preventDefault();
+
     const body = {
-      "email": email,
-      "password": senha
+      "email": form.email,
+      "password": form.password
     }
 
     axios.post(baseUrl, body)
     .then( response => {
+      window.localStorage.setItem("permission", response.data.user.email.substring(0, 3))
       window.localStorage.setItem("token", response.data.token);
       goToCreateForm();
+      resetForm();
     })
     .catch( err => {
       alert("Usuário ou senha incorretos.")
@@ -46,30 +56,52 @@ function LoginPage() {
     <>
     <Header />
     <Container>
-        <form className={classes.form} noValidate autoComplete="off">
+        <form
+          className={classes.form}
+          autoComplete="off"
+          onSubmit={login}
+        >
             <TextField
-            required
-            className={classes.input}
-            id="outlined-required"
-            label="usuário"
-            variant="outlined"
-            value={email}
-            onChange={atualizaEmail}
+              required
+              className={classes.input}
+              name="email"
+              id="outlined-required"
+              label="usuário"
+              type="email"
+              variant="outlined"
+              value={form.email}
+              onChange={handleInputChange}
             />
             <TextField
-            required
-            className={classes.input}
-            id="outlined-password-input"
-            label="senha"
-            type="password"
-            autoComplete="current-password"
-            variant="outlined"
-            value={senha}
-            onChange={atualizaSenha}
+              required
+              className={classes.input}
+              name="password"
+              id="outlined-password-input"
+              label="senha"
+              type="password"
+              autoComplete="current-password"
+              variant="outlined"
+              value={form.password}
+              onChange={handleInputChange}
             />
-            <Button className={classes.button}  color="primary" variant="contained" onClick={login}>entrar</Button>
-            <Button className={classes.button}  color="primary" variant="contained" onClick={goToSignUp}>cadastrar</Button>
+            <Button 
+              className={classes.button}  
+              color="primary" 
+              variant="contained" 
+              type="submit"
+              >
+                entrar
+            </Button>
         </form>
+        <Typography 
+          color="primary" 
+          variant="h6" 
+          component="h6" 
+          className={classes.link}
+          onClick={goToSignUp}
+        >
+          Não é cadastrado? Cadastre-se aqui.
+        </Typography>
     </Container>
     </>
   );

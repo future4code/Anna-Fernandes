@@ -40,7 +40,7 @@ function Header() {
     </Button>
 
   return (
-      <AppBar position="static">
+      <AppBar position="static" className={classes.pos}>
         <Toolbar className={classes.header}>
           <Typography 
             variant="h6" 
