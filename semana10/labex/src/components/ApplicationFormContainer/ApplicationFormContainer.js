@@ -6,8 +6,8 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useStyles } from '../../styles';
 
 import Header from '../Header/Header';
@@ -15,7 +15,7 @@ import Countries from '../Countries/Countries';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
 
-function ApplicationsFormPage() {
+function ApplicationFormContainer() {
     const classes = useStyles();
     const pathParams = useParams();
     const trips = useRequestData(baseUrl, [],);
@@ -28,6 +28,7 @@ function ApplicationsFormPage() {
       applicationText: "", 
       profession: "", 
       country: "",
+      tripId: ""
     });
 
     const handleInputChange = event => {
@@ -86,7 +87,8 @@ function ApplicationsFormPage() {
     }
 
     const applyTrip = event => {
-      const id = pathParams.id;
+      const id = form.tripId;
+      
       event.preventDefault();
       validateForm();
 
@@ -113,22 +115,13 @@ function ApplicationsFormPage() {
     }
 
   return (
-    <>
-    <Header />
-    <Container className={classes.container}>
-      {trips.map( trip => trip.id === pathParams.id ?
-      <Typography key={trip.id} variant="h4" component="h4" className={classes.center}>
-        Inscreva-se para {trip.name}
-      </Typography>
-      : null )}
-      
-      <form
+    <form
         className={classes.form}
         autoComplete="off"
         onSubmit={applyTrip}
-      >
+    >
         
-            <TextField
+        <TextField
             required
             className={classes.input}
             name="name"
@@ -139,8 +132,8 @@ function ApplicationsFormPage() {
             onChange={handleInputChange}
             error={isWrongName}
             helperText={errorName}
-            />
-            <TextField
+        />
+        <TextField
             required
             className={classes.input}
             name="age"
@@ -152,8 +145,8 @@ function ApplicationsFormPage() {
             onChange={handleInputChange}
             error={isWrongAge}
             helperText={errorAge}
-            />
-            <TextField
+        />
+        <TextField
             required
             className={classes.input}
             name="profession"
@@ -164,39 +157,52 @@ function ApplicationsFormPage() {
             onChange={handleInputChange}
             error={isWrongProfession}
             helperText={errorProfession}
-            />
-            <Countries
-              error={isWrongCountry}
-              value={form.country}
-              onChange={handleInputChange}
-              helperText={errorCountry}
-            />
-            <TextField
-              required
-              className={classes.input}
-              name="applicationText"
-              label="por que você deve ir..."
-              variant="outlined"
-              multiline
-              inputProps={{ pattern: "[a-z]{30,300}" }}
-              rows={6}
-              value={form.applicationText}
-              onChange={handleInputChange}
-              error={isWrongApplication}
-              helperText={errorApplicationText}
-            />
-            <Button 
-              className={classes.button} 
-              color="primary" 
-              variant="contained"
-              type="submit"
-            >
-                enviar
-            </Button>
-        </form>
-    </Container>
-    </>
+        />
+        <Countries
+            error={isWrongCountry}
+            value={form.country}
+            onChange={handleInputChange}
+        />
+        <TextField
+            required
+            select
+            variant="outlined"
+            className={classes.input}
+            name="tripId"
+            defaultValue="Brasil"
+            value={form.tripId}
+            onChange={handleInputChange}
+            label="viagens"
+        > 
+            <MenuItem value="">selecione seu país</MenuItem>
+            {trips.map( trip => {
+              return <MenuItem key={trip.id} value={trip.id}>{trip.name}</MenuItem>
+            })}
+        </TextField>
+        <TextField
+            required
+            className={classes.input}
+            name="applicationText"
+            label="por que você deve ir..."
+            variant="outlined"
+            multiline
+            inputProps={{ pattern: "[a-z]{30,300}" }}
+            rows={4}
+            value={form.applicationText}
+            onChange={handleInputChange}
+            error={isWrongApplication}
+            helperText={errorApplicationText}
+        />
+        <Button 
+            className={classes.button} 
+            color="primary" 
+            variant="contained"
+            type="submit"
+        >
+            enviar
+        </Button>
+    </form>
   );
 }
 
-export default ApplicationsFormPage;
+export default ApplicationFormContainer;

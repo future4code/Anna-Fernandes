@@ -2,6 +2,7 @@ import React from 'react';
 import useRequestData from '../../hooks/useRequestData';
 import { useHistory } from 'react-router-dom';
 import useIsLoggedIn from '../../hooks/useIsLoggedIn';
+import usePermission from '../../hooks/usePermission';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -10,6 +11,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
+import Box from '@material-ui/core/Container';
 
 import Header from '../Header/Header';
 
@@ -22,6 +24,11 @@ function ListTripsPage() {
   const trips = useRequestData(baseUrl, [],);
   const history = useHistory();
   const isLoggedIn = useIsLoggedIn();
+  const permission = usePermission();
+
+  const goToCreatePage = () => {
+    history.push("/trips/create");
+  }
 
   const goToApplication = id => {
     history.push("/trips/application-form/" + id);
@@ -75,6 +82,17 @@ function ListTripsPage() {
                 )
             })}
         </Container>
+        
+        {permission === "adm" && 
+          <Box>
+            <Button
+              className={classes.button} color="primary"
+              size="medium"
+              variant="contained"
+              onClick={goToCreatePage}>
+                criar
+            </Button>
+          </Box>}
     </Container>
     </>
   );

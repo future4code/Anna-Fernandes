@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
+import MenuItem from '@material-ui/core/MenuItem';
 import { useStyles } from '../../styles';
 
 import Header from '../Header/Header';
@@ -53,11 +53,10 @@ function CreateTripPage() {
   const [ isWrongPlanet, setIsWrongPlanet ] = useState(false)
   const [ isWrongDescription, setIsWrongDescription ] = useState(false)
 
-  const [ isValidate, setValidation ] = useState(false)
+  const today = new Date();
+  const formatDate = new Date(form.date);
 
   const validateForm = () => {
-    const today = new Date();
-    const formattedDate = new Date(form.date);
 
     if( form.name.length >= 8 ) {
       setErrorName("");
@@ -67,7 +66,7 @@ function CreateTripPage() {
       setErrorName("O nome deve ter no mínimo 8 letras");
     }
 
-    if( formattedDate > today ) {
+    if( formatDate > today ) {
       setErrorDate("");
       setIsWrongDate(false);
     } else {
@@ -98,36 +97,32 @@ function CreateTripPage() {
       setIsWrongDescription(true);
       setErrorDescription("No mínimo 30 caracteres");
     }
-
-
-    // && setIsWrongDate === false && setIsWrongDuration === false && setIsWrongPlanet === false && setIsWrongDescription
   }
 
   const getTripDetails = event => {  
     event.preventDefault();
     validateForm();
 
-    console.log("oi")
+    if ( form.name.length >= 8 && formatDate > today && Number(form.durationInDays) >= 50 && form.planet !== "" && form.description.length >= 30 ) {
 
-    // const formatDate = new Date(form.date);
-
-    // const body = {
-    //   "name": form.name,
-    //   "planet": form.planet,
-    //   "date": formatDate.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric', year: '2-digit'}),
-    //   "description": form.description,
-    //   "durationInDays": form.durationInDays
-    // }
-
-    // axios.post(baseUrl, body, axiosConfig)
-    //   .then(() => {
-    //     alert("Viagem cadastrada com sucesso!")
-    //     resetForm();
-    //     history.push("/trips/list");
-    //   })
-    //   .catch(err => {
-    //     alert("Ops, algo deu errado:" + err.message)
-    //   })
+      const body = {
+        "name": form.name,
+        "planet": form.planet,
+        "date": formatDate.toLocaleDateString('en-GB', {day: 'numeric', month: 'numeric', year: '2-digit'}),
+        "description": form.description,
+        "durationInDays": form.durationInDays
+      }
+  
+      axios.post(baseUrl, body, axiosConfig)
+        .then(() => {
+          alert("Viagem cadastrada com sucesso!")
+          resetForm();
+          history.push("/trips/list");
+        })
+        .catch(err => {
+          alert("Ops, algo deu errado:" + err.message)
+        }) 
+    }
   }
 
   return (
@@ -170,15 +165,15 @@ function CreateTripPage() {
             error={isWrongPlanet}
             helperText={errorPlanet}
             >
-              <option value="">selecione o planeta</option>
-              <option value={"mercurio"}>Mercúrio</option>
-              <option value={"venus"}>Vênus</option>
-              <option value={"terra"}>Terra</option>
-              <option value={"jupiter"}>Júpiter</option>
-              <option value={"Saturno"}>Saturno</option>
-              <option value={"Urano"}>Urano</option>
-              <option value={"Netuno"}>Neturo</option>
-              <option value={"Plutão"}>Plutão, porque Plutão sempre estará em nossos corações</option>
+              <MenuItem value="">selecione o planeta</MenuItem>
+              <MenuItem value={"mercurio"}>Mercúrio</MenuItem>
+              <MenuItem value={"venus"}>Vênus</MenuItem>
+              <MenuItem value={"terra"}>Terra</MenuItem>
+              <MenuItem value={"jupiter"}>Júpiter</MenuItem>
+              <MenuItem value={"Saturno"}>Saturno</MenuItem>
+              <MenuItem value={"Urano"}>Urano</MenuItem>
+              <MenuItem value={"Netuno"}>Neturo</MenuItem>
+              <MenuItem value={"Plutão"}>Plutão, porque Plutão sempre estará em nossos corações</MenuItem>
             </TextField>
             <TextField
               required
@@ -199,7 +194,7 @@ function CreateTripPage() {
               name="durationInDays"
               label="duração (dias)"
               type="number"
-              InputProps={{ inputProps: { min: 49 } }}
+              InputProps={{ inputProps: { min: 50 } }}
               variant="outlined"
               value={form.durationInDays}
               onChange={handleInputChange}
@@ -211,7 +206,6 @@ function CreateTripPage() {
               className={classes.input}
               name="description"
               label="descrição"
-              inputProps={{ pattern: "[A-Za-z]{30,}" }}
               variant="outlined"
               multiline
               rows={6}

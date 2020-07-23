@@ -34,6 +34,18 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     padding: '24px!important',
   },
+  image: {
+    maxHeight: 360,
+    display: 'block',
+    margin: 'auto!important',
+    padding: '24px!important',
+  },
+  flex: {
+    display: 'flex!important',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '24px!important',
+  },
   centralize: {
     display: 'flex!important',
     alignItems: 'center',
@@ -51,7 +63,7 @@ export const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: '24px!important',
+    margin: '0 24px!important',
   },
   input: {
     minWidth: '400px!important',
@@ -91,6 +103,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   link: {
     textAlign: 'center',
+    textDecoration: 'underline',
     cursor: 'pointer',
   },
 }));

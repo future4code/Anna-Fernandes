@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
 import { useHistory } from 'react-router-dom';
 
 import Header from '../Header/Header';
@@ -9,13 +10,13 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
 import { useStyles } from '../../styles';
 
 function LoginPage() {
   const classes = useStyles();
   const { form, onChange, resetForm } = useForm({ email: "", password: ""});
   const history = useHistory();
+  const token = useProtectedRoute();
   
   const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/login"
   
@@ -51,6 +52,12 @@ function LoginPage() {
       alert("Usuário ou senha incorretos.")
     })
   }
+
+  useEffect(() => {
+    if(token !== null) {
+      history.push("/trips/list");
+    }
+  }, [history]);
 
   return (
     <>
