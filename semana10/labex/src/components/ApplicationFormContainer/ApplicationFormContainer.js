@@ -89,7 +89,7 @@ function ApplicationFormContainer() {
 
       let id;
 
-      if( hasIdInUrl !== null ) {
+      if( hasIdInUrl ) {
         id = hasIdInUrl;
       } else {
         id = form.tripId;
