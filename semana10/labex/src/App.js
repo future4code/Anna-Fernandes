@@ -5,7 +5,6 @@ import { theme, useStyles } from './styles';
 import { ThemeProvider } from '@material-ui/styles';
 
 import Router from './components/Router/Router';
-import Header from './components/Header/Header';
 
 function App() {
   const classes = useStyles();

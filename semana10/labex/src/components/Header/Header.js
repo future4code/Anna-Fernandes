@@ -13,6 +13,7 @@ function Header() {
     const classes = useStyles();
     const history = useHistory();
     const isLoggedIn = useIsLoggedIn();
+
     
     const goToHomePage = () => {
       history.push("/");

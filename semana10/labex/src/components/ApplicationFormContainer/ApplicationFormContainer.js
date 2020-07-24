@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import useForm from '../../hooks/useForm';
 import useRequestData from '../../hooks/useRequestData';
@@ -6,21 +6,19 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import Container from '@material-ui/core/Container';
 import MenuItem from '@material-ui/core/MenuItem';
 import { useStyles } from '../../styles';
 
-import Header from '../Header/Header';
 import Countries from '../Countries/Countries';
 
 const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
 
 function ApplicationFormContainer() {
     const classes = useStyles();
-    const pathParams = useParams();
-    const trips = useRequestData(baseUrl, [],);
-
+    const trips = useRequestData(baseUrl, []);
     const history = useHistory();
+    const pathParams = useParams();
+    const hasIdInUrl = pathParams.id;
 
     const { form, onChange, resetForm } = useForm({
       name: "", 
@@ -56,7 +54,7 @@ function ApplicationFormContainer() {
         setIsWrongName(true);
         setErrorName("O nome deve ter no mínimo 3 letras");
       }
-      if( Number(form.age) > 18 ) {
+      if( Number(form.age) >= 18 ) {
         setErrorAge("");
         setIsWrongAge(false);
       } else {
@@ -85,12 +83,17 @@ function ApplicationFormContainer() {
         setErrorApplicationText("Você deve escrever mais do que 30 caracteres");
       }      
     }
-
     const applyTrip = event => {
-      const id = form.tripId;
-      
       event.preventDefault();
       validateForm();
+
+      let id;
+
+      if( hasIdInUrl !== null ) {
+        id = hasIdInUrl;
+      } else {
+        id = form.tripId;
+      }
 
       const body = {
         "name": form.name,
@@ -100,19 +103,26 @@ function ApplicationFormContainer() {
         "country": form.country
       }
 
-      if( form.name.length && Number(form.age) > 18 &&form.profession.length > 5 && form.country !== "" && form.applicationText.length > 30 ) {
-        
+      if( form.name.length && Number(form.age) >= 18 && form.profession.length > 5 && form.country !== "" && form.applicationText.length > 30 ) {
         axios.post(`${baseUrl}/${id}/apply`, body)
           .then( () => {
             alert("Sua inscrição foi enviada!");
             resetForm();
-            history.push("/trips/list");
+            if( hasIdInUrl !== null ) {
+              history.push("/trips/list");;
+            }
           })
           .catch( err => {
             alert("Ops, algo deu errado: " + err.message);
           })
       } 
     }
+
+    const organizedTrips = trips.sort( (a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+    });  
 
   return (
     <form
@@ -162,8 +172,9 @@ function ApplicationFormContainer() {
             error={isWrongCountry}
             value={form.country}
             onChange={handleInputChange}
+            helperText={errorCountry}
         />
-        <TextField
+        {!hasIdInUrl && <TextField
             required
             select
             variant="outlined"
@@ -174,11 +185,11 @@ function ApplicationFormContainer() {
             onChange={handleInputChange}
             label="viagens"
         > 
-            <MenuItem value="">selecione seu país</MenuItem>
-            {trips.map( trip => {
+            <MenuItem value="">selecione uma viagem</MenuItem>
+            {organizedTrips.map( trip => {
               return <MenuItem key={trip.id} value={trip.id}>{trip.name}</MenuItem>
             })}
-        </TextField>
+        </TextField>}
         <TextField
             required
             className={classes.input}
@@ -186,7 +197,6 @@ function ApplicationFormContainer() {
             label="por que você deve ir..."
             variant="outlined"
             multiline
-            inputProps={{ pattern: "[a-z]{30,300}" }}
             rows={4}
             value={form.applicationText}
             onChange={handleInputChange}

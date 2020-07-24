@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useRequestData from '../../hooks/useRequestData';
 import { useHistory } from 'react-router-dom';
-import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 import usePermission from '../../hooks/usePermission';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
 
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -12,18 +12,20 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Container';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Header from '../Header/Header';
 
 import { useStyles } from '../../styles';
 
-const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
-
 function ListTripsPage() {
+
+  const baseUrl = "https://us-central1-labenu-apis.cloudfunctions.net/labeX/anna-fernandes-turing/trips"
+  
   const classes = useStyles();
-  const trips = useRequestData(baseUrl, [],);
+  const trips = useRequestData(baseUrl, []);
   const history = useHistory();
-  const isLoggedIn = useIsLoggedIn();
+  const token = useProtectedRoute();
   const permission = usePermission();
 
   const goToCreatePage = () => {
@@ -38,6 +40,22 @@ function ListTripsPage() {
     history.push("/trips/details/" + id);
   }
 
+  const goToHome = id => {
+    history.push("/");
+  }
+
+  const organizedTrips = trips.sort( (a, b) => {
+    if (a.name < b.name) {
+      return -1;
+    }
+  });
+
+  useEffect(() => {
+    if(token === null) {
+      history.push("/login");
+    }
+  }, [history]);
+
   return (
     <>
     <Header />
@@ -47,7 +65,8 @@ function ListTripsPage() {
       </Typography>
       <Divider />
       <Container maxWidth="lg" className={classes.cards}>
-          {trips.map( trip => {
+        {trips.length === 0 && <Box className={classes.centralize}><CircularProgress color="primary" /></Box>}
+          {organizedTrips.map( trip => {
               return (
                   <Card className={classes.card} key={trip.id}>
                     <CardContent>
@@ -64,19 +83,20 @@ function ListTripsPage() {
                         {trip.description}
                       </Typography>
                     </CardContent>
-                      <CardActions>
+                      {permission === "user" && <CardActions>
                         <Button
                         className={classes.button} color="primary" size="medium" variant="contained"
                         onClick={() => goToApplication(trip.id)}
                         >inscrever-se</Button>
-                      </CardActions>
-                      {isLoggedIn && <CardActions>
+                      </CardActions>}
+                      {permission === "adm" || permission === "rev" ? <CardActions>
                         <Button
                         className={classes.button} color="primary"
                         size="medium"
                         variant="contained"
-                        onClick={() => goToCandidates(trip.id)}>detalhes</Button>
+                        onClick={() => goToCandidates(trip.id)}>candidatos</Button>
                       </CardActions>
+                      : null
                       }
                     </Card>
                 )
@@ -84,7 +104,14 @@ function ListTripsPage() {
         </Container>
         
         {permission === "adm" && 
-          <Box>
+          <Box className={classes.centralize}>
+            <Button
+              className={classes.button} color="primary"
+              size="medium"
+              variant="contained"
+              onClick={goToHome}>
+                voltar
+            </Button>
             <Button
               className={classes.button} color="primary"
               size="medium"

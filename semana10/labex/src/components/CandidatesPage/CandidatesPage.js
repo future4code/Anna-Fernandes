@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import Container from '@material-ui/core/Container';
 import Box from '@material-ui/core/Box';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import { useStyles } from '../../styles';
 
@@ -36,25 +37,37 @@ function CandidatesPage() {
     }
   };
 
+  
+  let isCancelled = false;
+
   const getTripDetails = () => {
     const id = pathParams.id;
-    axios.get(`${baseUrl}/${id}`, axiosConfig)
-    .then( response => {
-      setTripDetails(response.data.trip)
-      setCandidates(response.data.trip.candidates)
-    })
-    .catch( err => {
-      alert("Ops, algo deu errado: " + err.message)
-    })
+
+    if (!isCancelled) {
+      axios.get(`${baseUrl}/${id}`, axiosConfig)
+      .then( response => {
+        setTripDetails(response.data.trip)
+        setCandidates(response.data.trip.candidates)
+      })
+      .catch( err => {
+        alert("Ops, algo deu errado: " + err.message)
+      })
+    }
   }
 
   useEffect(() => {
+
     if(token === null) {
       history.push("/login");
     } else {
       getTripDetails();
+
+      return () => {
+        isCancelled = true;
+      };
     }
-  }, [history]);
+    
+  }, []);
 
   const decideCandidate = (candidate, approve) => {
     const id = pathParams.id;
@@ -93,7 +106,9 @@ function CandidatesPage() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg" className={classes.container}>
+      {!tripDetails.name && <Box className={classes.centralize}><CircularProgress color="primary" /></Box>}
+      {tripDetails.name && 
+      <Container className={classes.container}>
          <Typography 
           align="center" 
           variant="h3" 
@@ -103,20 +118,27 @@ function CandidatesPage() {
         </Typography>
         <Divider  className={classes.pos} />
         <Container  maxWidth="sm">
-          <Typography align="center" variant="body2" component="p" className={classes.pos} >
-          {tripDetails.date} – {tripDetails.durationInDays}
+          <Typography 
+            align="center" 
+            variant="h6"
+            color="textSecondary"
+            className={classes.pos} 
+            >
+          {tripDetails.date} – {tripDetails.durationInDays} dias – {tripDetails.planet}
           </Typography>
-          <Typography align="center" variant="body2" component="p" className={classes.pos} >
-          {tripDetails.planet}
-          </Typography>
-          <Typography align="center" variant="body2" component="p" className={classes.pos} >
+          <Typography 
+            align="center" 
+            variant="body2" 
+            component="p" 
+            className={classes.pos} 
+            >
           {tripDetails.description}
           </Typography>
         </Container>
-        {permission === "rev" || permission === "adm" && <Container maxWidth="sm" className={classes.cards}>
+        {permission === "rev" || permission === "adm" ? <Container maxWidth="sm" className={classes.cards}>
             {candidates.map( candidate => {
-                return (
-                    <Card className={classes.cardLarge} key={candidate.id}>
+              return (
+                <Card className={classes.cardLarge} key={candidate.id}>
                         <CardContent>
                             <Typography variant="h6" component="h2">
                             {candidate.name}, {candidate.age}, {candidate.profession}
@@ -148,8 +170,8 @@ function CandidatesPage() {
                         </CardActions>
                     </Card>
                 )
-            })}
-        </Container>}
+              })}
+        </Container> : null}
         <Box className={classes.centralize}>
           <Button
             className={classes.button} color="primary"
@@ -167,6 +189,7 @@ function CandidatesPage() {
           </Button>}
         </Box>
       </Container>
+      }
     </>
   );
 }

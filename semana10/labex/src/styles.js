@@ -43,17 +43,18 @@ export const useStyles = makeStyles((theme) => ({
   flex: {
     display: 'flex!important',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     padding: '24px!important',
   },
   centralize: {
     display: 'flex!important',
     alignItems: 'center',
-    justifyContent: 'space-between!important',
+    justifyContent: 'center!important',
     padding: '24px!important',
   },
   center: {
     textAlign: 'center',
+    marginBottom: '24px!important'
   },
   logo: {
     cursor: 'pointer'
@@ -78,7 +79,7 @@ export const useStyles = makeStyles((theme) => ({
   cards: {
     display: "flex!important",
     alignItems: "stretch",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     flexWrap: 'wrap',
     paddingTop: 24,
     paddingBottom: 24,
@@ -86,7 +87,7 @@ export const useStyles = makeStyles((theme) => ({
     paddingLeft: 0,
   },
   card: {
-    maxWidth: 240,
+    maxWidth: 260,
     margin: 16,
     padding: 8
   },

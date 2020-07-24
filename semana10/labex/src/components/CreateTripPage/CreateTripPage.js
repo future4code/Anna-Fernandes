@@ -5,6 +5,7 @@ import { useHistory } from 'react-router-dom';
 import useProtectedRoute from '../../hooks/useProtectedRoute';
 import usePermission from '../../hooks/usePermission';
 
+import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Container from '@material-ui/core/Container';
@@ -40,6 +41,10 @@ function CreateTripPage() {
           auth: token
       }
   };
+
+  const goToTripsList = () => {
+    history.push("/trips/list");
+  }
 
   const [ errorName, setErrorName ] = useState("")
   const [ errorDate, setErrorDate ] = useState("")
@@ -132,9 +137,14 @@ function CreateTripPage() {
         Crie uma viagem
       </Typography>
 
-    {permission !== "adm" && <Container maxWidth="sm"> <Typography variant="h5" component="h2" className={classes.center}>
-      Você não tem permissão para criar viagens.
-    </Typography></Container>}
+    {permission !== "adm" && <Container maxWidth="sm">
+      <Typography 
+        variant="h5" 
+        component="h2" 
+        className={classes.center}
+      >
+        Você não tem permissão para criar viagens.
+      </Typography></Container>}
     {permission === "adm" && <Container>
         <form 
           className={classes.form} 
@@ -146,7 +156,7 @@ function CreateTripPage() {
               className={classes.input}
               name="name"
               label="nome"
-              inputProps={{ pattern: "[A-Za-z]{5,}" }}
+              inputProps={{ pattern: ".{8,}" }}
               variant="outlined"
               value={form.name}
               onChange={handleInputChange}
@@ -166,10 +176,10 @@ function CreateTripPage() {
             helperText={errorPlanet}
             >
               <MenuItem value="">selecione o planeta</MenuItem>
-              <MenuItem value={"mercurio"}>Mercúrio</MenuItem>
-              <MenuItem value={"venus"}>Vênus</MenuItem>
-              <MenuItem value={"terra"}>Terra</MenuItem>
-              <MenuItem value={"jupiter"}>Júpiter</MenuItem>
+              <MenuItem value={"Mercúrio"}>Mercúrio</MenuItem>
+              <MenuItem value={"Vênus"}>Vênus</MenuItem>
+              <MenuItem value={"Terra"}>Terra</MenuItem>
+              <MenuItem value={"Júpiter"}>Júpiter</MenuItem>
               <MenuItem value={"Saturno"}>Saturno</MenuItem>
               <MenuItem value={"Urano"}>Urano</MenuItem>
               <MenuItem value={"Netuno"}>Neturo</MenuItem>
@@ -223,6 +233,15 @@ function CreateTripPage() {
                 enviar
             </Button>
         </form>
+        <Box className={classes.centralize}>
+          <Button
+            className={classes.button} color="primary"
+            size="medium"
+            variant="contained"
+            onClick={goToTripsList}>
+              voltar
+          </Button>
+        </Box>
     </Container>}
     </>
   );
