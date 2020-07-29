@@ -137,6 +137,12 @@ describe('Conferir se não há posts e adicionar mensagem', () => {
 
     expect(noPostMessage).toBeInTheDocument()
   });
+  test('A mensagem não deve aparecer caso haja posts', () => {
+    const {queryByText} = addPost()
+    const noPostMessage = queryByText(/Não há posts/i)
+
+    expect(noPostMessage).not.toBeInTheDocument()
+  });
 });
 
 describe('A quantidade de posts deve ser mostrada, caso pelo menos um post exista', () => {
@@ -146,6 +152,13 @@ describe('A quantidade de posts deve ser mostrada, caso pelo menos um post exist
     const quantity = getByText('Quantidade de posts: 1')
 
     expect(quantity).toBeInTheDocument()
+  });
+  test("Não deve haver a indicação de quantidade de posts caso não haja posts", () => {
+    const {queryByText} = render(<App/>)
+
+    const quantity = queryByText('Quantidade de posts: 1')
+
+    expect(quantity).not.toBeInTheDocument()
   });
 });
 
