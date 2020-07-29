@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { TaskText } from "./styles";
+import { TaskText, Button } from "./styles";
 
 const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes'
 
@@ -67,11 +67,11 @@ export const Task = props => {
           })}
         </select>
 
-        <button onClick={() => editTask(props.task.id)}>Editar</button>
+        <Button onClick={() => editTask(props.task.id)}>Editar</Button>
         </>
       }
 
-      <button onClick={() => deleteTask(props.task.id)}>Apagar</button>
+      <Button onClick={() => deleteTask(props.task.id)}>Apagar</Button>
     </div>
   );
 };

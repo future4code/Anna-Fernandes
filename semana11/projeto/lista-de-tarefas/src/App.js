@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./App.css";
-import { AppContainer, Planner, PlannerQtd, PlannerDay } from "./styles";
+import { AppContainer, Header, HeaderTitle, Planner, PlannerAddTask, Input, Select, Button,PlannerQtd, PlannerDay, PlannerTitle } from "./styles";
 import { Task } from "./components/Task/Task";
 
 const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes'
@@ -51,30 +51,32 @@ const App = () => {
   const daysList = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
   return (
     <AppContainer>
-      <div>
-        <input
-          type="text"
-          onChange={onChangeInput}
-          value={inputValue}
-          placeholder={"Nova tarefa"}
-        />
-        <label htmlFor={'dias'}>Dias da semana</label>
-        <select onChange={onChangeSelect} value={selectValue} id={'dias'}>
-          <option value="">Selecione o dia</option>
-          {daysList.map( day => {
-            return <option key={day} value={day}>{day}</option>
-          })}
-        </select>
-        <button onClick={addTask}>Adicionar</button>
-      </div>
-      <br />
-      {errorMessage && <p>O texto não pode estar em branco.</p>}
+      <Header>
+        <HeaderTitle>Weekly Planner</HeaderTitle>
+      </Header>
       <Planner>
+        <PlannerAddTask>
+          <Input
+            type="text"
+            onChange={onChangeInput}
+            value={inputValue}
+            placeholder={"Nova tarefa"}
+          />
+          <label htmlFor={'dias'}>Dias da semana</label>
+          <Select onChange={onChangeSelect} value={selectValue} id={'dias'}>
+            <option value="">Selecione o dia</option>
+            {daysList.map( day => {
+              return <option key={day} value={day}>{day}</option>
+            })}
+          </Select>
+          <Button onClick={addTask}>Adicionar</Button>
+          {errorMessage && <p>O texto não pode estar em branco.</p>}
           <PlannerQtd>Quantidade de tarefas: {tasksList.length}</PlannerQtd>
+        </PlannerAddTask>
           {daysList.map( day => {
             return (
               <PlannerDay key={day}>
-                <h3>{day}</h3>
+                <PlannerTitle>{day}</PlannerTitle>
                 {tasksList.map(task => {
                   if( task.day === day) {
                     if(task.day) {

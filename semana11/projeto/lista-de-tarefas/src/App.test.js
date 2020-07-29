@@ -165,7 +165,7 @@ describe('Apagar um tarefa', () => {
   });
 });
 
-describe('A quantidade de tarefas deve ser mostrada, caso pelo menos um tarefa exista', () => {
+describe('A quantidade de tarefas deve ser mostrada, caso pelo menos uma tarefa exista', () => {
   test("A quantidade de tarefas deve ser mostrada no formato 'Quantidade de tarefas: 1'", async () => {
     axios.get = jest.fn().mockResolvedValue({
       data: [{
