@@ -1,8 +1,9 @@
 import React from "react";
-import { render, fireEvent, wait, findAllByText, getByLabelText } from "@testing-library/react";
+import { render, fireEvent, wait, getByLabelText } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"
 import App from "./App";
 import axios from "axios";
+import userEvent from "@testing-library/user-event";
 
 axios.get = jest.fn().mockResolvedValue({
   data: []
@@ -20,7 +21,7 @@ describe('Lista de tarefas', () => {
       data: [{
         id: '1',
         text: 'tarefa teste 1',
-        day: 'Segunda'
+        day: 'Segunda-7'
       }]
     });
     const {getByPlaceholderText, getByText, findByText} = render(<App/>)
@@ -30,6 +31,9 @@ describe('Lista de tarefas', () => {
 
     const select = getByText(/Selecione o dia/i)
     expect(select).toBeInTheDocument()
+
+    const selectHour = await findByText(/Selecione o horário/i)
+    expect(selectHour).toBeInTheDocument()
     
     const addButton = getByText(/adicionar/i)
     expect(addButton).toBeInTheDocument()
@@ -49,37 +53,33 @@ describe('Lista de tarefas', () => {
 
     const {
       getByPlaceholderText,
-      getByLabelText,
-      getByText
+      getByText,
+      getByTestId
     } = render(<App />)
 
     const input = getByPlaceholderText('Nova tarefa');
 
-    fireEvent.change(input, {
-      target: {
-        value: 'tarefa teste'
-      }
-    })
-
+    await userEvent.type(input, 'tarefa teste')
     expect(input).toHaveValue('tarefa teste')
-  
-    const select = getByLabelText(/Dias/i)
-  
-    fireEvent.change(select, {
-      target: {
-        value: 'Segunda'
-      }
-    })
-  
+    
+    const select = getByTestId(/days/i)
+    userEvent.selectOptions(select, 'Segunda')
     expect(select).toHaveValue('Segunda')
+    
+    
+    const selectHour = getByTestId(/hours/i)
+    userEvent.selectOptions(selectHour, '7')
+    expect(selectHour).toHaveValue('7')
 
     const addButton = getByText(/Adicionar/)
     fireEvent.click(addButton)
 
-    expect(axios.post).toHaveBeenCalledWith('https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes', {
-      text: 'tarefa teste',
-      day: 'Segunda'
-    })
+    await wait(
+      expect(axios.post).toHaveBeenCalledWith('https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes', {
+        text: 'tarefa teste',
+        day: 'Segunda-7'
+      })
+    );
 
     await wait(() => expect(axios.get).toHaveBeenCalledTimes(2));
     await wait(() => expect(input).toHaveValue(''));
@@ -87,50 +87,52 @@ describe('Lista de tarefas', () => {
 });
 
 describe('Testa edição de uma tarefa', () => {
-  test('Quando clicar na tarefa, aparecem os elementos de edição', async () => {
+  test('Quando clicar na tarefa, aparecem os elementos de edição o trecho é editado', async () => {
     axios.get = jest.fn().mockResolvedValue({
       data: [{
         id: '1',
         text: 'tarefa teste para editar',
-        day: 'Segunda'
+        day: 'Segunda-7'
       }]
     })
 
     axios.put = jest.fn().mockResolvedValue()
 
-    const {getByPlaceholderText, getByText, findByText, getByLabelText} = render(<App/>)
-
-    const task = await findByText(/tarefa teste para editar/)
-    expect(task).toBeInTheDocument()
-
-    fireEvent.click(task)
+    const {getByPlaceholderText, findByTestId, getByText, getByLabelText} = render(<App/>)
+    
+    await wait(() => {
+      const task = getByText('tarefa teste para editar')
+      expect(task).toBeInTheDocument()
+  
+      fireEvent.click(task)
+    });
 
     const input = getByPlaceholderText('Editar tarefa');
+    expect(input).toBeInTheDocument()
 
-    fireEvent.change(input, {
-      target: {
-        value: 'tarefa teste editada'
-      }
-    })
-
+    await userEvent.type(input, 'tarefa teste editada')
     expect(input).toHaveValue('tarefa teste editada');
   
-    const select = getByLabelText(/editar dia/i)
-  
-    fireEvent.change(select, {
-      target: {
-        value: 'Terça'
-      }
-    })
+    const select = getByLabelText(/editar dia/i);
+    expect(select).toBeInTheDocument()
+    
+    userEvent.selectOptions(select, 'Terça')
   
     expect(select).toHaveValue('Terça')
+  
+    const selectHour = getByLabelText(/editar horário/i);
+    expect(selectHour).toBeInTheDocument()
+    
+    userEvent.selectOptions(selectHour, '7')
+  
+    expect(selectHour).toHaveValue('7')
 
-    const editButton = getByText('Editar')
-    fireEvent.click(editButton)
+    const editButton = await findByTestId('atualizarBtn')
+    userEvent.click(editButton)
 
     expect(axios.put).toHaveBeenCalledWith('https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes/1', {
       text: "tarefa teste editada",
-      day: "Terça"
+      day: "Terça-7"
     })
 
     await wait(() => {
@@ -141,26 +143,35 @@ describe('Testa edição de uma tarefa', () => {
 
 describe('Apagar um tarefa', () => {
   test('Quando adiciona tarefa, aparece botão apagar e o botão apaga o tarefa', async () => {
-    axios.get = jest.fn().mockResolvedValue({
+    axios.get = jest.fn().mockResolvedValueOnce({
       data: [{
         id: '1',
         text: 'tarefa teste para deletar',
-        day: 'Segunda'
+        day: 'Segunda-7'
       }]
     })
 
     axios.delete = jest.fn().mockResolvedValue()
     
-    const {findByText} = render(<App/>)
+    const {findByTestId, queryByText} = render(<App/>)
     
-    const deleteButton = await findByText('Apagar')
+    const deleteButton = await findByTestId('deleteBtn')
+    userEvent.click(deleteButton)
     
-    fireEvent.click(deleteButton)
+    axios.get = jest.fn().mockResolvedValueOnce({
+      data: []
+    })
     
-    expect(axios.delete).toHaveBeenCalledWith('https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes/1')
-
     await wait(() => {
-      expect(axios.get).toHaveBeenCalledTimes(2)
+      expect(axios.delete).toHaveBeenCalledWith('https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes/1')
+    });
+    
+    await wait(() => {
+      expect(axios.get).toHaveBeenCalled()
+    })
+    
+    await wait(() => {
+      expect(queryByText('tarefa teste para deletar')).toBeNull()
     })
   });
 });
