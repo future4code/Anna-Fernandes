@@ -107,6 +107,8 @@ describe('Testa edição de uma tarefa', () => {
       fireEvent.click(task)
     });
 
+    window.alert = jest.fn();
+    
     const input = getByPlaceholderText('Editar tarefa');
     expect(input).toBeInTheDocument()
 
@@ -153,6 +155,8 @@ describe('Apagar um tarefa', () => {
 
     axios.delete = jest.fn().mockResolvedValue()
     
+    window.alert = jest.fn();
+
     const {findByTestId, queryByText} = render(<App/>)
     
     const deleteButton = await findByTestId('deleteBtn')
@@ -190,14 +194,14 @@ describe('A quantidade de tarefas deve ser mostrada, caso pelo menos uma tarefa 
     
     const { findByText } = render(<App/>)
 
-    const quantity = await findByText('Quantidade de tarefas: 1')
+    const quantity = await findByText('Total de tarefas na semana: 1')
 
     expect(quantity).toBeInTheDocument()
   });
   test("Não deve haver a indicação de quantidade de tarefas caso não haja tarefas", () => {
     const {queryByText} = render(<App/>)
 
-    const quantity = queryByText('Quantidade de tarefas: 1')
+    const quantity = queryByText('Total de tarefas na semana: 1')
 
     expect(quantity).not.toBeInTheDocument()
   });

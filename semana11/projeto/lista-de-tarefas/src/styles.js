@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const AppContainer = styled.div `
-    width: 100vw;
+    max-width: 100vw;
     min-height: 100vh;
     margin: 0;
     background-color: #f2f2f2;
@@ -39,56 +39,6 @@ export const Planner = styled.div `
   }
 `
 
-export const PlannerAddTask = styled.div `
-    min-height: 240px;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-`
-
-export const Input = styled.textarea `
-    margin: 16px 0;
-    min-width: 200px;
-    min-height: 80px;
-    padding: 8px;
-    border: none;
-    border-radius: 4px;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.10);
-`
-
-export const Select = styled.select `
-    min-width: 200px;
-    margin: 4px auto;
-    padding: 8px;
-    border-radius: 4px;
-    box-shadow:  0 0 2px 1px rgba(0, 0, 0, 0.10);
-`
-
-export const Button = styled.button `
-    margin: 16px 0;
-    min-width: 160px;
-    padding: 8px;
-    border: none;
-    border-radius: 8px;
-    box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.10);
-    background-color: #CCB7D8;
-    color: #f2f2f2;
-    font-weight: 700;
-`
-
-export const PlannerQtd = styled.h3`
-    width: 100%;
-    margin: 16px 0;
-    padding: 8px;
-    background-color: #CCB7D8;
-    color: #f2f2f2;
-    font-weight: 700;
-    text-align: center;
-    font-family: 'Over the Rainbow', cursive;
-`
-
 export const PlannerDay = styled.div `
     min-height: 240px;
     flex: 1;
@@ -106,10 +56,6 @@ export const PlannerTitle = styled.h3 `
     box-sizing: border-box;
 `
 
-export const Label = styled.label `
-    display: none;
-`
-
 export const NoTaskMessage = styled.p `
     font-size: 12px;
     text-align: center;
@@ -117,8 +63,8 @@ export const NoTaskMessage = styled.p `
 `
 
 export const TaskRow = styled.div `
-    display: grid;
-    grid-template-columns: 3% 97%;
+    display: block;
+    min-height: 20px;
     align-items: center;
     padding: 2px 8px;
 
@@ -127,7 +73,8 @@ export const TaskRow = styled.div `
     }
 `
 
-export const HourSpan = styled.p`
+export const HourSpan = styled.span`
+    float: left;
     font-size: 12px;
     color: #CCB7D8;
 `
