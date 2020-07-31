@@ -10,7 +10,17 @@ export const AppContainer = styled.div `
 
 export const Header = styled.div `
     padding: 24px;
-    background-color: #CCB7D8;
+    background-color: ${ props => { 
+        if( props.color === 'blue'  ) {
+            return '#4FC0ED'
+
+        } else if (  props.color === 'dark' ) {
+            return '#4e4e4e'
+        } else {
+            return '#CCB7D8'
+        }
+    }};
+    position: relative;
 `
 
 export const HeaderTitle = styled.h1 `
@@ -19,6 +29,20 @@ export const HeaderTitle = styled.h1 `
     font-size: 3rem;
     color: #f2f2f2;
     text-align: center;
+`
+
+export const OpenColorBox = styled.img`
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+
+    &:hover {
+        opacity: 0.7;
+    }
 `
 
 export const Planner = styled.div `
@@ -48,7 +72,16 @@ export const PlannerDay = styled.div `
 export const PlannerTitle = styled.h3 `
     margin: 16px 0;
     padding: 8px;
-    background-color: #CCB7D8;
+    background-color: ${ props => { 
+        if( props.color === 'blue'  ) {
+            return '#4FC0ED'
+
+        } else if (  props.color === 'dark' ) {
+            return '#4e4e4e'
+        } else {
+            return '#CCB7D8'
+        }
+    }};
     color: #f2f2f2;
     font-weight: 700;
     text-align: center;
@@ -59,7 +92,16 @@ export const PlannerTitle = styled.h3 `
 export const NoTaskMessage = styled.p `
     font-size: 12px;
     text-align: center;
-    color: #CCB7D8;
+    color: ${ props => { 
+        if( props.color === 'blue'  ) {
+            return '#4FC0ED'
+
+        } else if (  props.color === 'dark' ) {
+            return '#4e4e4e'
+        } else {
+            return '#CCB7D8'
+        }
+    }};
 `
 
 export const TaskRow = styled.div `
@@ -76,5 +118,14 @@ export const TaskRow = styled.div `
 export const HourSpan = styled.span`
     float: left;
     font-size: 12px;
-    color: #CCB7D8;
+    color: ${ props => { 
+        if( props.color === 'blue'  ) {
+            return '#4FC0ED'
+
+        } else if (  props.color === 'dark' ) {
+            return '#4e4e4e'
+        } else {
+            return '#CCB7D8'
+        }
+    }};
 `

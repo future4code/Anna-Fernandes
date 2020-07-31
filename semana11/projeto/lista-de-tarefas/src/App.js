@@ -1,58 +1,70 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { AppContainer, Header, HeaderTitle, Planner,PlannerDay, PlannerTitle, NoTaskMessage, TaskRow, HourSpan } from "./styles";
+import React, {useState} from "react";
 import { Task } from "./components/Task/Task";
 import { AddTask } from "./components/AddTask/AddTask";
+import { ColorsContainer } from "./components/ColorsContainer/ColorsContainer";
+import { daysList, hours } from './components/variables';
+import useTasksList from "./hooks/useTasksList";
+
+import { AppContainer, Header, HeaderTitle, Planner,PlannerDay, PlannerTitle, NoTaskMessage, TaskRow, HourSpan, OpenColorBox } from "./styles";
 import { GlobalStyle } from "./GlobalStyle";
 
-const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes'
+import iconArrowDown from "./images/arrow-down.svg";
+import iconArrowUp from "./images/arrow-up.svg";
 
 const App = () => {
-  const [tasksList, setTasksList] = useState([]);
+  const { tasksList, fetchData } = useTasksList();
 
-  const getTasks = async () => {
-    const response = await axios.get(baseUrl);
-    setTasksList(response.data)
+  const [colorBoxOpen, setColorBoxOpen] = useState(false)
+  const [color, setColor] = useState('')
+
+  const onClickShowColorBox = () => {
+    setColorBoxOpen(!colorBoxOpen)
   }
 
-  useEffect( () => {
-    getTasks();
-  }, [])
-
-  const daysList = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
-
-  const hours = [];
-  for(let i=7; i < 23; i++) {
-    hours.push(i)
+  const onClickChangeColor = e => {
+    if(e.target.id === 'blue') {
+      setColor('blue');
+    } else if (e.target.id === 'dark') {
+      setColor('dark');
+    } else {
+      setColor('');
+    }
   }
+
+  const iconArrow = colorBoxOpen ? iconArrowUp : iconArrowDown;
 
   return (
     <AppContainer>
       <GlobalStyle />
-      <Header>
+      <Header color={color} data-testid='header'>
         <HeaderTitle>Weekly Planner</HeaderTitle>
+        <OpenColorBox onClick={onClickShowColorBox} src={iconArrow} alt="Ícone de seta para abrir cores"/>
       </Header>
+      {colorBoxOpen && <ColorsContainer onClickChangeColor={onClickChangeColor}/>}
       <Planner data-testid="tarefas-lista">
-        <AddTask list={tasksList.length} getTasks={getTasks} />
+        <AddTask 
+          color={color} 
+          list={tasksList.length} 
+          getTasks={fetchData} 
+        />
         {daysList.map( day => {
           return (
             <PlannerDay key={day}>
-              <PlannerTitle>{day}</PlannerTitle>
+              <PlannerTitle color={color.toString()}>{day}</PlannerTitle>
               {tasksList.find(task => task.day.search(day) !== -1 ) && hours.map( hour => {
                 return (
                   <TaskRow key={hour}>
-                    <HourSpan>{hour}</HourSpan>
+                    <HourSpan color={color} >{hour}</HourSpan>
                     {tasksList.map(task => {
                       if( task.day === `${day}-${hour}` ) {
                         if(task.day) {
-                          return (
-                            <Task
+                          return <Task
                               key={task.id}
                               task={task}
-                              getTasks={getTasks}
+                              getTasks={fetchData}
                               daysList={daysList}
+                              color={color}
                             />
-                          );
                         }
                       }
                     })
@@ -60,11 +72,10 @@ const App = () => {
                   </TaskRow>
                 )
               })}
-              {!tasksList.find(task => task.day.search(day) !== -1 ) && <NoTaskMessage>Não há tarefas cadastradas</NoTaskMessage>}
-
-              </PlannerDay>
-            )
-          })}
+              {!tasksList.find(task => task.day.search(day) !== -1 ) && <NoTaskMessage color={color} >Não há tarefas cadastradas</NoTaskMessage>}
+            </PlannerDay>
+          )
+        })}
       </Planner>
     </AppContainer>
   );

@@ -43,6 +43,12 @@ export const TaskContainer = styled.div`
     justify-content: space-between;
 `
 
+export const TaskEdit = styled.form `
+    display: flex;
+    align-items: center;
+    justify-items: center;
+`
+
 export const TaskCheck = styled.div `
     display: block;
     position: relative;
@@ -101,10 +107,4 @@ export const Select = styled.select `
     border-radius: 4px;
     box-shadow:  0 0 2px 1px rgba(0, 0, 0, 0.10);
     box-sizing: border-box;
-`
-
-export const TaskEdit = styled.div `
-    display: flex;
-    align-items: center;
-    justify-items: center;
 `

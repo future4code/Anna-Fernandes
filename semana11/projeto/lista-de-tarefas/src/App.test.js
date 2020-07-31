@@ -1,5 +1,5 @@
 import React from "react";
-import { render, fireEvent, wait, getByLabelText } from "@testing-library/react";
+import { render, fireEvent, wait, act } from "@testing-library/react";
 import "@testing-library/jest-dom/extend-expect"
 import App from "./App";
 import axios from "axios";
@@ -198,32 +198,161 @@ describe('A quantidade de tarefas deve ser mostrada, caso pelo menos uma tarefa 
 
     expect(quantity).toBeInTheDocument()
   });
+
   test("Não deve haver a indicação de quantidade de tarefas caso não haja tarefas", () => {
+    
     const {queryByText} = render(<App/>)
-
+    
     const quantity = queryByText('Total de tarefas na semana: 1')
-
     expect(quantity).not.toBeInTheDocument()
+
   });
 });
 
 describe('Se um usuário tenta criar um tarefa com o texto vazio, uma mensagem deve aparecer na tela ', () => {
-  test("Aparece a mensagem na tela e o tarefa não é criado", () => {
-    
+  test("Aparece a mensagem na tela e o tarefa não é criada", () => {
+
     const {getByPlaceholderText, getByText} = render(<App/>)
-
+    
     const input = getByPlaceholderText('Nova tarefa')
-
-    fireEvent.change(input, {
-      target: {
-        value: ''
-      }
-    })
+    userEvent.type(input, '')
     
     const addButton = getByText('Adicionar')
-
-    fireEvent.click(addButton)
+    userEvent.click(addButton)
 
     expect(getByText('O texto não pode estar em branco.')).toBeInTheDocument()
   });
 });
+
+describe('Teste das definições de estilo', () => {
+  test('Quando o checkbox da tarefa não é marcado, ele aparece em branco', async() => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: [{
+        id: '1',
+        text: 'tarefa teste',
+        day: 'Segunda-7'
+      }]
+    })
+
+    const {getByTestId, findByText} = render(<App/>)
+   
+    const text = await findByText('tarefa teste');
+    expect(text).toBeInTheDocument();
+
+    const checkmark = getByTestId('checkmark');
+    
+    const taskcheck = getByTestId('taskcheck');
+    
+    await wait(() => {
+      expect(checkmark).toHaveStyle(`
+        backgroundColor: '#ffffff'
+      `)
+
+      expect(taskcheck).toHaveStyle(`
+        display: inline
+      `)
+    })
+  });
+  test('Quando o checkbox da tarefa é marcado, aparece o check e o texto da tarefa aparece riscado', async() => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: [{
+        id: '1',
+        text: 'tarefa teste',
+        day: 'Segunda-7'
+      }]
+    })
+
+    const {getByTestId, findByText} = render(<App/>)
+   
+      const text = await findByText('tarefa teste');
+      
+      const checkmark = getByTestId('checkmark');
+      userEvent.click(checkmark)
+      
+      const taskcheck = getByTestId('taskcheck');
+
+      await wait(() => {
+        expect(taskcheck).toHaveStyle(`
+          display: inline
+        `)
+  
+        expect(text).toHaveStyle(`
+          text-decoration: line-through
+        `)
+      })
+  });
+
+  test('Quando o usuário mudar a cor azul do tema, todos os background-color e color que não são neutros mudam', () => {
+
+    const {getByTestId, getByAltText, getByText} = render(<App/>)
+    const arrow = getByAltText('Ícone de seta para abrir cores');;
+    expect(arrow).toBeInTheDocument();
+    userEvent.click(arrow)
+    
+    const blueBox = getByTestId('blue');
+    expect(blueBox).toBeInTheDocument();
+    userEvent.click(blueBox)
+    
+    const header = getByTestId('header');
+    expect(header).toHaveStyle(`
+      backgroundColor: '#4FC0ED'
+    `)
+    
+    const addButton = getByText('Adicionar');
+    expect(addButton).toHaveStyle(`
+      backgroundColor: '#4FC0ED'
+    `)
+  });
+
+  test('Quando o usuário mudar a cor dark do tema, todos os background-color e color que não são neutros mudam', async() => {
+    const {getByTestId, getByAltText, getByText} = render(<App/>)
+
+    const arrow = getByAltText('Ícone de seta para abrir cores');
+    expect(arrow).toBeInTheDocument();
+    userEvent.click(arrow)
+    
+    const darkBox = getByTestId('dark');
+    expect(darkBox).toBeInTheDocument();
+    userEvent.click(darkBox)
+    
+    const header = getByTestId('header');
+    expect(header).toHaveStyle(`
+      backgroundColor: '#4e4e4e'
+    `)
+    
+    const addButton = getByText('Adicionar');
+    expect(addButton).toHaveStyle(`
+      backgroundColor: '#4e4e4e'
+    `)
+  });
+
+  test('Quando clica em atualizar um item, o icone de atualizar tem a cor do tema', async() => {
+    axios.get = jest.fn().mockResolvedValue({
+      data: [{
+        id: '1',
+        text: 'tarefa teste para editar',
+        day: 'Segunda-7'
+      }]
+    })
+
+    const {findByAltText, getByText, getByAltText, getByTestId} = render(<App/>)
+    
+    await wait(() => {
+      const task = getByText('tarefa teste para editar')
+      userEvent.click(task)
+    });
+    
+    const arrow = getByAltText('Ícone de seta para abrir cores');
+    expect(arrow).toBeInTheDocument();
+    userEvent.click(arrow)
+    
+    const darkBox = getByTestId('dark');
+    expect(darkBox).toBeInTheDocument();
+    userEvent.click(darkBox)
+
+    const editButton = await findByAltText('Ícone de atualizar')
+    expect(editButton).toHaveAttribute('src', expect.stringContaining('update-dark.svg'))
+
+  })
+
+})

@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { TaskText, TaskEdit, Label, TaskContainer, TaskCheck, Checkmark, IconBtn, Icon, Input, Select, DeleteBtn } from "./styles";
+import useForm from '../../hooks/useForm';
+import { daysList, hours } from '../variables';
 
 import iconDelete from '../../images/delete.svg';
-import iconUpdate from '../../images/update.svg';
+import iconUpdateViolet from '../../images/update.svg';
+import iconUpdateBlue from '../../images/update-blue.svg';
+import iconUpdateDark from '../../images/update-dark.svg';
 import iconCancel from '../../images/cancel.svg';
 
 const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes'
@@ -11,22 +15,18 @@ const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/plan
 export const Task = props => {
 
   const [checked, setChecked] = useState(false);
-  const [inputValue, setInputValue] = useState("");
   const [editContainer, setEditContainer] = useState(false);
-  const [selectValue, setSelectValue] = useState("");
-  const [selectHoursValue, setSelectHoursValue] = useState("");
+  
+  const { form, onChange, resetForm } = useForm({
+    text: "", 
+    day: "", 
+    hour: ""
+  });
 
-  const onChangeInput = event => {
-    setInputValue(event.target.value);
-  };
-
-  const onChangeSelect = event => {
-    setSelectValue(event.target.value);
-  };
-
-  const onChangeSelectHours = event => {
-    setSelectHoursValue(event.target.value);
-  };
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    onChange(name, value)
+  }
 
   const deleteTask = async (taskId) => {
     try {
@@ -47,10 +47,12 @@ export const Task = props => {
     setChecked(!checked)
   }
 
-  const editTask = async (taskId) => {
+  const editTask = async(e) => {
+    e.preventDefault();
+    const taskId = e.target.id;
     const body = {
-      "text": inputValue,
-      "day": `${selectValue}-${selectHoursValue}`
+      "text": form.text,
+      "day": `${form.day}-${form.hour}`
     };
 
     await axios.put(`${baseUrl}/${taskId}`, body);
@@ -61,20 +63,27 @@ export const Task = props => {
     }
     props.getTasks();
   };
-  
-  const hours = [];
-  for(let i=7; i < 23; i++) {
-    hours.push(i)
-  }
 
+  const iconUpdate = () => {
+    switch(props.color) {
+    case "blue" :
+      return iconUpdateBlue
+      break;
+    case "dark":
+      return iconUpdateDark
+      break;
+    default:
+      return iconUpdateViolet;
+  }} 
 
   return (
     <TaskContainer>
-      <TaskCheck isEditing={editContainer}>
+      <TaskCheck isEditing={editContainer} data-testid='taskcheck'>
         <Checkmark 
           isEditing={editContainer}
           onClick={onClickInput} 
           checked={checked}
+          data-testid='checkmark'
           />
         <TaskText
           data-testid={'item-tarefa'}
@@ -86,28 +95,42 @@ export const Task = props => {
       </TaskCheck>
 
       {editContainer && 
-        <TaskEdit>
+        <TaskEdit onSubmit={editTask} id={props.task.id}>
           <Input
+            required
             type="text"
-            onChange={onChangeInput}
-            value={inputValue}
+            name="text"
+            onChange={handleInputChange}
+            value={form.text}
             placeholder={"Editar tarefa"}
           />
           <Label htmlFor={'editarDia'}>Editar dia da semana</Label>
-          <Select onChange={onChangeSelect} value={selectValue} id={'editarDia'}>
+          <Select
+            required
+            name="day"
+            onChange={handleInputChange}
+            value={form.day} 
+            id={'editarDia'}
+          >
             <option value="">Dia</option>
               {props.daysList.map( day => {
               return <option key={day} value={day}>{day}</option>
               })}
           </Select>
           <Label htmlFor={'editarHora'}>Editar horário</Label>
-          <Select onChange={onChangeSelectHours} value={selectHoursValue} id={'editarHora'}>
+          <Select
+            required
+            name="hour"
+            onChange={handleInputChange} 
+            value={form.hour} 
+            id={'editarHora'}
+          >
             <option value="">Horário</option>
               {hours.map( hour => {
               return <option key={hour} value={hour}>{hour}</option>
               })}
           </Select>
-            <IconBtn data-testid="atualizarBtn" onClick={() => editTask(props.task.id)}><Icon src={iconUpdate} alt="Ícone de atualizar"/></IconBtn>
+            <IconBtn data-testid="atualizarBtn" type="submit"><Icon src={iconUpdate()} alt="Ícone de atualizar"/></IconBtn>
             <IconBtn onClick={onClickTask}><Icon src={iconCancel} alt="Ícone de cancelar" /></IconBtn>
         </TaskEdit>
       }

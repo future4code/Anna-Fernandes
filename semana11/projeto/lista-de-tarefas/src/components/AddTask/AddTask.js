@@ -1,77 +1,89 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { PlannerAddTask, Input, Select, Button, PlannerQtd, Label } from "./styles";
+import { PlannerAddTask, Input, Select, Button, PlannerQtd, Label, TaksForm } from "./styles";
+
+import { daysList, hours } from '../variables';
+import useForm from '../../hooks/useForm';
 
 const baseUrl = 'https://us-central1-labenu-apis.cloudfunctions.net/generic/planner-turing-anna-fernandes'
 
 export const AddTask = props => {
 
-  const [inputValue, setInputValue] = useState("");
-  const [selectValue, setSelectValue] = useState("");
-  const [selectHoursValue, setSelectHoursValue] = useState("");
   const [errorMessage, setErrorMessage] = useState(false);
+  const { form, onChange, resetForm } = useForm({
+    task: "", 
+    day: "", 
+    hour: ""
+  });
 
-  const onChangeInput = event => {
-    setInputValue(event.target.value);
-  };
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    onChange(name, value)
+  }
 
-  const onChangeSelectDays = event => {
-    setSelectValue(event.target.value);
-  };
-
-  const onChangeSelectHours = event => {
-    setSelectHoursValue(event.target.value);
-  };
-
-  const addTask = async () => {
-    if ( inputValue !== "") {
+  const addTask = async (e) => {
+    e.preventDefault();
+    if ( form.task !== "") {
       const body = {
-        "text": inputValue,
-        "day": `${selectValue}-${selectHoursValue}`
+        "text": form.task,
+        "day": `${form.day}-${form.hour}`
       };
 
       await axios.post(baseUrl, body);
   
       props.getTasks();
-      setInputValue("");
       setErrorMessage(false);
+      resetForm()
     } else {
       setErrorMessage(true);
     }
   };
 
-  const daysList = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
-
-  const hours = [];
-  for(let i=7; i < 23; i++) {
-    hours.push(i)
-  }
-
   return (
     <PlannerAddTask>
-        <PlannerQtd>Total de tarefas na semana: {props.list}</PlannerQtd>
+        <PlannerQtd color={props.color}>Total de tarefas na semana: {props.list}</PlannerQtd>
+        
+        <TaksForm onSubmit={addTask}>
         <Input
-            type="text"
-            onChange={onChangeInput}
-            value={inputValue}
-            placeholder={"Nova tarefa"}
+          required
+          type="text"
+          name="task"
+          onChange={handleInputChange}
+          value={form.task}
+          placeholder={"Nova tarefa"}
         />
         <Label htmlFor={'days'}>Dias da semana</Label>
-        <Select data-testid='days' onChange={onChangeSelectDays} value={selectValue} id={'days'}>
+        <Select 
+          required
+          data-testid='days' 
+          name="day"
+          onChange={handleInputChange}
+          value={form.day}
+          id={'days'}
+        >
             <option value="">Selecione o dia</option>
             {daysList.map( day => {
               return <option data-testid="option" key={day} value={day}>{day}</option>
             })}
         </Select>
         <Label htmlFor={'hours'}>Horários</Label>
-        <Select data-testid='hours' onChange={onChangeSelectHours} value={selectHoursValue} id={'hours'}>
-            <option value="">Selecione o horário</option>
-            {hours.map( hour => {
-              return <option key={hour} value={hour}>{hour}</option>
-            })}
+        <Select 
+          required
+          data-testid='hours' 
+          name="hour" 
+          onChange={handleInputChange} 
+          value={form.hour} 
+          id={'hours'}
+        >
+          <option value="">Selecione o horário</option>
+          {hours.map( hour => {
+            return <option key={hour} value={hour}>{hour}</option>
+          })}
         </Select>
-        <Button onClick={addTask}>Adicionar</Button>
+        <Button color={props.color}>Adicionar</Button>
           {errorMessage && <p>O texto não pode estar em branco.</p>}
+        </TaksForm>
+
     </PlannerAddTask>
   );
 };
