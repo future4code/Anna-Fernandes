@@ -1,6 +1,6 @@
-type pokemon {
+type pokemon = {
 	name: string,
-  types: string,
+    types: string,
 	healthPoints: number
 }
 
@@ -16,7 +16,7 @@ const pokemon2: pokemon = {
   healthPoints: 31
 }
 
-const pokemon2: pokemon = {
+const pokemon3: pokemon = {
   name: "Squirtle",
   types: "Water",
   healthPoints: 35
