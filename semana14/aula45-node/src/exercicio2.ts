@@ -18,9 +18,9 @@ const result = () => {
 }
 
 if(!operation && !firstNumber && !secondNumber) {
-    console.log("Esperava 3 parâmetros mas não recebi nenhum :(")
+    console.error('\x1b[31m%s\x1b[0m',"Esperava 3 parâmetros mas não recebi nenhum :(")
 } else if(!firstNumber && !secondNumber) {
-	console.log("Esperava 3 parâmetros mas recebi apenas um :(")
+	console.error('\x1b[31m%s\x1b[0m',"Esperava 3 parâmetros mas recebi apenas um :(")
 } else {
-	console.log('\x1b[35m%s\x1b[0m', result());
+	console.log('\x1b[32m%s\x1b[0m', result());
 }
