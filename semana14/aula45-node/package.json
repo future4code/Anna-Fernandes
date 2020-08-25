@@ -1,0 +1,23 @@
+{
+  "name": "aula-node-package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./src/index.ts",
+    "exercicio1": "clear && echo \"Temos uma mensagem para você:\" && tsc && node ./build/exercicio1.js",
+    "exercicio2": "clear && echo \"Resultado da operação:\" && tsc && node ./build/exercicio2.js",
+    "exercicio3": "clear && echo \"Adicionando nova tarefa...\" && tsc && node ./build/exercicio3.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "\u0016\u0016"
+  },
+  "author": "Anna Fernandes",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.6.0",
+    "ts-node": "^9.0.0"
+  }
+}
