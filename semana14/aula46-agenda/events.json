@@ -1,0 +1,14 @@
+[
+   {
+      "name": "Aniversário da Joana",
+      "description": "Aniversário virtual da Joana",
+      "startAt": "moment('04/09/2020 20:00', 'DD/MM/YYYY HH:mm')",
+      "finishAt": "moment('04/09/2020 24:00', 'DD/MM/YYYY HH:mm')"
+   },
+   {
+      "name": "Festa pós pandemia",
+      "description": "Aglomeração somente para vacinados",
+      "startAt": "2021-09-03T04:00:00.000Z",
+      "finishAt": "2021-09-04T02:00:00.000Z"
+   }
+]
