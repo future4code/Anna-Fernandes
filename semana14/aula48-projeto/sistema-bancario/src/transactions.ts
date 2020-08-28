@@ -1,0 +1,10 @@
+import { readDatabase, writeToDatabase } from "./index";
+
+// 4. Alterem a função `addBalance` para que ela adicione um item ao extrato da conta do usuário: indicando o valor e a data da transação. A descrição para este tipo de item deve ser a mesma ("Depósito de dinheiro")
+// 5. Criem uma função (`payBill`) que permita ao cliente pagar uma conta. Ela deve receber uma data, uma descrição e um valor; e salvar uma transação no extrato da conta. O saldo do usuário **não** deve ser atualizado neste momento. Caso nenhuma data seja passada, considere que o pagamento deve ser feito hoje.
+// 6. Criem uma nova função: `updateBalance`. Ela será responsável por atualizar o saldo do cliente. Para isto, percorram os itens do extrato e atualize o saldo somente para as contas cujas datas são anteriores a hoje. 
+// 7. Adicionem uma validação à função do item 1 deste dasafio (`payBill`): o usuário não pode colocar uma data que já passou.
+// 8. Adicionem mais uma validação à função do item 1 deste desafio (`payBill` ): o usuário não pode tentar fazer um pagamento cujo valor seja maior do que seu saldo atual.
+// 9. Criem uma função (`performTransfer`)para permitir a transferência entre contas internas do banco. O usuário deve informar o seu nome, o seu CPF, o nome do destinatário, o CPF do destinatário e o valor. Para cada transferência, criem um item do extrato para as duas contas envolvidas. Os saldos de ambas não devem ser atualizadas neste momento. (A função `updateBalance`, que vocês implementaram, já deve fazer isso) @
+// 10. Adicionem uma validação para a função `performTransfer`: verificar se o saldo do usuário é suficiente para a transferência. Se não for, exiba uma mensagem de erro.
+// 11. Adicionem mais uma validação para a função `performTransfer`: verificar se ambas as contas (do remetente e destinatário) existem. Exibam uma mensagem de erro, se não existir.

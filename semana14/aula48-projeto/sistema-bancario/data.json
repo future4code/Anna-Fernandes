@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Felizberto Rico",
+    "cpf": "111.111.111-11",
+    "dateOfBirth": "07/11/1978",
+    "balance": "060",
+    "transactions": [
+      {
+        "date": "28/08/2020",
+        "value": 15,
+        "description": "Café e pão de queijo na padaria cara"
+      }
+    ]
+  },
+  {
+    "name": "Rogéria Maria",
+    "cpf": "22.222.222-22",
+    "balance": 0,
+    "dateOfBirth": "1973-05-08T03:00:00.000Z",
+    "transaction": []
+  },
+  {
+    "name": "Felizberto Junior",
+    "cpf": "111.111.111-12",
+    "balance": 0,
+    "dateOfBirth": "2001-11-07T02:00:00.000Z",
+    "transaction": []
+  }
+]
