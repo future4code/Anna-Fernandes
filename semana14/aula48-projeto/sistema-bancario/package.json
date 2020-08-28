@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "transactions": "ts-node ./src/transactions.ts",
+    "performTransfer": "ts-node ./src/performTransfer.ts",
+    "updateBalance": "ts-node ./src/updateBalance.ts",
+    "payBill": "ts-node ./src/payBill.ts",
     "addBalance": "ts-node ./src/addBalance.ts",
     "getBalance": "ts-node ./src/getBalance.ts",
     "deleteAccount": "ts-node ./src/deleteAccount.ts",

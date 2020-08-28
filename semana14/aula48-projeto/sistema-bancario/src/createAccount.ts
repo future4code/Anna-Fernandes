@@ -1,5 +1,6 @@
 import { readDatabase, writeToDatabase, userAcount, transaction } from "./index";
 import moment from "moment";
+moment.locale('pt-br');
 
 
 const validateCpf = (cpf: string): boolean => {
@@ -24,7 +25,7 @@ const createAccount = (user: userAcount ): void => {
         cpf: user.cpf,
         balance: user.balance,
         dateOfBirth: user.dateOfBirth,
-        transaction: user.transaction
+        transactions: user.transactions
     }
 
     const today: moment.Moment = moment();
@@ -50,5 +51,5 @@ createAccount({
     cpf: process.argv[3],
     balance: 0,
     dateOfBirth: moment(process.argv[4], 'DD/MM/YYYY HH:mm'),
-    transaction: []
+    transactions: []
 })

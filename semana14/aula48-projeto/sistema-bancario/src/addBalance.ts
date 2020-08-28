@@ -1,4 +1,5 @@
 import { readDatabase, writeToDatabase, userAcount, transaction } from "./index";
+import moment from "moment";
 
 const addBalance = (name: string, cpf: string, value: string) => {
     const users = readDatabase();
@@ -9,9 +10,21 @@ const addBalance = (name: string, cpf: string, value: string) => {
     if(findUserByName && findUserByCpf && findUserByName === findUserByCpf) {
         const newBalanceUsers = users.map( (user: userAcount) => {
             if( user.name === name && user.cpf === cpf ) {
+                            
+
+                const newTransaction: transaction = {
+                    date: moment(),
+                    value: Number(value),
+                    description: "Depósito de dinheiro"
+                }
+                
+                const transactions = user.transactions
+                transactions.push(newTransaction);
+
                 const newBalanceForUser = {
                     ...user,
-                    balance: user.balance + value
+                    balance: Number(user.balance) + Number(value),
+                    transactions: transactions
                 }
     
                 return newBalanceForUser
@@ -27,5 +40,5 @@ const addBalance = (name: string, cpf: string, value: string) => {
     }
 }
 
-console.log(`Adicionando R$ ${process.argv[3]}`);
+console.log(`Adicionando R$ ${process.argv[4]}`);
 addBalance(process.argv[2], process.argv[3], process.argv[4]);

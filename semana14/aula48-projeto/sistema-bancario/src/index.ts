@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import moment from 'moment';
+moment.locale('pt-br');
 
 export function readDatabase(): any {
   try {
@@ -31,5 +32,5 @@ export type userAcount = {
   cpf: string,
   balance: number,
   dateOfBirth: moment.Moment,
-  transaction: transaction[]
+  transactions: transaction[]
 }
