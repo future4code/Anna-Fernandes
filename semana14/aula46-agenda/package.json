@@ -1,0 +1,26 @@
+{
+  "name": "agenda",
+  "version": "1.0.0",
+  "description": "sistema de agenda usando somente typescript",
+  "main": "index.js",
+  "scripts": {
+    "deleteEvent": "clear && echo \"Agenda\" && tsc && node ./build/deleteEvent.js",
+    "editEvent": "clear && echo \"Agenda\" && tsc && node ./build/editEvent.js",
+    "createEvent": "clear && echo \"Agenda\" && tsc && node ./build/createEvent.js",
+    "getEvent": "clear && echo \"Agenda\" && tsc && node ./build/getEvent.js",
+    "getAllEvents": "clear && echo \"Agenda\" && tsc && node ./build/getAllEvents.js",
+    "start": "clear && echo \"Agenda\" && tsc && node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "typescript",
+    "node",
+    "date"
+  ],
+  "author": "Anna Fernandes",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.6.0",
+    "moment": "^2.27.0"
+  }
+}
