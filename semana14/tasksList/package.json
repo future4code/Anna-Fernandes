@@ -1,0 +1,16 @@
+{
+  "name": "taskslist",
+  "version": "1.0.0",
+  "description": "Aplicação Node que receba uma string representando o nome do arquivo da lista de tarefas e uma string representando uma nova tarefa, em seguida o programa deve adicionar a nova tarefa em um arquivo que tenha o nome da lista de tarefas.",
+  "main": "./build/index.js",
+  "scripts": {
+    "start": "clear && echo \"Adicionando nova tarefa...\" && tsc && node ./build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Anna Fernandes",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^14.6.0"
+  }
+}
