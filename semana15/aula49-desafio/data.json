@@ -1,0 +1,32 @@
+[
+   {
+      "name": "Feijoada",
+      "description": "Uma gostosa feijoada",
+      "price": 25,
+      "category": "SaltyDish"
+   },
+   {
+      "name": "Macarronada",
+      "description": "Delicioso macarrão com molho de tomate",
+      "price": 30,
+      "category": "SaltyDish"
+   },
+   {
+      "name": "Brownie",
+      "description": "Delicioso brownie de chocolate",
+      "price": 5,
+      "category": "Dessert"
+   },
+   {
+      "name": "Bolo de cenour",
+      "description": "Delicioso bolo de cenoura",
+      "price": 5,
+      "category": "Dessert"
+   },
+   {
+      "name": "Bolo de cenoura",
+      "description": "Delicioso bolo de cenoura",
+      "price": 5,
+      "category": "Dessert"
+   }
+]
