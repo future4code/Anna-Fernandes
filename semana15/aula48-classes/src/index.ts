@@ -1,97 +1,66 @@
-import moment from 'moment';
-import fs from 'fs';
+import fs from "fs";
+import { JSONFileManager } from './JSONFileManager';
+import { Transaction } from './Transaction';
+import { UserAccount } from './UserAccount';
+import { Bank } from './Bank';
 
+const bank: Bank = new Bank();
 
-class UserAccount {
-    private cpf: string;
-    private name: string;
-    private age: number;
-    private balance: number = 0;
-    private transactions: Transaction[] = [];
-  
-    constructor(
-       cpf: string,
-       name: string,
-       age: number,
-    ) {
-       console.log("Chamando o construtor da classe UserAccount")
-       this.cpf = cpf;
-       this.name = name;
-       this.age = age;
-    }
+const action: string = process.argv[2];
 
-    public getName(): string {
-        return this.name
-    }
-
-    public getCpf(): string {
-        return this.cpf
-    }
-
-    public getBalance(): number {
-        return this.balance
-    }
-
-}
-
-const userOne: UserAccount = new UserAccount("111.111.111-11", "Felizberto Rico", 45)
-console.log(userOne)
-
-// 1. a) Ele é chamado por constructor(args){}
-// 1. b) Uma vez
-// 1/ c) Pelo new Classe
-
-
-class Transaction {
-    private date: string;
-    private value: number;
-    private description: string;
-
-    constructor(date: string, value: number, description: string) {
-        console.log("Chamando o construtor da classe Transaction")
-        this.date = date;
-        this.value = value;
-        this.description = description;
-    }
-}
-
-const transactionOne: Transaction = new Transaction("31/08/2020", 50, "Pagando boleto")
-console.log(transactionOne)
-
-class Bank {
-    private accounts: UserAccount[];
-    private fileManager: JSONFileManager;
-
-    constructor(accounts: UserAccount[], fileManager: JSONFileManager) {
-        this.accounts = accounts;
-        this.fileManager = new JSONFileManager("data.json")
-    }
-}
-
-class JSONFileManager {
-    private fileName: string;
-
-    constructor(fileName: string) {
-        this.fileName = fileName;
-    }
-
-    public readDatabase(): Object {
-        try {
-            const fileData: string = fs.readFileSync(this.fileName).toString()
-            return JSON.parse(fileData)
-            
-        } catch(err) {
-            console.log(`Erro ao ler a base de dados: ${err.message}`);
-            return []
-        }
-    }
-
-    public writeToDatabase(data: any): void {
-        try {
-            const dataAsString: string = JSON.stringify(data, null, 3)
-            fs.writeFileSync(this.fileName, dataAsString)
-        } catch(err) {
-            console.log(`Erro ao ler a base de dados: ${err.message}`);
-        }
-    }
+switch(action) {
+    case "createAccount":
+        bank.createAccount(
+            process.argv[3],
+            process.argv[4],
+            Number(process.argv[5])
+        )
+        console.log("Conta criada com sucesso!")
+        break;
+    case "getBalance":
+        console.log(
+            bank.getBalance(
+            process.argv[3],
+            process.argv[4]
+            )
+        )
+        break;
+    case "addBalance":
+        bank.addBalance(
+            process.argv[3],
+            process.argv[4],
+            Number(process.argv[5])
+        )
+        console.log("O depósito foi realizado com sucesso.")
+        break;
+    case "payBill":
+        bank.payBill(
+            process.argv[3],
+            Number(process.argv[4]),
+            process.argv[5],
+            process.argv[6]
+        )
+        break;
+    case "payBill":
+        bank.payBill(
+            process.argv[3],
+            Number(process.argv[4]),
+            process.argv[5],
+            process.argv[6]
+        )
+        break;
+    case "updateBalance":
+        bank.updateBalance()
+        break;
+    case "makeTransfer":
+        bank.makeTransfer(
+            process.argv[3],
+            process.argv[4],
+            process.argv[5],
+            process.argv[6],
+            Number(process.argv[7]),
+        )
+        break;
+    default:
+        console.log("Operação inválida.")
 }
