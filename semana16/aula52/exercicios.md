@@ -127,18 +127,108 @@ app.delete("/actor/:id", async (req:Request, res:Response) => {
 
 ### Exercício 5
 
-a)
-b)
-c)
+
+const createMovie = async (
+    id: string,
+    name: string,
+    sinopse: string,
+    debut_date: Date,
+    rating: number,
+    playing_limit_date: Date,
+
+) => {
+    try {
+        await connection
+        .insert({
+            id,
+            name,
+            sinopse,
+            debut_date,
+            rating,
+            playing_limit_date})
+        .into('Movie')
+        console.log('Sucesso')
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/movie", async (req:Request, res:Response) => {
+    try {
+        await createMovie(
+            req.body.id,
+            req.body.name,
+            req.body.sinopse,
+            req.body.debut_date,
+            req.body.rating,
+            req.body.playing_limit_date
+        )
+        res.status(200).send({
+            message: "Success",
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 ### Exercício 6
 
-a)
-b)
-c)
+const getAllMovies = async (): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT * FROM Movie LIMIT 15
+        `)
+        console.log('Sucesso')
+        return result[0]
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/movie/all", async (req:Request, res:Response) => {
+    try {
+        const movies = await getAllMovies();
+        res.status(200).send({
+            movies: movies,
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 ### Exercício 7
 
-a)
-b)
-c)
+const searchMovie = async (name: string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+          SELECT * FROM Movie WHERE name LIKE "%${name}%"
+        `)
+        console.log(result[0])
+        return result[0]
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/movie/search", async (req:Request, res:Response) => {
+    try {
+        const movies = await searchMovie(req.query.name as string);
+        res.status(200).send({
+            movies
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
