@@ -129,7 +129,7 @@ const averageSalary = async(gender: string): Promise<void> => {
     }
 }
 
-// createActor("003", "Ísis Valverde", 500000, new Date(17/2/1987), "female")
+// createActor("006", "Alice Braga", 500000, new Date(15/4/1983), "female")
 // updateSalary("001", 450000)
 // deleteActor("003")
 // averageSalary("female")
@@ -312,5 +312,38 @@ app.get("/movie/search", async (req:Request, res:Response) => {
     }
 })
 
-searchMovie("Bacurau")
+// searchMovie("Bacurau")
 // createMovie("001", "Eduardo e Mônica", "Eduardo abriu os olhos mas não quis se levantar ficou deitado e viu que horas eram, enquanto isso a Mônica tomava um conhaque no outro canto da cidade como eles disseram", new Date(21/11/2020), 10, new Date (21/12/2021))
+
+
+const createRating = async (
+    id: string,
+    comment: string,
+    rate: number,
+    movie_id: string,
+
+) => {
+    try {
+        await connection
+        .insert({
+            id,
+            comment,
+            rate,
+            movie_id
+        })
+        .into('Rating')
+        console.log('Sucesso')
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+// createRating("003", "Sensacional, igual a música!", 9, "001")
+// createRating("001", "Adorie, muito fofo!", 9, "002")
+// createRating("004", "Um clássico!", 9, "003")
+// createRating("002", "Amei, vou colocar em prática na próxima revolução!", 9, "004")
+// createRating("005", "Assisti de verdade e é muito profundo", 10, "005")
+
+
+
