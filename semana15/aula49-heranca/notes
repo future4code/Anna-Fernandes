@@ -1,0 +1,30 @@
+Sistema de loja
+
+user (id, email, nome, senha)
+Tipos de usuário
+consumidores - guardar cartão e historico de conta
+funcionarios - salario base
+vendedores - comissao
+
+Classes:
+User (id, email, nome, senha)
+Customer (user, cartao, historico - filha do user)
+Employee (user, admissionDate, baseSalary - protected)
+Seller (filha de employee, pode acessar itens protected)
+
+imprimir id, email e nome do user
+imprimir id, email, purchaseTotal e creditCard do Customer
+
+criar introduceYourself em User com a mensagem "Olá, sou ${nome do usuário}. Bom dia!"
+
+criar get admissionDate e baseSalary em Employee
+
+criar calculateTotalSalary em Employee (baseSalary + benefícios(a statics BENEFITS_VALUE que vai ser criada))
+
+imprimir instância da classe Seller
+
+add salesQuantity:number e setSalesQuantity em Seller
+
+criar em Employee uma static BENEFITS_VALUE com valor de 400
+
+criar em Seller uma static SELLING_COMMISSION com valor de 5 e fazer o Seller add esse atributo em calculateTotalSalary.

@@ -1,0 +1,43 @@
+[
+   {
+      "name": "Felizardo Rico",
+      "cpf": "111.111.111-11",
+      "age": 65,
+      "balance": 790,
+      "transactions": [
+         {
+            "value": 190,
+            "description": "Depósito de dinheiro",
+            "date": "31/08/2020"
+         },
+         {
+            "value": 1000,
+            "description": "Depósito de dinheiro",
+            "date": "31/08/2020"
+         },
+         {
+            "value": -250,
+            "description": "Comprei creminhos pra pele",
+            "date": "31/08/2020"
+         },
+         {
+            "value": -150,
+            "description": "Transferência entre contas.",
+            "date": "31/08/2020"
+         }
+      ]
+   },
+   {
+      "name": "Rogéria Endividada",
+      "cpf": "222.222.222-22",
+      "age": 34,
+      "balance": 150,
+      "transactions": [
+         {
+            "value": 150,
+            "description": "Transferência entre contas.",
+            "date": "31/08/2020"
+         }
+      ]
+   }
+]
