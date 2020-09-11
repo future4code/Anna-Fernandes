@@ -56,6 +56,81 @@ app.get("/user/all", async (req:Request, res:Response) => {
     }
 })
 
+// Pegar todas as tarefas por status 
+const getTaksByStatus = async (status: string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.status = "${status}"
+        `)
+        
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+        
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/task", async (req: Request, res: Response) => {
+    try {
+        const status = req.query.status as string;
+        const tasks = await getTaksByStatus(status);
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Pegar todas as tarefas atrasadas
+
+const searchTaksByLateStatus = async (): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.status = "delayed"
+        `)
+        
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+        
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/task/delayed", async (req: Request, res: Response) => {
+    try {
+        const tasks = await searchTaksByLateStatus();
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 // Criar usuários
 
@@ -247,7 +322,7 @@ app.get("/task/:id", async (req: Request, res: Response) => {
 const getTaskByUserCreator = async(id:string): Promise<any> => {
     try {
         const result = await connection.raw(`
-            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status , u.nickname as creatorUserNickname 
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
             FROM ToDoListTask t
             INNER JOIN ToDoListUser u 
             ON t.creator_user_id = u.id
@@ -281,8 +356,8 @@ app.get("/task", async (req: Request, res: Response) => {
     }
 })
 
-
 // Pesquisar usuário 
+
 const searchUser = async (query: string): Promise<any> => {
     try {
         const result = await connection.raw(`
@@ -315,12 +390,12 @@ app.get("/user", async (req: Request, res: Response) => {
 
 // Atribuir um usuário responsável a uma tarefa
 
-const setResponsibleUserForTask = async (responsible_user_id: string, task_id: string): Promise<any> => {
+const setResponsibleUserForTask = async (task_id: string, responsible_user_id: string): Promise<any> => {
     try {
         await connection.raw(`
           INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
-            ${responsible_user_id},
-            ${task_id}
+            "${task_id}",
+            "${responsible_user_id}"
           )
         `)
         console.log("Tarefa atribuída ao usuário com sucesso.")
@@ -333,8 +408,8 @@ const setResponsibleUserForTask = async (responsible_user_id: string, task_id: s
 app.post("/task/responsible", async (req: Request, res: Response) => {
     try {
         await setResponsibleUserForTask(
-            req.body.responsible_user_id,
             req.body.task_id,
+            req.body.responsible_user_id,
         );
         console.log("Usuário responsável foi atribuído à tarefa com sucesso.")
     } catch(err) {
@@ -345,11 +420,15 @@ app.post("/task/responsible", async (req: Request, res: Response) => {
 })
 
 // Pegar usuários responsáveis por uma tarefa
+
 const getUserByTask = async (id: string): Promise<any> => {
     try {
         const result = await connection.raw(`
-          SELECT * FROM ToDoListUser WHERE id = ${id}
-          INNER JOIN ToDoListTask ON ToDoListUser.id = ToDoListTask.creator_user_id
+        SELECT u.id, u.nickname 
+        FROM ToDoListUser u
+        INNER JOIN ToDoListTask t 
+        ON t.creator_user_id = u.id
+        WHERE t.id = "${id}"
         `)
         console.log(result[0])
         return result[0]
@@ -359,12 +438,15 @@ const getUserByTask = async (id: string): Promise<any> => {
     }
 }
 
-app.get("/user?query=", async (req: Request, res: Response) => {
+app.get("/task/:id/responsible", async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
         const user = await getUserByTask(id);
-
-        res.status(200).send(user)
+        if(user) {
+            res.status(200).send(user)
+        } else {
+            res.status(200).send([])
+        }
     } catch(err) {
         res.status(400).send({
             message: err.message
@@ -373,6 +455,7 @@ app.get("/user?query=", async (req: Request, res: Response) => {
 })
 
 // Atualizar o status da tarefa
+
 const updateStatus = async(id: string, status: string): Promise<void> => {
     try {
         await connection("ToDoListTask")
@@ -386,11 +469,11 @@ const updateStatus = async(id: string, status: string): Promise<void> => {
     }
 }
 
-app.post("/task", async (req:Request, res:Response) => {
+app.post("/task/:id/status/edit", async (req:Request, res:Response) => {
     try {
         await updateStatus(
-            req.body.id,
-            req.body.salary
+            req.params.id,
+            req.body.status
         )
         res.status(200).send({
             message: "Status atualizado com sucesso.",
@@ -403,59 +486,6 @@ app.post("/task", async (req:Request, res:Response) => {
     }
 })
 
-// Pegar todas as tarefas por status 
-const getTaksByStatus = async (status: string): Promise<any> => {
-    try {
-        const result = await connection.raw(`
-          SELECT * FROM Actor WHERE status = ${status}
-        `)
-        console.log(result[0])
-        return result[0]
-        
-    } catch(err) {
-        console.log(err.message)
-    }
-}
-
-
-app.get("/task?query=", async (req: Request, res: Response) => {
-    try {
-        const status = req.params.status;
-        const tasks = await getTaksByStatus(status);
-
-        res.status(200).send(tasks)
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
-        })
-    }
-})
-
-
-// Pegar todas as tarefas atrasadas
-const searchTaksByLateStatus = async (): Promise<any> => {
-    try {
-        const result = await connection.raw(`
-          SELECT * FROM Actor WHERE status = "delayed"
-        `)
-        console.log(result[0])
-        return result[0]
-        
-    } catch(err) {
-        console.log(err.message)
-    }
-}
-
-app.get("/task/delayed", async (req: Request, res: Response) => {
-    try {
-        const tasks = await searchTaksByLateStatus();
-        res.status(200).send(tasks)
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
-        })
-    }
-})
 
 // Retirar um usuário responsável de uma tarefa
 const deleteResponsibleUserForTask = async (responsible_user_id: string, task_id: string): Promise<any> => {
