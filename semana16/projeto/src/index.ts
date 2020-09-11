@@ -28,6 +28,34 @@ const server = app.listen(process.env.PORT || 3003, () => {
     }
 });
 
+// Pegar todos os usuários
+
+async function getAllUsers(): Promise<any> {
+    try {
+        const result = await connection.raw(`
+            SELECT * FROM ToDoListUser
+            `)
+        console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+app.get("/user/all", async (req:Request, res:Response) => {
+    try {
+        const users = await getAllUsers();
+        res.status(200).send({
+            users: users
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err
+        })
+    }
+})
+
 
 // Criar usuários
 
@@ -67,10 +95,18 @@ app.put("/user", async (req:Request, res:Response) => {
 // Pegar usuário pelo id
 
 const getUserById = async(id:string): Promise<any> => {
-    const result = await connection.raw(`
+    try {
+        const result = await connection.raw(`
         SELECT * FROM ToDoListUser WHERE id = '${id}'
-    `)
-    return result[0][0]
+        `)
+        if(result) {
+            return result[0][0]
+        } else {
+            return "Usuário não encontrado."
+        }
+    } catch(err) {
+        console.log(err.message)
+    }
 }
 
 app.get("/user/:id", async (req: Request, res: Response) => {
@@ -78,7 +114,12 @@ app.get("/user/:id", async (req: Request, res: Response) => {
         const id = req.params.id;
         const user = await getUserById(id);
 
-        res.status(200).send(user)
+        if(user) {
+            res.status(200).send(user)
+        } else {
+            res.status(200).send([])
+        }
+
     } catch(err) {
         res.status(400).send({
             message: err.message
@@ -122,23 +163,23 @@ app.post("/user/edit/:id", async (req:Request, res:Response) => {
 })
 
 
-// Criar tarefa
 
+// Criar tarefa
 
 const createTask = async(
     title: string,
     description: string,
-    limitDate: string,
-    creatorUserId: string,
+    limit_date: Date,
+    creator_user_id: string,
 
 ): Promise<void> => {
     await connection
     .insert({
-        taskId: Date.now().toString(),
+        id: Date.now().toString(),
         title,
         description,
-        limitDate,
-        creatorUserId
+        limit_date,
+        creator_user_id
     })
     .into("ToDoListTask")
     console.log("Usuário adicionado com sucesso.")
@@ -149,8 +190,8 @@ app.put("/task", async (req:Request, res:Response) => {
         await createTask(
             req.body.title,
             req.body.description,
-            req.body.limitDate,
-            req.body.creatorUserId,
+            new Date(req.body.limit_date),
+            req.body.creator_user_id,
         )
 
     } catch(err) {
@@ -164,47 +205,35 @@ app.put("/task", async (req:Request, res:Response) => {
 // Pegar tarefa pelo id
 
 const getTaskById = async(id:string): Promise<any> => {
-    const result = await connection.raw(`
-        SELECT * FROM ToDoListTask WHERE id = '${id}'
-    `)
-    return result[0][0]
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status , u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.id = "${id}"
+        `)
+
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+
+    } catch(err) {
+        console.log(err.message)
+    }
 }
 
 app.get("/task/:id", async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
         const task = await getTaskById(id);
-
-        res.status(200).send(task)
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
-        })
-    }
-})
-
-
-// Pegar todos os usuários
-
-async function getAllUsers(): Promise<any> {
-    try {
-        const result = await connection.raw(`
-            SELECT * FROM ToDoListUser
-            `)
-        console.log(result[0])
-        return result[0]
-    } catch (error) {
-        console.log(error.message)
-    }
-}
-
-app.get("/user/all", async (req:Request, res:Response) => {
-    try {
-        const users = await getAllUsers();
-        res.status(200).send({
-            users: users,
-        })
-
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
     } catch(err) {
         res.status(400).send({
             message: err
@@ -212,43 +241,52 @@ app.get("/user/all", async (req:Request, res:Response) => {
     }
 })
 
-getAllUsers()
-
 
 // Pegar tarefas criadas por um usuário
-const getTaskByUser = async (name: string): Promise<any> => {
+
+const getTaskByUserCreator = async(id:string): Promise<any> => {
     try {
         const result = await connection.raw(`
-          SELECT * FROM ToDoListTask WHERE creator_user_id = "${id}"
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status , u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.creator_user_id = "${id}"
         `)
-        console.log(result[0])
-        return result[0]
-        
+
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+
     } catch(err) {
         console.log(err.message)
     }
 }
 
-app.get("/task/:id", async (req: Request, res: Response) => {
+app.get("/task", async (req: Request, res: Response) => {
     try {
-        const id = req.params.id;
-        const tasks = await getTaskByUser(id);
-
-        res.status(200).send(tasks)
+        const id = req.query.creator_user_id as string;
+        const task = await getTaskByUserCreator(id);
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
     } catch(err) {
         res.status(400).send({
-            message: err.message
+            message: err
         })
     }
 })
 
 
-
 // Pesquisar usuário 
-const searchUser = async (name: string): Promise<any> => {
+const searchUser = async (query: string): Promise<any> => {
     try {
         const result = await connection.raw(`
-          SELECT * FROM ToDoListUser WHERE name = "${name}"
+          SELECT ToDoListUser.id, ToDoListUser.nickname FROM ToDoListUser WHERE nickname = "${query}" OR email = "${query}"
         `)
         console.log(result[0])
         return result[0]
@@ -258,12 +296,15 @@ const searchUser = async (name: string): Promise<any> => {
     }
 }
 
-app.get("/user?query=", async (req: Request, res: Response) => {
+app.get("/user", async (req: Request, res: Response) => {
     try {
-        const name = req.params.name;
-        const tasks = await searchUser(name);
-
-        res.status(200).send(tasks)
+        const query = req.query.query as string;
+        const tasks = await searchUser(query);
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
     } catch(err) {
         res.status(400).send({
             message: err.message
@@ -278,8 +319,8 @@ const setResponsibleUserForTask = async (responsible_user_id: string, task_id: s
     try {
         await connection.raw(`
           INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
-            responsible_user_id,
-            task_id
+            ${responsible_user_id},
+            ${task_id}
           )
         `)
         console.log("Tarefa atribuída ao usuário com sucesso.")
