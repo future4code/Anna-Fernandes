@@ -132,6 +132,71 @@ app.get("/task/delayed", async (req: Request, res: Response) => {
     }
 })
 
+// Atribuir um usuário responsável a uma tarefa
+
+// const setResponsibleUserForTask = async (task_id: string, responsible_user_id: string): Promise<any> => {
+//     try {
+//         await connection.raw(`
+//           INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
+//             "${task_id}",
+//             "${responsible_user_id}"
+//           )
+//         `)
+//         console.log("Tarefa atribuída ao usuário com sucesso.")
+        
+//     } catch(err) {
+//         console.log(err.message)
+//     }
+// }
+
+// app.post("/task/responsible", async (req: Request, res: Response) => {
+//     try {
+//         await setResponsibleUserForTask(
+//             req.body.task_id,
+//             req.body.responsible_user_id,
+//         );
+//         console.log("Usuário responsável foi atribuído à tarefa com sucesso.")
+//     } catch(err) {
+//         res.status(400).send({
+//             message: err.message
+//         })
+//     }
+// })
+
+// Atribuir mais de um responsável a uma tarefa
+
+const setMultipleResponsibleUsersForTask = async (task_id: string, responsible_user_id: string[]): Promise<any> => {
+    try {
+        await connection.raw(`
+          INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
+              "${task_id}",
+              "${responsible_user_id.toString()}"
+          )
+        `)
+        console.log("Tarefa atribuída ao usuário com sucesso.")
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/task/responsible", async (req: Request, res: Response) => {
+    try {
+        for( let element of req.body.responsible_user_id) {
+            await setMultipleResponsibleUsersForTask(
+                req.body.task_id,
+                element
+            );
+        }
+        console.log("Usuários responsáveis foram atribuídos à tarefa com sucesso.")
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+
 // Criar usuários
 
 const createUser = async(
@@ -236,7 +301,6 @@ app.post("/user/edit/:id", async (req:Request, res:Response) => {
         })
     }
 })
-
 
 
 // Criar tarefa
@@ -387,38 +451,6 @@ app.get("/user", async (req: Request, res: Response) => {
     }
 })
 
-
-// Atribuir um usuário responsável a uma tarefa
-
-const setResponsibleUserForTask = async (task_id: string, responsible_user_id: string): Promise<any> => {
-    try {
-        await connection.raw(`
-          INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
-            "${task_id}",
-            "${responsible_user_id}"
-          )
-        `)
-        console.log("Tarefa atribuída ao usuário com sucesso.")
-        
-    } catch(err) {
-        console.log(err.message)
-    }
-}
-
-app.post("/task/responsible", async (req: Request, res: Response) => {
-    try {
-        await setResponsibleUserForTask(
-            req.body.task_id,
-            req.body.responsible_user_id,
-        );
-        console.log("Usuário responsável foi atribuído à tarefa com sucesso.")
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
-        })
-    }
-})
-
 // Pegar usuários responsáveis por uma tarefa
 
 const getUserByTask = async (id: string): Promise<any> => {
@@ -487,6 +519,42 @@ app.post("/task/:id/status/edit", async (req:Request, res:Response) => {
 })
 
 
+// Atualizar o status de várias tarefas
+
+const updateStatusMultipleTasks = async(id: string, status: string): Promise<void> => {
+    try {
+        await connection("ToDoListTask")
+        .update({
+            status
+        })
+        .where("id", id);
+        console.log("Status atualizado com sucesso.")
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/task/status/edit", async (req:Request, res:Response) => {
+    try {
+        for(let item of req.params.id){
+            await updateStatusMultipleTasks(
+                item,
+                req.body.status
+            )
+        }
+        res.status(200).send({
+            message: "Status atualizado com sucesso.",
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+
+
 // Retirar um usuário responsável de uma tarefa
 const deleteResponsibleUserForTask = async (responsible_user_id: string, task_id: string): Promise<any> => {
     try {
@@ -505,37 +573,7 @@ app.delete("/task/:taskId/responsible/:responsibleUserId", async (req: Request, 
         const task = req.params.task_id;
         const responsible_user = req.params.responsible_user_id;
         await deleteResponsibleUserForTask(responsible_user, task);
-        console.log("Tarefas deletadas com sucesso.")
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
-        })
-    }
-})
-
-// Atribuir mais de um responsável a uma tarefa
-const setResponsibleUserForTask2 = async (responsible_user_ids: string[], task_id: string): Promise<any> => {
-    try {
-        await connection.raw(`
-          INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
-            [responsible_user_ids],
-            task_id
-          )
-        `)
-        console.log("Tarefa atribuída ao usuário com sucesso.")
-        
-    } catch(err) {
-        console.log(err.message)
-    }
-}
-
-app.post("/task/responsible", async (req: Request, res: Response) => {
-    try {
-        await setResponsibleUserForTask2(
-            [req.body.responsible_user_ids],
-            req.body.task_ids,
-        );
-        console.log("Usuários responsável foi atribuído à tarefa com sucesso.")
+        console.log("Tarefa retirada do usuário com sucesso.")
     } catch(err) {
         res.status(400).send({
             message: err.message
@@ -544,60 +582,41 @@ app.post("/task/responsible", async (req: Request, res: Response) => {
 })
 
 // Procurar tarefa por termos 
-const searchTask = async (search: string): Promise<any> => {
+const searchTask = async(query:string): Promise<any> => {
     try {
         const result = await connection.raw(`
-          SELECT * FROM ToDoListTask WHERE description = "%${search}% OR title = "%${search}%"
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.title LIKE "%${query}%" OR t.description LIKE "%${query}%"
         `)
-        console.log(result[0])
-        return result[0]
-        
+
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+
     } catch(err) {
         console.log(err.message)
     }
 }
 
-app.get("/task?query=", async (req: Request, res: Response) => {
-    try {
-        const search = req.params.search;
-        const tasks = await searchTask(search);
+console.log(searchTask("criar"))
 
-        res.status(200).send(tasks)
+app.get("/task", async (req: Request, res: Response) => {
+    try {
+        const query = req.query.query as string;
+        const task = await searchTask(query);
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
     } catch(err) {
         res.status(400).send({
-            message: err.message
-        })
-    }
-})
-
-// Atualizar o status de várias tarefas
-
-const updateStatus2 = async(id: string, status: string): Promise<void> => {
-    try {
-        await connection("ToDoListTask")
-        .update({
-            status
-        })
-        .where("id", id);
-        console.log("Status atualizado com sucesso.")
-    } catch(err) {
-        console.log(err.message)
-    }
-}
-
-app.post("/task", async (req:Request, res:Response) => {
-    try {
-        await updateStatus2(
-            req.body.id,
-            req.body.salary
-        )
-        res.status(200).send({
-            message: "Status atualizado com sucesso.",
-        })
-
-    } catch(err) {
-        res.status(400).send({
-            message: err.message
+            message: err
         })
     }
 })
