@@ -7,6 +7,9 @@ import { signup } from "./endpoints/signup";
 import { login } from "./endpoints/login";
 import { getUserProfile } from "./endpoints/getUserProfile";
 
+// import bcrypt from 'bcryptjs';
+// const saltRounds = 10;
+
 
 dotenv.config();
 
