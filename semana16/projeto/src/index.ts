@@ -14,7 +14,7 @@ const connection = knex({
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
     }
-})
+});
 
 const app = express();
 app.use(express.json());
@@ -26,185 +26,640 @@ const server = app.listen(process.env.PORT || 3003, () => {
     } else {
         console.error(`Failure upon starting server.`);
     }
+});
+
+// Pegar todos os usuários
+
+async function getAllUsers(): Promise<any> {
+    try {
+        const result = await connection.raw(`
+            SELECT * FROM ToDoListUser
+            `)
+        console.log(result[0])
+        return result[0]
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+app.get("/user/all", async (req:Request, res:Response) => {
+    try {
+        const users = await getAllUsers();
+        res.status(200).send({
+            users: users
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err
+        })
+    }
 })
 
-// CREATE TABLE TodoListUser (
-//     id VARCHAR(255) PRIMARY KEY, 
-// name VARCHAR(255) NULL, 
-// nickname VARCHAR(255) UNIQUE NOT NULL, 
-// email VARCHAR(255) UNIQUE NOT NULL
-// );
+// Pegar todas as tarefas por status 
+const getTaksByStatus = async (status: string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.status = "${status}"
+        `)
+        
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+        
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
 
-// CREATE TABLE TodoListTask (
-//     id VARCHAR(255) PRIMARY KEY, 
-// title VARCHAR(255) NOT NULL, 
-// description TEXT NOT NULL, 
-// status VARCHAR(255) NOT NULL DEFAULT "to_do",
-// limit_date DATE NOT NULL,
-// creator_user_id varchar(255) NOT NULL,
-// FOREIGN KEY (creator_user_id) REFERENCES TodoListUser(id)
-// );
+app.get("/task", async (req: Request, res: Response) => {
+    try {
+        const status = req.query.status as string;
+        const tasks = await getTaksByStatus(status);
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
-// CREATE TABLE TodoListResponsibleUserTaskRelation (
-//     task_id VARCHAR(255),
-// responsible_user_id VARCHAR(255),
-// FOREIGN KEY (task_id) REFERENCES TodoListTask(id),
-// FOREIGN KEY (responsible_user_id) REFERENCES TodoListUser(id)
-// );
+// Pegar todas as tarefas atrasadas
 
-// app.get("/caminhoDoEndpoint", async (req: Request, res: Response)=>{
-//     try{ //inicio de um sonho
-//        //corpo da função. Como é um get, normalmente buscaremos alguma informação.
- 
-//        //fim do corpo da função
-//        //deu tudo certo
-//        res.status(200).send({chaveDoRetorno: valorDaBusca});
-//     }catch(error){
-//        //deu tudo errado
-//        res.status(400).send({chaveDoErro: valorDoErro});
+const searchTaksByLateStatus = async (): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.status = "delayed"
+        `)
+        
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+        
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/task/delayed", async (req: Request, res: Response) => {
+    try {
+        const tasks = await searchTaksByLateStatus();
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Atribuir um usuário responsável a uma tarefa
+
+// const setResponsibleUserForTask = async (task_id: string, responsible_user_id: string): Promise<any> => {
+//     try {
+//         await connection.raw(`
+//           INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
+//             "${task_id}",
+//             "${responsible_user_id}"
+//           )
+//         `)
+//         console.log("Tarefa atribuída ao usuário com sucesso.")
+        
+//     } catch(err) {
+//         console.log(err.message)
 //     }
-//  });
-
-// app.post("/caminhoDoEndpoint", async (req: Request, res: Response)=>{
-//     try{ //inicio de um sonho
-//        //corpo da função. Como é um post, normalmente buscaremos enviaremos uma mensagem de erro ou sucesso.
- 
-//        //fim do corpo da função
-//        //deu tudo certo
-//        res.status(200).send({chaveDoRetorno: mensagemDeSucesso});
-//     }catch(error){
-//        //deu tudo errado
-//        res.status(400).send({chaveDoErro: mensagemDeErro});
-//     }
-//  });
-
-// async function mySelect(valor: string): Promise<any>{
-
-// 	const result = await knex()
-//         .select("*")
-//         .from("NOME_DA_TABELA")
-//         .where({coluna: valor});
-
-// 	return result;
 // }
 
-// async function mySelect(valor: string): Promise<any>{
+// app.post("/task/responsible", async (req: Request, res: Response) => {
+//     try {
+//         await setResponsibleUserForTask(
+//             req.body.task_id,
+//             req.body.responsible_user_id,
+//         );
+//         console.log("Usuário responsável foi atribuído à tarefa com sucesso.")
+//     } catch(err) {
+//         res.status(400).send({
+//             message: err.message
+//         })
+//     }
+// })
 
-// 	const result = await knex().raw(`
-// 		SELECT * FROM NOME_DA_TABELA
-// 	  WHERE COLUNA = "${valor}"
-// 	`);
-   
-// 	return result[0];
-// }
+// Atribuir mais de um responsável a uma tarefa
+
+const setMultipleResponsibleUsersForTask = async (task_id: string, responsible_user_id: string[]): Promise<any> => {
+    try {
+        await connection.raw(`
+          INSERT INTO ToDoListResponsibleUserTaskRelation VALUES (
+              "${task_id}",
+              "${responsible_user_id.toString()}"
+          )
+        `)
+        console.log("Tarefa atribuída ao usuário com sucesso.")
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/task/responsible", async (req: Request, res: Response) => {
+    try {
+        for( let element of req.body.responsible_user_id) {
+            await setMultipleResponsibleUsersForTask(
+                req.body.task_id,
+                element
+            );
+        }
+        console.log("Usuários responsáveis foram atribuídos à tarefa com sucesso.")
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
 
 // Criar usuários
 
-// **Método:** PUT
-// **Path:** `/user`
+const createUser = async(
+    name: string,
+    nickname: string,
+    email: string,
 
-// **Body:**
+): Promise<void> => {
+    await connection
+    .insert({
+        id: Date.now().toString(),
+        name,
+        nickname,
+        email,
+    })
+    .into("ToDoListUser")
+    console.log("Usuário adicionado com sucesso.")
+}
 
-// ```json
-// {
-// 	"name": "Astro Dev",
-// 	"nickname": "astrodev",
-// 	"email": "astro@dev.com"
-// }
-// ```
+app.put("/user", async (req:Request, res:Response) => {
+    try {
+        await createUser(
+            req.body.name,
+            req.body.nickname,
+            req.body.email,
+        )
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 
 // Pegar usuário pelo id
 
-// **Método:** GET
-// **Path:** `/user/:id`
+const getUserById = async(id:string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+        SELECT * FROM ToDoListUser WHERE id = '${id}'
+        `)
+        if(result) {
+            return result[0][0]
+        } else {
+            return "Usuário não encontrado."
+        }
+    } catch(err) {
+        console.log(err.message)
+    }
+}
 
-// **Path Param**: é o id do usuário
+app.get("/user/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const user = await getUserById(id);
 
-// **Body de Resposta:**
+        if(user) {
+            res.status(200).send(user)
+        } else {
+            res.status(200).send([])
+        }
 
-// ```json
-// {
-// 	"id": "001",
-// 	"nickname": "astrodev"
-// }
-// ```
-
-// **Observações**:
-
-// - O seu código deve validar se o id do usuário foi enviado
-// - O endpoint deve retornar um erro se não encontrar o usuário
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 
 // Editar usuário
 
-// **Método:** POST
-// **Path:** `/user/edit/:id`
+const updateUser = async(id: string, name: string, nickname: string): Promise<void> => {
+    try {
+        await connection("ToDoListUser")
+        .update({
+            name,
+            nickname
+        })
+        .where("id", id);
+        console.log("Usuário alterado com sucesso!")
+    } catch(err) {
+        console.log(err.message)
+    }
+}
 
-// **Path Param**: é o id do usuário
+app.post("/user/edit/:id", async (req:Request, res:Response) => {
+    try {
+        await updateUser(
+            req.params.id,
+            req.body.name,
+            req.body.nickname
+        )
+        res.status(200).send({
+            message: "Usuário alterado com sucesso",
+        })
 
-// **Body:**
-
-// ```json
-// {
-// 	"name": "Astro Dev",
-// 	"nickname": "astrodev"
-// }
-// ```
-
-// **Observações**:
-
-// - O seu código deve validar se o id do usuário foi enviado
-// - O seu código só deve alterar o que for enviado
-// - Se algum valor enviado for vazio, deve retornar um erro
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 
 // Criar tarefa
 
-// **Método:** PUT
-// **Path:** `/task`
+const createTask = async(
+    title: string,
+    description: string,
+    limit_date: Date,
+    creator_user_id: string,
 
-// **Body:**
+): Promise<void> => {
+    await connection
+    .insert({
+        id: Date.now().toString(),
+        title,
+        description,
+        limit_date,
+        creator_user_id
+    })
+    .into("ToDoListTask")
+    console.log("Usuário adicionado com sucesso.")
+}
 
-// ```json
-// {
-// 	"title": "Criar banco dos alunos",
-// 	"description": "Devemos criar o banco dos alunos para o módulo do backend",
-// 	"limitDate": "04/05/2020",
-// 	"creatorUserId": "001"
-// }
-// ```
+app.put("/task", async (req:Request, res:Response) => {
+    try {
+        await createTask(
+            req.body.title,
+            req.body.description,
+            new Date(req.body.limit_date),
+            req.body.creator_user_id,
+        )
 
-// **Observações**:
-
-// - O seu código deve validar se todos os campos não estão vazios,
-// - O seu código deve gerar o id da tarefa,
-// - A data deve se recebida no formato mostrado acima: `DD/MM/YYYY` e o seu código deve fazer a conversão necessária para salvar no banco
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
 
 
 // Pegar tarefa pelo id
-// **Método:** GET
-// **Path:** `/task/:id`
 
-// **Path Param**: é o id da tarefa
+const getTaskById = async(id:string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status , u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.id = "${id}"
+        `)
 
-// **Body de Resposta:**
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
 
-// ```json
-// {
-// 	"taskId": "001",
-// 	"title": "Criar banco dos alunos",
-// 	"description": "Devemos criar o banco dos alunos para o módulo do backend",
-// 	"limitDate": "04/05/2020",
-// 	"status": "to_do",
-// 	"creatorUserId": "001",
-// 	"creatorUserNickname": "astrodev"
-// }
-// ```
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
 
-// **Observações**:
+    } catch(err) {
+        console.log(err.message)
+    }
+}
 
-// - O seu código deve validar se o id da task foi enviado
-// - O endpoint deve retornar um erro se não encontrar a task
-// - Perceba que o endpoint retorna informações tanto da tarefa como do usuário criador
-// - O seu código deve converter a data recebida do banco para o formato mostrado acima (`DD/MM/YYYY`)
+app.get("/task/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const task = await getTaskById(id);
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err
+        })
+    }
+})
+
+
+// Pegar tarefas criadas por um usuário
+
+const getTaskByUserCreator = async(id:string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.creator_user_id = "${id}"
+        `)
+
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/task", async (req: Request, res: Response) => {
+    try {
+        const id = req.query.creator_user_id as string;
+        const task = await getTaskByUserCreator(id);
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err
+        })
+    }
+})
+
+// Pesquisar usuário 
+
+const searchUser = async (query: string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+          SELECT ToDoListUser.id, ToDoListUser.nickname FROM ToDoListUser WHERE nickname = "${query}" OR email = "${query}"
+        `)
+        console.log(result[0])
+        return result[0]
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/user", async (req: Request, res: Response) => {
+    try {
+        const query = req.query.query as string;
+        const tasks = await searchUser(query);
+        if(tasks) {
+            res.status(200).send(tasks)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Pegar usuários responsáveis por uma tarefa
+
+const getUserByTask = async (id: string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+        SELECT u.id, u.nickname 
+        FROM ToDoListUser u
+        INNER JOIN ToDoListTask t 
+        ON t.creator_user_id = u.id
+        WHERE t.id = "${id}"
+        `)
+        console.log(result[0])
+        return result[0]
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.get("/task/:id/responsible", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const user = await getUserByTask(id);
+        if(user) {
+            res.status(200).send(user)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Atualizar o status da tarefa
+
+const updateStatus = async(id: string, status: string): Promise<void> => {
+    try {
+        await connection("ToDoListTask")
+        .update({
+            status
+        })
+        .where("id", id);
+        console.log("Status atualizado com sucesso.")
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/task/:id/status/edit", async (req:Request, res:Response) => {
+    try {
+        await updateStatus(
+            req.params.id,
+            req.body.status
+        )
+        res.status(200).send({
+            message: "Status atualizado com sucesso.",
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+
+// Atualizar o status de várias tarefas
+
+const updateStatusMultipleTasks = async(id: string, status: string): Promise<void> => {
+    try {
+        await connection("ToDoListTask")
+        .update({
+            status
+        })
+        .where("id", id);
+        console.log("Status atualizado com sucesso.")
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.post("/task/status/edit", async (req:Request, res:Response) => {
+    try {
+        for(let item of req.params.id){
+            await updateStatusMultipleTasks(
+                item,
+                req.body.status
+            )
+        }
+        res.status(200).send({
+            message: "Status atualizado com sucesso.",
+        })
+
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+
+
+// Retirar um usuário responsável de uma tarefa
+const deleteResponsibleUserForTask = async (responsible_user_id: string, task_id: string): Promise<any> => {
+    try {
+        await connection.raw(`
+          DELETE FROM ToDoListResponsibleUserTaskRelation WHERE responsible_user_id = ${responsible_user_id} AND task_id = ${task_id}
+        `)
+        console.log("Tarefa retirada do usuário com sucesso.")
+        
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+app.delete("/task/:taskId/responsible/:responsibleUserId", async (req: Request, res: Response) => {
+    try {
+        const task = req.params.task_id;
+        const responsible_user = req.params.responsible_user_id;
+        await deleteResponsibleUserForTask(responsible_user, task);
+        console.log("Tarefa retirada do usuário com sucesso.")
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Procurar tarefa por termos 
+const searchTask = async(query:string): Promise<any> => {
+    try {
+        const result = await connection.raw(`
+            SELECT t.id, t.title, t.description, t.limit_date, t.creator_user_id, t.status, u.nickname as creatorUserNickname 
+            FROM ToDoListTask t
+            INNER JOIN ToDoListUser u 
+            ON t.creator_user_id = u.id
+            WHERE t.title LIKE "%${query}%" OR t.description LIKE "%${query}%"
+        `)
+
+        const newResponse = result[0][0];
+        const formatDate = newResponse.limit_date.toLocaleDateString('en-GB');
+
+        const newResult = {...newResponse, limit_date: formatDate};
+        return newResult
+
+    } catch(err) {
+        console.log(err.message)
+    }
+}
+
+console.log(searchTask("criar"))
+
+app.get("/task", async (req: Request, res: Response) => {
+    try {
+        const query = req.query.query as string;
+        const task = await searchTask(query);
+        if(task) {
+            res.status(200).send(task)
+        } else {
+            res.status(200).send([])
+        }
+    } catch(err) {
+        res.status(400).send({
+            message: err
+        })
+    }
+})
+
+// Deletar tarefa
+
+const deleteTaskById = async(id:string): Promise<any> => {
+    await connection.raw(`
+        DELETE FROM ToDoListTask WHERE id = '${id}'
+    `)
+    console.log("Tarefa deletada com sucesso.")
+}
+
+app.delete("/task/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await deleteTaskById(id);
+        console.log("Tarefa deletada com sucesso")
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
+
+// Deletar usuário
+
+const deleteUserById = async(id:string): Promise<any> => {
+    await connection.raw(`
+        DELETE FROM ToDoListUser WHERE id = '${id}'
+    `)
+    console.log("Usuário deletado com sucesso.")
+}
+
+
+app.delete("/user/:id", async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        await deleteUserById(id);
+        console.log("Usuário deletada com sucesso")
+    } catch(err) {
+        res.status(400).send({
+            message: err.message
+        })
+    }
+})
