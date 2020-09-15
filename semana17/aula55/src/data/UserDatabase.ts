@@ -3,13 +3,14 @@ import { BaseDatabase } from "./BaseDatabase";
 export class UserDatabase extends BaseDatabase {
   private static TABLE_NAME: string = 'User';
 
-  public async createUser(id: string, name: string, email: string, password: string): Promise<void> {
+  public async createUser(id: string, name: string, email: string, password: string, role: USER_ROLES): Promise<void> {
     await this.getConnection()
     .insert({
       id,
       name, 
       email,
-      password
+      password,
+      role
     }).into(UserDatabase.TABLE_NAME)
   }
 
@@ -33,4 +34,16 @@ export class UserDatabase extends BaseDatabase {
       .where({id})
       return result[0]
   }
+
+  public async deleteUser(id: string): Promise<any> {
+    await this.getConnection()
+      .delete()
+      .from(UserDatabase.TABLE_NAME)
+      .where({ id });
+  }
+}
+
+export enum USER_ROLES {
+  NORMAL = "NORMAL",
+  ADMIN = "ADMIN"
 }

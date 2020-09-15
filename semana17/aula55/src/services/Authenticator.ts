@@ -1,5 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { tokenToString } from 'typescript';
+import { USER_ROLES } from '../data/UserDatabase';
 
 export class Authenticator {
     private static EXPIRES_IN = "1min";
@@ -21,7 +22,8 @@ export class Authenticator {
       process.env.JWT_KEY as string
     ) as any
     const result = {
-      id: payload.id
+      id: payload.id,
+      role: payload.role
     }
     return result
   }
@@ -29,4 +31,5 @@ export class Authenticator {
 
 export interface AuthenticationData {
   id: string;
+  role: USER_ROLES;
 }
