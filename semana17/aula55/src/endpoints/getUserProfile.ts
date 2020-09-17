@@ -18,14 +18,18 @@ try{
     throw new Error('Usuário não encontrado')
   }
 
-  res.status(200).send({
-      id: user.id,
-      email: user.email,
-  })
+  if(authenticationData.role !== "NORMAL") {
+    throw new Error('Não autorizado')
+  } else {
+    res.status(200).send({
+        id: user.id,
+        email: user.email,
+    })
+  }
 
-}catch(e) {
-  res.status(e.statusCode || 400).send({
-    message: e.message
+} catch(err) {
+  res.status(err.statusCode || 400).send({
+    message: err.message
   })
 }
 

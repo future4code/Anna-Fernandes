@@ -1,6 +1,7 @@
 import { Request, Response} from 'express';
 import { UserDatabase } from '../data/UserDatabase';
 import { Authenticator } from '../services/Authenticator';
+import { HashManager } from '../services/HashManager';
 import { IdGenerator } from '../services/IdGenerator';
 
 export const signup = async (req: Request, res: Response) => {
@@ -9,10 +10,11 @@ export const signup = async (req: Request, res: Response) => {
     const userData = {
       name: req.body.name,
       email: req.body.email,
-      password: req.body.password
+      password: req.body.password,
+      role: req.body.role
     }
 
-    if(!userData.name || !userData.password || !userData.email) {
+    if(!userData.name || !userData.password || !userData.email || !userData.role) {
       throw new Error('Insira todas as informações necessárias para o cadastro')
     }
 
@@ -27,16 +29,20 @@ export const signup = async (req: Request, res: Response) => {
     const idGenerator = new IdGenerator();
     const id = idGenerator.generateId();
 
+    const hashManager: HashManager = new HashManager();
+    const cypherPassword: string = await hashManager.hash(userData.password);
+
     const userDatabase = new UserDatabase();
     await userDatabase.createUser(
       id,
       userData.name,
       userData.email,
-      userData.password
+      cypherPassword,
+      userData.role
     );
 
     const authenticatior = new Authenticator();
-    const token = authenticatior.generateToken({id});
+    const token = authenticatior.generateToken({id, role: userData.role});
 
     res.status(200).send({
       message: 'Usuário criado com sucesso',
