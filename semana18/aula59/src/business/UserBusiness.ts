@@ -44,10 +44,10 @@ export class UserBusiness {
         const userFromDB = await userDatabase.getUserByEmail(input.email);
 
         const hashManager = new HashManager();
-        const hashCompare = await hashManager.compare(input.password, userFromDB.getPassword());
+        const hashCompare = await hashManager.compare(input.password, userFromDB.password);
 
         const authenticator = new Authenticator();
-        const accessToken = authenticator.generateToken({ id: userFromDB.getId()});
+        const accessToken = authenticator.generateToken({ id: userFromDB.id, role: userFromDB.role});
 
         if (!hashCompare) {
             throw new Error("Invalid Password!");
@@ -76,7 +76,6 @@ export class UserBusiness {
 
         return await userDatabase.deleteUser(input.id);
     }
-
 }
 
 export type user = {
