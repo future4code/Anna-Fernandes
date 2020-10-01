@@ -1,78 +1,81 @@
 export class Band{
     constructor(
-    private id: string,
-    private name: string,
-    private email: string,
-    private password: string,
-    private role: BandRole
-    ){}
-
+        private id: string,
+        private name: string,
+        private music_genre: MusicGenre,
+        private responsible: string
+        ){}
+    
     getId(){
         return this.id;
     }
-
+    
     getName(){
         return this.name
     }
-
-    getEmail(){
-        return this.email;
+    
+    getMusicGenre(){
+        return this.music_genre
     }
-
-    getPassword(){
-        return this.password;
+    
+    getResponsible(){
+        return this.responsible
     }
-
-    getRole(){
-        return this.role;
-    }
-
+    
+    
     setId(id: string){
         this.id = id;
     }
-
+    
     setName(name: string){
         this.name = name;
     }
-
-    setEmail(email: string){
-        this.email = email;
+    
+    setMusicGEnre(music_genre: MusicGenre){
+        this.music_genre = music_genre;
     }
-
-    setPassword(password: string){
-        this.password = password;
+    
+    setResponsible(responsible: string){
+        this.responsible = responsible;
     }
-
-    setRole(role: BandRole){
-        this.role = role;
-    }
-
-   static stringToBandRole(input: string): BandRole{
+    
+   static stringToMusicGenre(input: string): MusicGenre{
         switch (input) {
-            case "NORMAL":
-              return BandRole.NORMAL;
-            case "ADMIN":
-              return BandRole.ADMIN;
+            case "ROCK":
+              return MusicGenre.ROCK;
+            case "INDIE":
+              return MusicGenre.INDIE;
+            case "METAL":
+              return MusicGenre.METAL;
+            case "HIPHOP":
+              return MusicGenre.HIPHOP;
+            case "FUNK":
+              return MusicGenre.FUNK;
+            case "POPULAR":
+              return MusicGenre.POPULAR;
             default:
-              throw new Error("Invalid Band role");
+              throw new Error("Invalid Music Genre");
           }
     }
 
     static toBandModel(Band: any): Band {
-        return new Band(Band.id, Band.name, Band.email, Band.password, Band.stringToBandRole(Band.role));
+        return new Band(Band.id, Band.name, Band.stringToMusicGenre(Band.music_genre), Band.responsible);
       }
 
 
 }
 
 export interface BandInputDTO{
-    email: string;
-    password: string;
     name: string;
-    role: string;
+    music_genre: string;
+    responsible: string;
 }
 
-export enum BandRole{
-    NORMAL = "NORMAL",
-    ADMIN = "ADMIN"
+export enum MusicGenre{
+    ROCK = "ROCK",
+    INDIE = "INDIE",
+    METAL = "METAL",
+    HIPHOP = "HIPHOP",
+    FUNK = "FUNK",
+    POPULAR = "POPULAR"
 }
