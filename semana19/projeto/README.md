@@ -1,5 +1,5 @@
 # Projeto LAMA
-## Gerenciamento de shows em três dias (sexta, sábado e domingo)
+## Gerenciamento de shows em três dias
 
 ### 1. Cadastro
     O sistema permite o registro dos usuários que irão usá-lo. Para se cadastrar, é necessário passar um email, um nome e uma senha, e também uma função dentro do sistema. Você pode ser um cliente (usuário normal) ou um administrador do sistema (admin). O usuário deve poder se logar automaticamente após o cadastro. Caso tenha interesse, tente tornar o código de cadastro mais testável utilizando a inversão de dependência.
@@ -22,7 +22,7 @@
     Recebe um dia (sexta, sábado ou domingo) e retorna todos os shows daquela data (ordenados pelo horário), mostrando somente o nome da banda e o gênero musical principal.
 
 ### 7. Endpoint de criar um ingresso
-    O caso de uso desse endpoint é o administrador do sistema querendo criar ingressos para serem vendidos. Para criar, precisa indicar: nome do ingresso, valor, o id do evento e a quantidade de ingressos. No banco, você deve guardar a quantidade de ingressos totais e criar um campo "quantidade de ingressos vendidos" com o valor 0 para guardar esse registro. **Somente administradores** podem registrar ingressos.
+    Ingressos vendidos por dia de evento. O caso de uso desse endpoint é o administrador do sistema querendo criar ingressos para serem vendidos. Para criar, precisa indicar: nome do ingresso, valor, o dia do evento e a quantidade de ingressos. No banco, você deve guardar a quantidade de ingressos totais e criar um campo "quantidade de ingressos vendidos" com o valor 0 para guardar esse registro. **Somente administradores** podem registrar ingressos.
 
 ### 8. Comprar ingresso
     Deve receber a quantidade de ingressos e o nome. Deve retornar erros específicos para um nome inválido, ingresso não encontrado e quantidade inválida (ou seja se existem menos ingressos disponíveis do que o usuário quer comprar)

@@ -17,8 +17,18 @@ export class ShowBusiness {
 
     async addShow(token: string, show: ShowInputDTO) {
 
-        if ( !show.week_day || !show.start_time || !show.end_time || !show.band_id ) {
+        if ( !show.day || !show.start_time || !show.end_time || !show.band_id ) {
             throw new InvalidParameterError("Missing input");
+        }
+
+        if (show.start_time <= 8 || show.end_time >= 23) {
+            throw new InvalidParameterError("This date is not avaible. The show have to be schedule between 8am and 11pm.");
+        }
+
+        const checkIfNotAvaible = await this.showDatabase.checkIfIsAvaiable(show.day, show.start_time);
+
+        if (checkIfNotAvaible && checkIfNotAvaible.length !== 0) {
+            throw new InvalidParameterError("This date is not avaible");
         }
 
         const id = this.idGenerator.generate();
@@ -29,7 +39,7 @@ export class ShowBusiness {
             throw new UnauthorizedError("You don't have permission to do that.");
         }
 
-        await this.showDatabase.createShow(id, show.week_day, show.start_time, show.end_time, show.band_id);
+        await this.showDatabase.createShow(id, show.day, show.start_time, show.end_time, show.band_id);
 
     }
 
@@ -40,9 +50,9 @@ export class ShowBusiness {
         return showFromDB;
     }
 
-    async getShowByWeekDay(week_day: string) {
+    async getShowByDay(day: string) {
 
-        const showFromDB = await this.showDatabase.getShowByWeekDay(week_day);
+        const showFromDB = await this.showDatabase.getShowByDay(day);
 
         return showFromDB;
     }

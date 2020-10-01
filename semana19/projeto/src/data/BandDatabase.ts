@@ -1,5 +1,5 @@
 import { BaseDatabase } from "./BaseDatabase";
-import { Band, MusicGenre } from "../model/Band";
+import { Band } from "../model/Band";
 
 export class BandDatabase extends BaseDatabase {
 
@@ -30,6 +30,16 @@ export class BandDatabase extends BaseDatabase {
       .select("*")
       .from(BandDatabase.TABLE_NAME)
       .where({ id });
+
+    return Band.toBandModel(result[0]);
+  }
+
+  public async getBandByQuery(query: string): Promise<Band> {
+    const result = await this.getConnection()
+      .select("*")
+      .from(BandDatabase.TABLE_NAME)
+      .where({ id: query })
+      .orWhere({ name: query })
 
     return Band.toBandModel(result[0]);
   }

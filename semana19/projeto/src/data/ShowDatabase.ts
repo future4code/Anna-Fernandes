@@ -1,5 +1,4 @@
-import { Show, WeekDay } from "../model/Show";
-import { IdGenerator } from "../services/IdGenerator";
+import { Show, Day } from "../model/Show";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class ShowDatabase extends BaseDatabase {
@@ -8,7 +7,7 @@ export class ShowDatabase extends BaseDatabase {
 
   public async createShow(
       id: string,
-      week_day: WeekDay,
+      day: Day,
       start_time: number,
       end_time: number,
       band_id: string,
@@ -17,7 +16,7 @@ export class ShowDatabase extends BaseDatabase {
       await this.getConnection()
         .insert({
           id,
-          week_day,
+          day,
           start_time,
           end_time,
           band_id,
@@ -37,13 +36,23 @@ export class ShowDatabase extends BaseDatabase {
     return Show.toShowModel(result[0]);
   }
 
-  public async getShowByWeekDay(week_day: string): Promise<Show> {
+  public async getShowByDay(day: string): Promise<Show> {
     const result = await this.getConnection()
       .select("*")
       .from(ShowDatabase.TABLE_NAME)
-      .where({ week_day });
+      .where({ day });
 
     return Show.toShowModel(result[0]);
+  }
+
+  public async checkIfIsAvaiable(day: string, start_time: number): Promise<Show[]> {
+    const result = await this.getConnection()
+      .select("*")
+      .from(ShowDatabase.TABLE_NAME)
+      .where({ day })
+      .andWhere({ start_time });
+
+    return result[0];
   }
 
 }

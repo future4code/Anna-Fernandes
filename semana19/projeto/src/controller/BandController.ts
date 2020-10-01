@@ -34,13 +34,28 @@ export class BandController {
         await BaseDatabase.destroyConnection();
     }
 
-
     async getBandById(req: Request, res: Response) {
 
         try {
             const bandId = req.params.bandId
 
             const result = await BandController.bandBusiness.getBandById(bandId)
+
+            res.status(200).send({ result });
+
+        } catch (error) {
+            res.status(400).send({ error: error.message });
+        }
+
+        await BaseDatabase.destroyConnection();
+    }
+
+    async getBandByQuery(req: Request, res: Response) {
+
+        try {
+            const query = req.query.id as string ||  req.query.name as string
+
+            const result = await BandController.bandBusiness.getBandByQuery(query)
 
             res.status(200).send({ result });
 

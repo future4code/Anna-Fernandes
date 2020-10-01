@@ -1,7 +1,7 @@
 export class Show{
     constructor(
         private id: string,
-        private week_day: WeekDay,
+        private day: Day,
         private start_time: number,
         private end_time: number,
         private band_id: string,
@@ -11,38 +11,71 @@ export class Show{
         return this.id;
     }
 
-    setId(id: string){
-        this.id = id;
+    getDay(){
+        return this.day;
     }
 
-    static stringToWeekDay(input: string): WeekDay{
+    getStartTime(){
+        return this.start_time;
+    }
+
+    getEndTime(){
+        return this.end_time;
+    }
+
+    getBandId(){
+        return this.band_id;
+    }
+
+    setId(){
+        return this.id;
+    }
+
+    setDay(){
+        return this.day;
+    }
+
+    setStartTime(){
+        return this.start_time;
+    }
+
+    setEndTime(){
+        return this.end_time;
+    }
+
+    setBandId(){
+        return this.band_id;
+    }
+
+
+    static stringToDay(input: string): Day{
         switch (input) {
-            case "SEXTA":
-              return WeekDay.SEXTA;
-            case "SABADO":
-              return WeekDay.SABADO;
-            case "DOMINGO":
-              return WeekDay.DOMINGO;
+            case "DAY1":
+              return Day.DAY1;
+            case "DAY2":
+              return Day.DAY2;
+            case "DAY3":
+              return Day.DAY3;
             default:
               throw new Error("Invalid user role");
           }
     }
 
     static toShowModel(Show: any): Show {
-        return new Show(Show.id, Show.stringToWeekDay(Show.week_day), Show.start_time, Show.end_time, Show.band_id);
+        return new Show(Show.id, Show.stringToDay(Show.day), Show.start_time, Show.end_time, Show.band_id);
     }
 
 }
 
 export interface ShowInputDTO{
-    week_day: WeekDay,
+    day: Day,
     start_time: number,
     end_time: number,
     band_id: string,
 }
 
-export enum WeekDay {
-    SEXTA = "SEXTA",
-    SABADO = "SABADO",
-    DOMINGO = "DOMINGO"
+export enum Day {
+    DAY1 = "DAY1",
+    DAY2 = "DAY2",
+    DAY3 = "DAY3"
 }

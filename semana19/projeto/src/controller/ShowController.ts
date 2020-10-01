@@ -18,7 +18,7 @@ export class ShowController {
         try {
             const token = req.headers.authorization as string;
             const input: ShowInputDTO = {
-                week_day: req.body.week_day, 
+                day: req.body.day, 
                 start_time: Number(req.body.start_time), 
                 end_time: Number(req.body.end_time), 
                 band_id: req.body.band_id
@@ -51,12 +51,12 @@ export class ShowController {
         await BaseDatabase.destroyConnection();
     }
 
-    async getShowByWeekDay(req: Request, res: Response) {
+    async getShowByDay(req: Request, res: Response) {
 
         try {
-            const week_day = req.body.week_day
+            const day = req.body.day
 
-            const result = await ShowController.showBusiness.getShowByWeekDay(week_day)
+            const result = await ShowController.showBusiness.getShowByDay(day)
 
             res.status(200).send({ result });
 

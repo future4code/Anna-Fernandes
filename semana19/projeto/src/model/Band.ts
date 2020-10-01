@@ -4,7 +4,7 @@ export class Band{
         private name: string,
         private music_genre: MusicGenre,
         private responsible: string
-        ){}
+    ){}
     
     getId(){
         return this.id;
@@ -31,7 +31,7 @@ export class Band{
         this.name = name;
     }
     
-    setMusicGEnre(music_genre: MusicGenre){
+    setMusicGenre(music_genre: MusicGenre){
         this.music_genre = music_genre;
     }
     

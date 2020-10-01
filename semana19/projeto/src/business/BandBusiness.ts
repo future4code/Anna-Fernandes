@@ -39,5 +39,12 @@ export class BandBusiness {
 
         return bandFromDB;
     }
+
+    async getBandByQuery(query: string) {
+
+        const bandFromDB = await this.bandDatabase.getBandByQuery(query);
+
+        return bandFromDB;
+    }
     
 }
