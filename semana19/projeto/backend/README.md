@@ -31,6 +31,6 @@
     Você deve criar um endpoint que adiciona uma foto para a galeria de um evento. Elas devem ser armazenadas como links no banco de dados.
 
 ### 10. Pegar todas as fotos
-    O endpoint receberá o identificador do evento e devolverá todas as fotos deste.
+    O endpoint receberá o identificador do evento as informações dos eventos com as fotos deste.
 
-**Bônus:** Crie uma página de Frontend em React e para que o administrador consiga entrar no site e ver todas as fotos que foram tiradas, consumindo o endpoint que você criou. Não precisa fazer o resto do front-end da aplicação, não se preocupe. A forma da página é livre, e você pode criar outro projeto, apartado desse, se preferir, para fazer esse pedacinho.
+**Bônus:** Página de Frontend em React para que o administrador consiga entrar no site e ver todas as fotos que foram tiradas, consumindo o endpoint que você criou.

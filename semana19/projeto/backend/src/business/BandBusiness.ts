@@ -35,14 +35,22 @@ export class BandBusiness {
 
     async getBandById(bandId: string) {
 
+        if (!bandId ) {
+            throw new InvalidParameterError("Missing input.");
+        }
+
         const bandFromDB = await this.bandDatabase.getBandById(bandId);
 
         return bandFromDB;
     }
 
-    async getBandByQuery(query: string) {
+    async getBandByQuery(search: string) {
 
-        const bandFromDB = await this.bandDatabase.getBandByQuery(query);
+        if (!search ) {
+            throw new InvalidParameterError("Missing input.");
+        }
+
+        const bandFromDB = await this.bandDatabase.getBandByQuery(search);
 
         return bandFromDB;
     }

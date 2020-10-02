@@ -53,9 +53,9 @@ export class BandController {
     async getBandByQuery(req: Request, res: Response) {
 
         try {
-            const query = req.query.name as string
+            const search = req.query.search as string
 
-            const result = await BandController.bandBusiness.getBandByQuery(query)
+            const result = await BandController.bandBusiness.getBandByQuery(search)
 
             res.status(200).send({ result });
 

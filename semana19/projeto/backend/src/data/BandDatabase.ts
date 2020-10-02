@@ -34,13 +34,15 @@ export class BandDatabase extends BaseDatabase {
     return result[0];
   }
 
-  public async getBandByQuery(query: string): Promise<Band> {
+  public async getBandByQuery(search: string): Promise<Band> {
     const result = await this.getConnection().raw(`
       SELECT *
       FROM lama_bands as band
+      WHERE band.name LIKE "%${search.toLocaleLowerCase()}%"
+      OR band.id = "${search}"
     `)
 
-    return result;
+    return result[0];
   }
 
 }
