@@ -1,6 +1,10 @@
+import moment from 'moment';
+
 import { Photo } from "../model/Photo";
 import { Ticket } from "../model/Ticket";
+import { BandDatabase } from "./BandDatabase";
 import { BaseDatabase } from "./BaseDatabase";
+import { ShowDatabase } from "./ShowDatabase";
 
 export class EventDatabase extends BaseDatabase {
 
@@ -8,6 +12,7 @@ export class EventDatabase extends BaseDatabase {
   private static TABLE_GALLERY = "lama_events_photos";
   private static TABLE_TICKETS = "lama_tickets";
   private static TABLE_TICKETS_BUYERS = "lama_tickets_buyers";
+  private static TABLE_USERS = "lama_users";
 
   public async createTicket(
     id: string,
@@ -37,18 +42,19 @@ export class EventDatabase extends BaseDatabase {
     const result = await this.getConnection()
       .select("*")
       .from(EventDatabase.TABLE_TICKETS)
-      .where({ id });
+      .where({ id })
 
     return Ticket.toTicketsModel(result[0]);
   }
 
-  public async getShowByDay(day: string): Promise<Ticket> {
+  public async getAllTickets(): Promise<Ticket[]> {
     const result = await this.getConnection()
       .select("*")
       .from(EventDatabase.TABLE_TICKETS)
-      .where({ day });
+      .join(EventDatabase.TABLE_EVENTS, `${EventDatabase.TABLE_TICKETS}.event_id`, `${EventDatabase.TABLE_EVENTS}.id`)
+      .orderBy(`${EventDatabase.TABLE_TICKETS}.event_id`, 'asc')
 
-    return Ticket.toTicketsModel(result[0]);
+    return result;
   }
 
   public async buyTicket(
@@ -88,6 +94,23 @@ export class EventDatabase extends BaseDatabase {
 
   }
 
+  public async getTicketsByUser(userId: string) {
+    
+    const result = await this.getConnection().raw(`
+      SELECT *
+      FROM ${EventDatabase.TABLE_TICKETS_BUYERS} as tickets
+      JOIN ${EventDatabase.TABLE_USERS} as users
+      ON tickets.user_id = users.id
+      JOIN ${EventDatabase.TABLE_TICKETS} as alltickets
+      ON tickets.ticket_id = alltickets.id
+      JOIN ${EventDatabase.TABLE_EVENTS} as events
+      ON alltickets.event_id = events.id
+      WHERE tickets.user_id = "${userId}"
+    `)
+
+    return result;
+  }
+
   public async addPhoto(
       id: string,
       event_id: string,
@@ -106,22 +129,12 @@ export class EventDatabase extends BaseDatabase {
     }
   }
 
-  public async checkIfIsAvaiable(day: string): Promise<Event> {
-    const result = await this.getConnection()
-      .select("*")
-      .from(EventDatabase.TABLE_GALLERY)
-      .where({ day })
-
-    return result[0];
-  }
-
-  
-  public async gePhotos(eventId: string): Promise<any> {
+  public async getPhotos(eventId: string): Promise<any> {
   
     const result = await this.getConnection().raw(`
-    SELECT *
-    FROM ${EventDatabase.TABLE_GALLERY}
-    WHERE event_id = "${eventId}"
+        SELECT *
+        FROM ${EventDatabase.TABLE_GALLERY}
+        WHERE event_id = "${eventId}"
     `);
 
     const gallery: any[] = [];
@@ -144,12 +157,41 @@ export class EventDatabase extends BaseDatabase {
     `)
     const events: any[] =[];
     for(let event of result[0]) {
-      const gallery = await this.gePhotos(eventId)
+      const gallery = await this.getPhotos(eventId);
+      const showsDatabase = new ShowDatabase();
+      const shows = await showsDatabase.getShowByDay(event.day)
+
       events.push({
         id: event.id,
         day: event.day,
-        data: event.data,
+        data: new Date(event.data).toLocaleString('pt-BR'),
         description: event.description,
+        shows: shows,
+        gallery: gallery
+      })
+
+    }
+
+    return events;
+  }
+
+  public async getAllEvents(): Promise<any[]> {
+    const result = await this.getConnection().raw(`
+        SELECT *
+        FROM ${EventDatabase.TABLE_EVENTS} as event
+    `)
+    const events: any[] =[];
+    for(let event of result[0]) {
+      const gallery = await this.getPhotos(event.id);
+      const showsDatabase = new ShowDatabase();
+      const shows = await showsDatabase.getShowByDay(event.day)
+
+      events.push({
+        id: event.id,
+        day: event.day,
+        data: moment(event.data, "YYYY-MM-DD").format("DD/MM/YYYY"),
+        description: event.description,
+        shows: shows,
         gallery: gallery
       })
 

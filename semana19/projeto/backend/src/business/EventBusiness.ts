@@ -62,6 +62,28 @@ export class EventBusiness {
 
     }
 
+    async getAllTickets() {
+
+        const result = await this.eventDatabase.getAllTickets();
+
+        return result
+        
+    }
+
+    async getTicketsByUser(token: string) {
+
+        const accessTokenId = this.authenticator.getData(token).id;
+
+        if (!accessTokenId) {
+            throw new InvalidParameterError("You don't haver permission to see that.");
+        }
+
+        const result = await this.eventDatabase.getTicketsByUser(accessTokenId);
+
+        return result[0]
+
+    }
+
     async addPhoto(token: string, photo: PhotoInputDTO) {
 
         if (!photo.event_id || !photo.photo) {
@@ -92,6 +114,14 @@ export class EventBusiness {
         const result = await this.eventDatabase.getEvent(eventId);
 
         return result
+    }
+
+    async getAllEvents() {
+
+        const result = await this.eventDatabase.getAllEvents();
+
+        return result
+
     }
 
 }

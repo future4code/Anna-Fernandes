@@ -36,6 +36,19 @@ export class EventController {
         await BaseDatabase.destroyConnection();
     }
 
+    async getAllTickets(req: Request, res: Response) {
+        try {
+            const result = await EventController.eventBusiness.getAllTickets();
+
+            res.status(200).send(result);
+
+        } catch (error) {
+            res.status(400).send({ error: error.message });
+        }
+
+        await BaseDatabase.destroyConnection();
+    }
+
     async buyTicket(req: Request, res: Response) {
         try {
             const token = req.headers.authorization as string;
@@ -47,6 +60,21 @@ export class EventController {
             await EventController.eventBusiness.buyTicket(token, input);
 
             res.status(200).send({ message: "Ticket bought successfully" });
+
+        } catch (error) {
+            res.status(400).send({ error: error.message });
+        }
+
+        await BaseDatabase.destroyConnection();
+    }
+
+    async getTicketByUser(req: Request, res: Response) {
+        try {
+            const token = req.headers.authorization as string;
+
+            const result = await EventController.eventBusiness.getTicketsByUser(token);
+
+            res.status(200).send(result);
 
         } catch (error) {
             res.status(400).send({ error: error.message });
@@ -79,6 +107,19 @@ export class EventController {
             const eventId:string = req.params.eventId
 
             const result = await EventController.eventBusiness.getEvent(eventId);
+
+            res.status(200).send(result);
+
+        } catch (error) {
+            res.status(400).send({ error: error.message });
+        }
+
+        await BaseDatabase.destroyConnection();
+    }
+
+    async getAllEvents(req: Request, res: Response) {
+        try {
+            const result = await EventController.eventBusiness.getAllEvents();
 
             res.status(200).send(result);
 

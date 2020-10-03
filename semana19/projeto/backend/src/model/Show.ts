@@ -5,6 +5,9 @@ export class Show{
         private start_time: number,
         private end_time: number,
         private band_id: string,
+        private name: string,
+        private music_genre: string,
+        private responsible: string,
     ){}
 
     getId(){
@@ -24,6 +27,18 @@ export class Show{
     }
 
     getBandId(){
+        return this.band_id;
+    }
+
+    getBandName(){
+        return this.band_id;
+    }
+
+    getBandMusicGenre(){
+        return this.band_id;
+    }
+
+    getBandMusicResponsible(){
         return this.band_id;
     }
 
@@ -47,9 +62,21 @@ export class Show{
         return this.band_id;
     }
 
+    setBandName(){
+        return this.band_id;
+    }
 
-    static toShowModel(Show: any): Show {
-        return new Show(Show.id, stringToDay(Show.day), Show.start_time, Show.end_time, Show.band_id);
+    setBandMusicGenre(){
+        return this.band_id;
+    }
+
+    setBandMusicResponsible(){
+        return this.band_id;
+    }
+
+
+    static toShowModel(show: any): Show {
+        return new Show(show.id, stringToDay(show.day), show.start_time, show.end_time, show.band_id, show.name, show.music_genre, show.responsible);
     }
 
 }
