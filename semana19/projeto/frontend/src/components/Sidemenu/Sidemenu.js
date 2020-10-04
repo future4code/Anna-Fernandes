@@ -19,10 +19,10 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import PersonIcon from '@material-ui/icons/Person';
 import AddBoxIcon from '@material-ui/icons/AddBox';import AddAPhotoIcon from '@material-ui/icons/AddAPhoto';
+import MusicNote from '@material-ui/icons/MusicNote';import PlayArrow from '@material-ui/icons/PlayArrow';
 
 const drawerWidth = 240;
 
@@ -125,6 +125,14 @@ export const Sidemenu = () => {
         history.push("/addPhotos");
     }
 
+    const goToAddShow = () => {
+        history.push("/addShow");
+    }
+
+    const goToAddBand = () => {
+        history.push("/addBand");
+    }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -144,7 +152,7 @@ export const Sidemenu = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap className={classes.title} onClick={goToHome}>
+          <Typography variant="h6" noWrap className={classes.title} onClick={goToHome} >
             Festival Lama
           </Typography>
           <Button color="inherit" onClick={goToLogin}>Login</Button>
@@ -166,33 +174,35 @@ export const Sidemenu = () => {
         </div>
         <Divider />
         <List>
-            <ListItem button>
+            <ListItem button onClick={goToProfile}>
               <ListItemIcon><PersonIcon /></ListItemIcon>
-              <ListItemText onClick={goToProfile}  primary={'Perfil'} />
+              <ListItemText primary={'Perfil'} />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={goToTickets}>
               <ListItemIcon><ConfirmationNumberIcon /></ListItemIcon>
-              <ListItemText onClick={goToTickets} primary={'Ingressos'} />
+              <ListItemText primary={'Comprar ingresso'} />
             </ListItem>
         </List>
         <Divider />
         <List>
-            <ListItem button>
-              <ListItemIcon><AddBoxIcon /></ListItemIcon>
-              <ListItemText onClick={goToAddTicket} primary={'Cadastrar ingresso'} />
+            <ListItem button onClick={goToAddBand}>
+              <ListItemIcon><MusicNote /></ListItemIcon>
+              <ListItemText primary={'Cadastrar banda'} />
             </ListItem>
-            <ListItem button>
+            <ListItem button onClick={goToAddShow}>
+              <ListItemIcon><PlayArrow /></ListItemIcon>
+              <ListItemText primary={'Cadastrar show'} />
+            </ListItem>
+            <ListItem button onClick={goToAddTicket}>
+              <ListItemIcon><AddBoxIcon /></ListItemIcon>
+              <ListItemText primary={'Cadastrar ingresso'} />
+            </ListItem>
+            <ListItem button onClick={goToAddPhotos}>
               <ListItemIcon><AddAPhotoIcon /></ListItemIcon>
-              <ListItemText  onClick={goToAddPhotos} primary={'Cadastrar fotos'} />
+              <ListItemText primary={'Cadastrar fotos'} />
             </ListItem>
         </List>
       </Drawer>
-      <main
-        className={clsx(classes.content, {
-          [classes.contentShift]: open,
-        })}
-      >
-      </main>
     </div>
   );
 }

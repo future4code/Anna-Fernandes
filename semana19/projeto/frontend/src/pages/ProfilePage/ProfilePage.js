@@ -9,11 +9,11 @@ const ProfilePage = () => {
     const [ profile, SetProfile] = useState([]);
     const history = useHistory();
 
-    const getEventInfo = async() => {
+    const getProfileInfo = async() => {
       try {
         const axiosConfig = {
             headers: {
-                Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFjMjlkMjU4LWQxYzktNDBhZC1hNmE0LTA5ZjZiMjY1OWI5NSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYwMTY3NTUyNCwiZXhwIjoxNjAxNjc1ODI0fQ.3S9LLa1SXVC0fI2a8GcHDoGkmA4QmxwBmMcDmL7ukXI"
+                Authorization: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjFjMjlkMjU4LWQxYzktNDBhZC1hNmE0LTA5ZjZiMjY1OWI5NSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTYwMTc3NzIzNSwiZXhwIjoxNjAxNzk1MjM1fQ.f_3YhScjtfuwNGcV8JyFYfBhLQtclfSRT8SrSBpIlLw"
             }
         } 
 
@@ -27,7 +27,7 @@ const ProfilePage = () => {
     }
   
     useEffect(() => {
-        getEventInfo();
+        getProfileInfo();
     }, [history])
 
     return (

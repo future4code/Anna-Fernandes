@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
   
-export const AddPhoto = () => {
+export const AddBand = () => {
     const classes = useStyles();
     const history = useHistory();
 
@@ -41,7 +41,7 @@ export const AddPhoto = () => {
         <Card>
             <CenterObjects>
                 <Typography variant="h4" noWrap className={classes.title}>
-                    Adicionar Foto
+                    Cadastrar Banda
                 </Typography>
 
                 <form noValidate autoComplete="off">
@@ -51,8 +51,18 @@ export const AddPhoto = () => {
                         className={clsx(classes.marginBottom)}
                         error
                         id="outlined-error"
-                        label="Foto"
-                        defaultValue="link da foto"
+                        label="Nome"
+                        defaultValue="nome da banda"
+                        variant="outlined"
+                        />
+                        <TextField
+                        fullWidth 
+                        className={clsx(classes.marginBottom)}
+                        error
+                        id="outlined-error-helper-text"
+                        label="Responsável"
+                        defaultValue="integrante responsável"
+                        helperText="Incorrect entry."
                         variant="outlined"
                         />
                         <Select
@@ -63,12 +73,15 @@ export const AddPhoto = () => {
                             label="Função"
                         >
                             <option aria-label="None" value="Função" />
-                            <option value="lama-event-001">Primeiro dia</option>
-                            <option value="lama-event-002">Segundo dia</option>
-                            <option value="lama-event-003">Terceiro dia</option>
+                            <option value="ROCK">Rock</option>
+                            <option value="INDIE">Indie</option>
+                            <option value="METAL">Metal</option>
+                            <option value="HIPHOP">Hip-hop</option>
+                            <option value="FUNK">Funk</option>
+                            <option value="POPULAR">Popular</option>
                         </Select>
                     </div>
-                    <Button className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
+                    <Button type="submit" className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
                 </form>
             </CenterObjects>
         </Card>

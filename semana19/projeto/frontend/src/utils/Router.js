@@ -12,6 +12,8 @@ import ProfilePage from '../pages/ProfilePage/ProfilePage';
 import AddTicketsPage from '../pages/AddTicketsPage/AddTicketsPage';
 import AddPhotosPage from '../pages/AddPhotosPage/AddPhotosPage';
 import TicketsPage from '../pages/TicketsPage/TicketsPage';
+import AddShowPage from '../pages/AddShowPage/AddShowPage';
+import AddBandPage from '../pages/AddBandPage/AddBandPage';
 
 const Router = () => {
   const classes = useStyles();
@@ -34,6 +36,12 @@ const Router = () => {
           </Route>
           <Route exact path="/tickets">
             <TicketsPage />
+          </Route>
+          <Route exact path="/addBand">
+            <AddBandPage />
+          </Route>
+          <Route exact path="/addShow">
+            <AddShowPage />
           </Route>
           <Route exact path="/addTicket">
             <AddTicketsPage />
