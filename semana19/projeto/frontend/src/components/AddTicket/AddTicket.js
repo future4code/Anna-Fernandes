@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import clsx from 'clsx';
+
+import useForm from '../../hooks/useForm';
+import { baseUrl } from '../../variables/mainVariables';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
@@ -10,7 +15,6 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 import Select from '@material-ui/core/Select';
-import useForm from '../../hooks/useForm';
 
 const useStyles = makeStyles((theme) => ({
     marginBottom: {
@@ -34,6 +38,13 @@ const useStyles = makeStyles((theme) => ({
 export const AddTicket = () => {
     const classes = useStyles();
     const history = useHistory();
+    const token = useProtectedRoute();
+
+    const axiosConfig = {
+        headers: {
+            Authorization: token
+        }
+    }
 
     const { form, onChange, resetForm } = useForm({
         event_id: "", 
@@ -56,13 +67,17 @@ export const AddTicket = () => {
             "ticket_price": Number(form.ticket_price), 
             "ticket_quantity": Number(form.ticket_quantity), 
         }
+        
         try {
-            axios.put("http://localhost:3001/event/ticket", body)
+            await axios.put(`${baseUrl}/event/ticket`, body, axiosConfig)
+            setRequestMessage("Cadastro realizado com sucesso.")
 
         } catch(err) {
-            console.log(err.message)
+            setRequestMessage(err.message)
         }
     }
+
+    const [ requestMessage, setRequestMessage ] = useState("");
     
     return (
         <Card>
@@ -75,24 +90,22 @@ export const AddTicket = () => {
                     <div>
                         <TextField
                         fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
                         label="Ingresso"
-                        defaultValue="nome do ingresso"
                         variant="outlined"
                         name="ticket_name"
                         value={form.ticket_name}
                         onChage={handleInputChange}
                         />
                         <TextField
+                        fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         type="number"
                         id="outlined-error-helper-text"
                         label="Preço"
-                        defaultValue="Preço"
-                        helperText="Incorrect entry."
                         variant="outlined"
                         type="number"
                         name="ticket_price"
@@ -100,21 +113,21 @@ export const AddTicket = () => {
                         onChage={handleInputChange}
                         />
                         <TextField
+                        fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         type="number"
                         id="outlined-error-helper-text"
                         label="Quantidade"
-                        defaultValue="Quantidade"
-                        helperText="Incorrect entry."
                         variant="outlined"
                         type="number"
                         name="event_id"
                         value={form.event_id}
                         onChage={handleInputChange}
                         />
-                        <Select
-                            fullWidth 
+                        <Select 
+                            fullWidth
+                            required
                             className={clsx(classes.marginBottom)}
                             variant="outlined"
                             native
@@ -131,6 +144,7 @@ export const AddTicket = () => {
                     </div>
                     <Button type="submit" className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
                 </form>
+                {requestMessage !== "" && <h2>{ requestMessage}</h2>}
             </CenterObjects>
         </Card>
     )

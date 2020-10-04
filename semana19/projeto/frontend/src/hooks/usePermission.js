@@ -6,13 +6,14 @@ const usePermission = () => {
     const [permission, setPermission] = useState("");
     
     useEffect(() => {
-        const getPermission = window.localStorage.getItem("permission");
+        const role = window.localStorage.getItem("role");
         
-        if(getPermission === "ADMIN") {
+        if(role === "ADMIN") {
             setPermission(getPermission);
         } else {
             setPermission("NORMAL");
         }
+        
     }, [history]);
       
     return permission;

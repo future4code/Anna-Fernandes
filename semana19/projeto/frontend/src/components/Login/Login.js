@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import clsx from 'clsx';
@@ -12,7 +12,7 @@ import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
 import useForm from '../../hooks/useForm';
-import Axios from 'axios';
+import { baseUrl } from '../../variables/mainVariables';
 
 const useStyles = makeStyles((theme) => ({
     marginBottom: {
@@ -58,15 +58,20 @@ export const Login = () => {
             "email": form.email,
             "password": form.password
         }
+
         try {
-            const response = axios.post("http://localhost:3001/user/login", body)
+            const response = await axios.post(`${baseUrl}/user/login`, body)
             
-            window.localStorage.setItem("token", response.data.token);
+            window.localStorage.setItem("token", response.data.token.accessToken);
+            window.localStorage.setItem("role", response.data.token.role);
+            setRequestMessage("Login feito com sucesso.")
 
         } catch(err) {
-            console.log(err.message)
+            setRequestMessage(err.message)
         }
     }
+
+    const [ requestMessage, setRequestMessage ] = useState("");
     
     return (
         <Card>
@@ -81,35 +86,31 @@ export const Login = () => {
                         required
                         fullWidth
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
-                        label="Error"
-                        defaultValue="email"
+                        label="Email"
                         variant="outlined"
                         type="email"
                         name="email"
                         value={form.email}
-                        onChage={handleInputChange}
+                        onChange={handleInputChange}
                         />
                         <TextField
                         fullWidth 
                         required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error-helper-text"
-                        label="Error"
-                        defaultValue="senha"
-                        helperText="Incorrect entry."
+                        label="Senha"
                         variant="outlined"
                         type="password"
                         name="password"
                         value={form.password}
-                        onChage={handleInputChange}
+                        onChange={handleInputChange}
                         />
                     </div>
                     <Button type="submit" className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
                 </form>
                 <Link color="inherit" onClick={goToSignUp}>Não tem login? Se cadastre aqui.</Link>
+                {requestMessage !== "" && <h2>{ requestMessage}</h2>}
             </CenterObjects>
         </Card>
     )

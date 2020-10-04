@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import clsx from 'clsx';
+import axios from 'axios';
+
+import useForm from '../../hooks/useForm';
+import { baseUrl } from '../../variables/mainVariables';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
@@ -32,10 +38,43 @@ const useStyles = makeStyles((theme) => ({
 export const AddBand = () => {
     const classes = useStyles();
     const history = useHistory();
+    const token = useProtectedRoute();
 
-    const goToSignUp = () => {
-        history.push('/signup');
+    const axiosConfig = {
+        headers: {
+            Authorization: token
+        }
     }
+
+    const { form, onChange, resetForm } = useForm({
+        name: "", 
+        music_genre: "", 
+        responsible: ""
+      });
+  
+    const handleInputChange = event => {
+        const { name, value } = event.target;
+        onChange(name, value)
+    }
+
+    const handleAddBand = async(e) => {
+        e.preventDefault();
+
+        const body = {     
+            "name": form.name, 
+            "music_genre": form.music_genre, 
+            "responsible": form.responsible
+        }
+        try {
+            await axios.put(`${baseUrl}/band/register`, body, axiosConfig)
+            setRequestMessage("Banda adicionada com sucesso.")
+
+        } catch(err) {
+            setRequestMessage(err.message)
+        }
+    }
+
+    const [ requestMessage, setRequestMessage ] = useState("");
     
     return (
         <Card>
@@ -44,33 +83,40 @@ export const AddBand = () => {
                     Cadastrar Banda
                 </Typography>
 
-                <form noValidate autoComplete="off">
+                <form noValidate autoComplete="off" onSubmit={handleAddBand}>
                     <div>
                         <TextField
                         fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
-                        label="Nome"
-                        defaultValue="nome da banda"
+                        label="Nome da banda"
                         variant="outlined"
+                        name="name"
+                        value={form.name}
+                        onChange={handleInputChange}
                         />
                         <TextField
                         fullWidth 
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error-helper-text"
                         label="Responsável"
-                        defaultValue="integrante responsável"
-                        helperText="Incorrect entry."
                         variant="outlined"
+                        name="responsible"
+                        value={form.responsible}
+                        onChange={handleInputChange}
                         />
                         <Select
                             fullWidth 
+                            required
                             className={clsx(classes.marginBottom)}
                             variant="outlined"
                             native
                             label="Função"
+                            name="music_genre"
+                            value={form.music_genre}
+                            onChange={handleInputChange}
                         >
                             <option aria-label="None" value="Função" />
                             <option value="ROCK">Rock</option>
@@ -83,6 +129,7 @@ export const AddBand = () => {
                     </div>
                     <Button type="submit" className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
                 </form>
+                {requestMessage !== "" && <h2>{ requestMessage}</h2>}
             </CenterObjects>
         </Card>
     )

@@ -32,7 +32,7 @@ export const Grid = styled.div `
 
 export const GridItem = styled.img `
     width: 100%;
-    min-height: 300px;
+    height: 200px;
     padding: 8px;
     object-fit: cover;
 `

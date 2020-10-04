@@ -1,6 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import axios from 'axios';
 import clsx from 'clsx';
+
+import useForm from '../../hooks/useForm';
+import { baseUrl } from '../../variables/mainVariables';
+import useProtectedRoute from '../../hooks/useProtectedRoute';
+
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
@@ -32,10 +38,42 @@ const useStyles = makeStyles((theme) => ({
 export const AddPhoto = () => {
     const classes = useStyles();
     const history = useHistory();
+    const token = useProtectedRoute();
 
-    const goToSignUp = () => {
-        history.push('/signup');
+    const axiosConfig = {
+        headers: {
+            Authorization: token
+        }
     }
+
+    const { form, onChange, resetForm } = useForm({
+        event_id: "", 
+        photo: "",
+      });
+  
+    const handleInputChange = event => {
+        const { name, value } = event.target;
+        onChange(name, value)
+    }
+
+    const handleAddPhoto = async(e) => {
+        e.preventDefault();
+
+        const body = {     
+            "event_id": form.event_id, 
+            "photo": form.photo
+        }
+
+        try {
+            await axios.post(`${baseUrl}/event/addPhoto`, body, axiosConfig)
+            setRequestMessage("Foto adicionada com sucesso.")
+
+        } catch(err) {
+            setRequestMessage(err.message)
+        }
+    }
+
+    const [ requestMessage, setRequestMessage ] = useState("");
     
     return (
         <Card>
@@ -44,23 +82,29 @@ export const AddPhoto = () => {
                     Adicionar Foto
                 </Typography>
 
-                <form noValidate autoComplete="off">
+                <form noValidate autoComplete="off" onSubmit={handleAddPhoto}>
                     <div>
                         <TextField
                         fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
                         label="Foto"
-                        defaultValue="link da foto"
                         variant="outlined"
+                        name="event_id"
+                        value={form.event_id}
+                        onChange={handleInputChange}
                         />
                         <Select
                             fullWidth 
+                            required
                             className={clsx(classes.marginBottom)}
                             variant="outlined"
                             native
                             label="Função"
+                            name="photo"
+                            value={form.photo}
+                            onChange={handleInputChange}
                         >
                             <option aria-label="None" value="Função" />
                             <option value="lama-event-001">Primeiro dia</option>
@@ -70,6 +114,7 @@ export const AddPhoto = () => {
                     </div>
                     <Button className={clsx(classes.button)} variant="contained" color="primary">entrar</Button>
                 </form>
+                {requestMessage !== "" && <h2>{ requestMessage}</h2>}
             </CenterObjects>
         </Card>
     )

@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import clsx from 'clsx';
 
 import useForm from '../../hooks/useForm';
+import { baseUrl } from '../../variables/mainVariables';
 
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -62,15 +63,20 @@ export const Signup = () => {
             "password": form.password,
             "role": form.role
         }
+
         try {
-            const response = axios.put("http://localhost:3001/user/signup", body)
+            const response = await axios.put(`${baseUrl}/user/signup`, body)
             
-            window.localStorage.setItem("token", response.data.token);
+            window.localStorage.setItem("token", response.data.token.accessToken);
+            window.localStorage.setItem("role", response.data.token.role);
+            setRequestMessage("Cadastro realizado com sucesso")
 
         } catch(err) {
             console.log(err.message)
         }
     }
+
+    const [ requestMessage, setRequestMessage ] = useState("");
 
     return (
         <Card>
@@ -83,52 +89,51 @@ export const Signup = () => {
                     <div>
                         <TextField
                         fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
-                        label="Error"
-                        defaultValue="nome"
+                        label="Nome"
                         variant="outlined"
                         name="name"
                         value={form.name}
-                        onChage={handleInputChange}
+                        onChange={handleInputChange}
                         />
                         <TextField
                         fullWidth
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error"
-                        label="Error"
+                        label="Email"
                         defaultValue="email"
                         variant="outlined"
                         type="email"
                         name="email"
                         value={form.email}
-                        onChage={handleInputChange}
+                        onChange={handleInputChange}
                         />
                         <TextField
                         fullWidth 
+                        required
                         className={clsx(classes.marginBottom)}
-                        error
                         id="outlined-error-helper-text"
-                        label="Error"
+                        label="Senha"
                         defaultValue="senha"
-                        helperText="Incorrect entry."
                         variant="outlined"
                         type="password"
                         name="password"
                         value={form.password}
-                        onChage={handleInputChange}
+                        onChange={handleInputChange}
                         />
                         <Select
                             fullWidth 
+                            required
                             className={clsx(classes.marginBottom)}
                             variant="outlined"
                             native
                             label="Função"
                             name="role"
                             value={form.role}
-                            onChage={handleInputChange}
+                            onChange={handleInputChange}
                         >
                             <option aria-label="None" value="Função" />
                             <option value="ADMIN">Administrador</option>
@@ -138,6 +143,7 @@ export const Signup = () => {
                     <Button type="submit" className={clsx(classes.button)}variant="contained" color="primary">cadastrar</Button>
                 </form>
                 <Link color="inherit" onClick={goToLogin}>Já tem login? Acesse o login aqui.</Link>
+                {requestMessage !== "" && <h2>{ requestMessage}</h2>}
             </CenterObjects>
         </Card>
     )

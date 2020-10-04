@@ -97,7 +97,7 @@ export class EventDatabase extends BaseDatabase {
   public async getTicketsByUser(userId: string) {
     
     const result = await this.getConnection().raw(`
-      SELECT *
+      SELECT alltickets.ticket_name, alltickets.ticket_price, tickets.ticket_quantity, users.name, events.data
       FROM ${EventDatabase.TABLE_TICKETS_BUYERS} as tickets
       JOIN ${EventDatabase.TABLE_USERS} as users
       ON tickets.user_id = users.id
@@ -150,11 +150,13 @@ export class EventDatabase extends BaseDatabase {
   }
 
   public async getEvent(eventId: string): Promise<any> {
+
     const result = await this.getConnection().raw(`
         SELECT *
         FROM ${EventDatabase.TABLE_EVENTS} as event
         WHERE event.id = "${eventId}"
     `)
+
     const events: any[] =[];
     for(let event of result[0]) {
       const gallery = await this.getPhotos(eventId);

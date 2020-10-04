@@ -57,11 +57,13 @@ export class UserBusiness {
         
         const accessToken = this.authenticator.generateToken({ id: userFromDB.getId(), role: userFromDB.getRole() });
 
+        const role = this.authenticator.getData(accessToken).role;
+
         if (!hashCompare) {
             throw new InvalidParameterError("Invalid password!");
         }
 
-        return accessToken;
+        return { accessToken, role};
     }
 
     async getProfile(token: string) {
